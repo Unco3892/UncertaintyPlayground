@@ -1,0 +1,43 @@
+# This technique works well and produces something similar to what I want
+# what if we calculate some kind of a weighted mean based on the similarity?
+# install.packages("kknn")
+library(kknn)
+
+# Example dataset
+data <- data.frame(x1 = c(1, 2, 3, 4, 5),
+                   x2 = c(5, 4, 3, 2, 1))
+
+distance_with_missing <- function(a, b) {
+  # Compute the distance only for non-missing values
+  not_missing <- !is.na(a) & !is.na(b)
+  sum((a[not_missing] - b[not_missing])^2)
+}
+
+estimate_instance_probabilities <- function(query, data, k = nrow(data)) {
+  # Calculate the distances between the query and the instances
+  distances <- apply(data, 1, function(row) distance_with_missing(row, query))
+  
+  # Get the k-nearest instances
+  nearest_indices <- order(distances)[1:k]
+  
+  # Compute softmax probabilities for these instances
+  softmax <- function(x) exp(x) / sum(exp(x))
+  probabilities <- softmax(-distances[nearest_indices])
+  
+  # Create a probability distribution for all instances
+  instance_probabilities <- numeric(nrow(data))
+  instance_probabilities[nearest_indices] <- probabilities
+  
+  instance_probabilities
+}
+
+# Example query with a missing x2 value
+query <- c(2, NA)
+
+# Estimate the instance probabilities
+instance_probabilities <- estimate_instance_probabilities(query, data)
+
+# Print the probabilities
+print(instance_probabilities)
+
+plot(instance_probabilities)
