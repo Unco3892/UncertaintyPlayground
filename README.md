@@ -51,3 +51,12 @@ Or for the docs, should do the following instead?
 ```
 
 Also, how should I define the modules for the testing part? Should they be seperate? Look at the best practices for how to place your tests.
+
+Other TODOS:
+- Can also use other kernels than RBF -> Option can also be added so that it's modular for that too
+- Adding multi-GPU support -> At the moment, we use the best hardware available
+
+To use SVGP for both regression and classification, we must:
+- Change the likelihood: For classification problems, you'll typically use a BernoulliLikelihood or SoftmaxLikelihood depending on whether it's binary or multiclass classification.
+- Change the performance metric: Accuracy, AUC, or F1-score might be a more appropriate metric than MSE for classification.
+- Change the loss function: Instead of the Mean Squared Error Loss, you might want to use Binary Cross-Entropy (for binary classification) or Cross-Entropy Loss (for multi-class classification).

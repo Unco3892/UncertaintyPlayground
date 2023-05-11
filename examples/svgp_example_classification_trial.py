@@ -2,7 +2,7 @@
 import torch
 import gpytorch
 import numpy as np
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
 import os
@@ -20,7 +20,15 @@ class SVGP(gpytorch.models.ApproximateGP):
         covar_module (gpytorch.kernels.ScaleKernel): Scaled RBF kernel.
     """
 
-    def __init__(self, inducing_points, dtype=torch.float32):
+    def __init__(self, inducing_points, num_classes, dtype=torch.float32):
+        """
+        Initialize the SVGP model.
+
+        Args:
+            inducing_points (torch.Tensor): Tensor containing the inducing points.
+            num_classes (int): Number of classes in the classification problem.
+            dtype (torch.dtype, optional): Data type for the model parameters. Defaults to torch.float32.
+        """
         variational_distribution = gpytorch.variational.CholeskyVariationalDistribution(
             inducing_points.size(0), dtype=dtype
         )
@@ -36,6 +44,8 @@ class SVGP(gpytorch.models.ApproximateGP):
         self.covar_module = gpytorch.kernels.ScaleKernel(
             gpytorch.kernels.RBFKernel())
 
+        self.num_classes = num_classes
+
     def forward(self, x):
         """
         Forward pass for the SVGP.
@@ -44,11 +54,11 @@ class SVGP(gpytorch.models.ApproximateGP):
             x (torch.Tensor): Input tensor.
 
         Returns:
-            gpytorch.distributions.MultivariateNormal: Multivariate normal distribution with the given mean and covariance.
+            gpytorch.distributions.MultitaskMultivariateNormal: Multitask multivariate normal distribution with the given mean and covariance.
         """
         mean_x = self.mean_module(x)
         covar_x = self.covar_module(x)
-        latent_pred = gpytorch.distributions.MultivariateNormal(mean_x, covar_x)
+        latent_pred = gpytorch.distributions.MultitaskMultivariateNormal(mean_x, covar_x)
         return latent_pred
 
 
@@ -66,6 +76,13 @@ class EarlyStopping:
         compare_fn (callable): Function to compare two values of the validation metric to determine if one is better than the other.
     """
     def __init__(self, patience=10, compare_fn=lambda x, y: x < y):
+        """
+        Initialize the EarlyStopping object.
+
+        Args:
+            patience (int, optional): Number of consecutive epochs with no improvement after which training will be stopped. Defaults to 10.
+            compare_fn (callable, optional): Function to compare two values of the validation metric to determine if one is better than the other. Defaults to lambda x, y: x < y.
+        """
         self.patience = patience
         self.counter = 0
         self.best_val_metric = np.inf
@@ -101,9 +118,9 @@ class BaseTrainer:
         self.dtype = dtype
         self.use_scheduler = use_scheduler
 
-        # setting for early stopping
+       # setting for early stopping
         self.best_epoch = -1
-        self.best_val_mse = np.inf
+        self.best_val_accuracy = 0.0
 
         # Choose device (GPU if available, otherwise CPU)
         self.device = torch.device(
@@ -125,7 +142,7 @@ class BaseTrainer:
 
         # Convert y to a tensor if it's a list or numpy array
         if isinstance(self.y, (list, np.ndarray)):
-            self.y = torch.tensor(self.y, dtype=self.dtype)
+            self.y = torch.tensor(self.y, dtype=torch.long)
 
         # Check if sample_weights is a tensor, numpy array, or list
         if self.sample_weights is not None:
@@ -157,40 +174,35 @@ class BaseTrainer:
 
 
 class SparseGPTrainer(BaseTrainer):
-    def __init__(self, *args, num_inducing_points=100, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__ (self, *args, num_inducing_points=100, num_classes=2, **kwargs):
+        super().__init__ (*args, **kwargs)
         self.num_inducing_points = num_inducing_points
-        
+        self.num_classes = num_classes
         # Initialize the model with inducing points
         inducing_points = self.X_train[:num_inducing_points, :]
-        self.model = SVGP(inducing_points, dtype=self.dtype).to(
+        self.model = SVGP(inducing_points, num_classes=self.num_classes, dtype=self.dtype).to(
             self.device, dtype=self.dtype)
-        self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
-            dtype=self.dtype).to(self.device, dtype=self.dtype)
+        self.likelihood = gpytorch.likelihoods.SoftmaxLikelihood(num_features = 1, num_classes=self.num_classes).to(
+            self.device, dtype=self.dtype)
         
     def train(self):
-        # set the seed
         torch.manual_seed(self.random_state)
-
-        # define the optimizer & loss function (dynamically)
+        # Define the optimizer & loss function (dynamically)
         optimizer_fn = getattr(torch.optim, self.optimizer_fn_name)
         optimizer = optimizer_fn(self.model.parameters(), lr=self.lr)
-        
-        # can use either one of the schuedlers
-        # define the learning rate scheduler if use_scheduler is True
-        # if self.use_scheduler:
-        #     scheduler = torch.optim.lr_scheduler.LambdaLR(
-        #         optimizer, self.custom_lr_scheduler)
-        if self.use_scheduler:
-            scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr = 5, epochs=50,  steps_per_epoch=len(self.train_loader))
 
-        # define the loss function
+        # Define the learning rate scheduler if use_scheduler is True
+        if self.use_scheduler:
+            scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=5, epochs=self.num_epochs,
+                                                        steps_per_epoch=len(self.train_loader))
+
+        # Define the loss function
         mll = gpytorch.mlls.VariationalELBO(
             self.likelihood, self.model, num_data=self.X_train.shape[0])
 
         # Early stopping parameters
         early_stopping = EarlyStopping(
-            patience=self.patience, compare_fn=lambda x, y: x < y)
+            patience=self.patience, compare_fn=lambda x, y: x > y)
 
         # Initiate the model training mode
         self.model.train()
@@ -199,7 +211,7 @@ class SparseGPTrainer(BaseTrainer):
         for i in range(self.num_epochs):
             for X_batch, y_batch, weights_batch in self.train_loader:
                 X_batch, y_batch, weights_batch = X_batch.to(self.device, dtype=self.dtype), y_batch.to(
-                    self.device, dtype=self.dtype), weights_batch.to(self.device, dtype=self.dtype)  # Move tensors to the chosen device
+                    self.device, dtype=torch.long), weights_batch.to(self.device, dtype=self.dtype)  # Move tensors to the chosen device
                 optimizer.zero_grad()
 
                 output = self.model(X_batch)
@@ -211,29 +223,25 @@ class SparseGPTrainer(BaseTrainer):
                 weighted_loss.backward()
 
                 optimizer.step()
-                
-                # the scheduler is called after the optimizer
+
+                # Call the scheduler after the optimizer step
                 if self.use_scheduler:
-                    scheduler.step()    
-            
-            # Compute validation metrics (MSE and R2)
+                    scheduler.step()
+
+            # Compute validation metrics (accuracy)
             self.model.eval()
             self.likelihood.eval()
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                y_pred_val = self.likelihood(self.model(self.X_val)).mean
-
-            mse_val = mean_squared_error(
-                self.y_val.detach().numpy(), y_pred_val.detach().numpy())
-            r2_val = r2_score(self.y_val.detach().numpy(),
-                              y_pred_val.detach().numpy())
+                y_pred_val = self.model(self.X_val).argmax(dim=-1)
+            acc_val = accuracy_score(self.y_val.cpu().numpy(), y_pred_val.cpu().numpy())
 
             self.model.train()
             self.likelihood.train()
 
             print(
-                f"Epoch {i + 1}/{self.num_epochs}, Weighted Loss: {weighted_loss.item():.3f}, Val MSE: {mse_val:.6f}, Val R2: {r2_val:.3f}")
+                f"Epoch {i + 1}/{self.num_epochs}, Weighted Loss: {weighted_loss.item():.3f}, Val Accuracy: {acc_val:.3f}")
 
-            should_stop = early_stopping(mse_val, self.model)
+            should_stop = early_stopping(acc_val, self.model)
 
             if should_stop:
                 print(f"Early stopping after {i + 1} epochs")
@@ -244,15 +252,15 @@ class SparseGPTrainer(BaseTrainer):
             self.model.eval()
             self.likelihood.eval()
 
-    def predict_with_uncertainty(self, X):
+    def predict(self, X):
         """
-        Predicts the mean and variance of the output distribution given input tensor X.
+        Predicts the class labels given input tensor X.
 
         Args:
             X (tensor): Input tensor of shape (num_samples, num_features).
 
         Returns:
-            tuple: A tuple of the mean and variance of the output distribution, both of shape (num_samples,).
+            numpy array: The predicted class labels.
         """
         self.model.eval()
         self.likelihood.eval()
@@ -266,31 +274,35 @@ class SparseGPTrainer(BaseTrainer):
             X = torch.unsqueeze(X, 0)
 
         with torch.no_grad(), gpytorch.settings.fast_pred_var():
-            # Get the predictive mean and variance
-            preds = self.likelihood(self.model(X))
-            mean = preds.mean.cpu().numpy()
-            variance = preds.variance.cpu().numpy()
+            # Get the predictive mean and convert to class labels
+            preds = self.model(X).argmax(dim=-1)
+            labels = preds.cpu().numpy()
 
-        return mean, variance
+        return labels
 
-# Example usage of the SVGPR class
+# Example usage of the SparseGPTrainer class
 
-# Assuming that your data is numpy arrays
-X = np.random.rand(1000, 20)
-y = np.random.rand(1000)
+from sklearn.datasets import make_classification
+# Create a multi-class classification dataset
 
-# we also set the seeds for the models
+X, y = make_classification(n_samples=1000, n_features=20, n_informative=15, n_redundant=5, n_classes=4, random_state=42)
+# Convert labels to int64
+
+y = y.astype(np.int64)
+# Set seeds for reproducibility
+
 torch.manual_seed(42)
 np.random.seed(42)
-
 # Create an instance of the SparseGPTrainer class
-trainer = SparseGPTrainer(X=X, y=y, num_inducing_points=200, num_epochs=5000, batch_size=1000, lr=0.2, patience=3)
 
+trainer = SparseGPTrainer(X=X, y=y, num_inducing_points=200, num_classes=4, num_epochs=5000, batch_size=1000, lr=0.2, patience=3)
 # Train the model
+
 trainer.train()
+# Make predictions
 
-# Make predictions with uncertainty
-y_pred, y_var = trainer.predict_with_uncertainty(trainer.X_val.numpy())
+y_pred = trainer.predict(trainer.X_val.numpy())
+# Compute accuracy for validation set
 
-# Compute R2 score for validation set
-print('R2 Score:', r2_score(trainer.y_val, y_pred))
+accuracy = accuracy_score(trainer.y_val.numpy(), y_pred)
+print('Accuracy:', accuracy)

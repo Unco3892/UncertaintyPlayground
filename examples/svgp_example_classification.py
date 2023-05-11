@@ -21,6 +21,13 @@ class SVGP(gpytorch.models.ApproximateGP):
     """
 
     def __init__(self, inducing_points, dtype=torch.float32):
+        """
+        Initialize the SVGP model.
+
+        Args:
+            inducing_points (torch.Tensor): Tensor containing the inducing points.
+            dtype (torch.dtype, optional): Data type for the model parameters. Defaults to torch.float32.
+        """
         variational_distribution = gpytorch.variational.CholeskyVariationalDistribution(
             inducing_points.size(0), dtype=dtype
         )
@@ -66,6 +73,13 @@ class EarlyStopping:
         compare_fn (callable): Function to compare two values of the validation metric to determine if one is better than the other.
     """
     def __init__(self, patience=10, compare_fn=lambda x, y: x < y):
+        """
+        Initialize the EarlyStopping object.
+
+        Args:
+            patience (int, optional): Number of consecutive epochs with no improvement after which training will be stopped. Defaults to 10.
+            compare_fn (callable, optional): Function to compare two values of the validation metric to determine if one is better than the other. Defaults to lambda x, y: x < y.
+        """
         self.patience = patience
         self.counter = 0
         self.best_val_metric = np.inf
@@ -165,8 +179,7 @@ class SparseGPTrainer(BaseTrainer):
         inducing_points = self.X_train[:num_inducing_points, :]
         self.model = SVGP(inducing_points, dtype=self.dtype).to(
             self.device, dtype=self.dtype)
-        self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
-            dtype=self.dtype).to(self.device, dtype=self.dtype)
+        self.likelihood = gpytorch.likelihoods.BernoulliLikelihood().to(self.device, dtype=self.dtype)
         
     def train(self):
         # set the seed
@@ -216,24 +229,22 @@ class SparseGPTrainer(BaseTrainer):
                 if self.use_scheduler:
                     scheduler.step()    
             
-            # Compute validation metrics (MSE and R2)
+            # Compute validation metrics (accuracy)
             self.model.eval()
             self.likelihood.eval()
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
                 y_pred_val = self.likelihood(self.model(self.X_val)).mean
+                y_pred_val = torch.round(y_pred_val)  # convert to class labels
 
-            mse_val = mean_squared_error(
-                self.y_val.detach().numpy(), y_pred_val.detach().numpy())
-            r2_val = r2_score(self.y_val.detach().numpy(),
-                              y_pred_val.detach().numpy())
+            acc_val = (y_pred_val == self.y_val).float().mean()
 
             self.model.train()
             self.likelihood.train()
 
             print(
-                f"Epoch {i + 1}/{self.num_epochs}, Weighted Loss: {weighted_loss.item():.3f}, Val MSE: {mse_val:.6f}, Val R2: {r2_val:.3f}")
+                f"Epoch {i + 1}/{self.num_epochs}, Weighted Loss: {weighted_loss.item():.3f}, Val Accuracy: {acc_val:.3f}")
 
-            should_stop = early_stopping(mse_val, self.model)
+            should_stop = early_stopping(acc_val, self.model)
 
             if should_stop:
                 print(f"Early stopping after {i + 1} epochs")
@@ -244,15 +255,15 @@ class SparseGPTrainer(BaseTrainer):
             self.model.eval()
             self.likelihood.eval()
 
-    def predict_with_uncertainty(self, X):
+    def predict(self, X):
         """
-        Predicts the mean and variance of the output distribution given input tensor X.
+        Predicts the class labels given input tensor X.
 
         Args:
             X (tensor): Input tensor of shape (num_samples, num_features).
 
         Returns:
-            tuple: A tuple of the mean and variance of the output distribution, both of shape (num_samples,).
+            numpy array: The predicted class labels.
         """
         self.model.eval()
         self.likelihood.eval()
@@ -266,20 +277,22 @@ class SparseGPTrainer(BaseTrainer):
             X = torch.unsqueeze(X, 0)
 
         with torch.no_grad(), gpytorch.settings.fast_pred_var():
-            # Get the predictive mean and variance
+            # Get the predictive mean and convert to class labels
             preds = self.likelihood(self.model(X))
-            mean = preds.mean.cpu().numpy()
-            variance = preds.variance.cpu().numpy()
+            labels = torch.round(preds.mean).cpu().numpy()
 
-        return mean, variance
+        return labels
 
 # Example usage of the SVGPR class
+from sklearn.datasets import make_classification
 
-# Assuming that your data is numpy arrays
-X = np.random.rand(1000, 20)
-y = np.random.rand(1000)
+# Create a binary classification dataset
+X, y = make_classification(n_samples=1000, n_features=20, n_informative=15, n_redundant=5, random_state=42)
 
-# we also set the seeds for the models
+# Convert labels to float32 (required for BernoulliLikelihood)
+y = y.astype(np.float32)
+
+# Set seeds for reproducibility
 torch.manual_seed(42)
 np.random.seed(42)
 
@@ -289,8 +302,11 @@ trainer = SparseGPTrainer(X=X, y=y, num_inducing_points=200, num_epochs=5000, ba
 # Train the model
 trainer.train()
 
-# Make predictions with uncertainty
-y_pred, y_var = trainer.predict_with_uncertainty(trainer.X_val.numpy())
+# Make predictions
+y_pred = trainer.predict(trainer.X_val.numpy())
 
-# Compute R2 score for validation set
-print('R2 Score:', r2_score(trainer.y_val, y_pred))
+# Compute accuracy for validation set
+accuracy = (y_pred == trainer.y_val.numpy()).mean()
+print('Accuracy:', accuracy)
+
+
