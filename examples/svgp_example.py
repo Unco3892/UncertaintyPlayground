@@ -294,3 +294,23 @@ y_pred, y_var = trainer.predict_with_uncertainty(trainer.X_val.numpy())
 
 # Compute R2 score for validation set
 print('R2 Score:', r2_score(trainer.y_val, y_pred))
+
+#------------------------------------------------------------
+# Example of plotting the predictions with uncertainty
+import matplotlib.pyplot as plt
+
+# choose an instance from validation set
+x_instance = trainer.X_val[0].numpy()
+
+# predict mean and variance for the instance
+y_pred, y_var = trainer.predict_with_uncertainty(x_instance)
+
+# calculate standard deviation for the prediction
+y_std = np.sqrt(y_var)
+
+# plot prediction and confidence interval
+plt.figure(figsize=(10, 5))
+plt.plot(x_instance, y_pred, 'ro', markersize=10, label='Prediction')
+plt.fill_between(x_instance, y_pred - y_std, y_pred + y_std, color='r', alpha=0.2, label='Confidence Interval')
+plt.legend()
+plt.show()

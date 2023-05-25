@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import os
 from sklearn.metrics import r2_score
+from torch.autograd import Variable
 
 class MDN(nn.Module):
     def __init__(self, n_hidden, n_gaussians):
@@ -29,19 +30,27 @@ class MDN(nn.Module):
 
     def sample(self, x):
         pi, mu, sigma = self.forward(x)
-        pi = pi.detach().cpu().numpy()  # Shape: (n, K)
-        mu = mu.detach().cpu().numpy()  # Shape: (n, K)
-        sigma = sigma.detach().cpu().numpy()  # Shape: (n, K)
 
-        # Pick component from the mixture
-        k = np.array([np.random.choice(len(p), p=p) for p in pi])
-        return np.array([np.random.normal(mu_i[k_i], sigma_i[k_i]) for mu_i, sigma_i, k_i in zip(mu, sigma, k)])
+        # Choose component from the mixture
+        categorical = torch.distributions.Categorical(pi)
+        pis = list(categorical.sample().data)
 
+        sample = Variable(sigma.data.new(sigma.size(0)).normal_())
+        for i in range(sigma.size(0)):
+            sample[i] = sample[i]*sigma[i,pis[i]] + mu[i,pis[i]]
+        return sample
+
+
+# def mdn_loss(y, mu, sigma, pi):
+#     m = Normal(loc=mu, scale=sigma)
+#     loss = -torch.sum(pi * m.log_prob(y.unsqueeze(1)))
+#     return loss / y.size(0)
 
 def mdn_loss(y, mu, sigma, pi):
     m = Normal(loc=mu, scale=sigma)
-    loss = -torch.sum(pi * m.log_prob(y.unsqueeze(1)))
-    return loss / y.size(0)
+    log_prob = m.log_prob(y.unsqueeze(1))
+    log_mix = torch.log(pi) + log_prob
+    return -torch.logsumexp(log_mix, dim=1).mean()
 
 class EarlyStopping:
     """
@@ -152,6 +161,7 @@ class MDNTrainer(BaseTrainer):
         self.n_gaussians = n_gaussians
 
         self.model = MDN(n_hidden=n_hidden, n_gaussians=self.n_gaussians).to(self.device)
+        # self.model = self.model.double()  # convert model parameters to float64
         self.optimizer = Adam(self.model.parameters(), lr=self.lr)
 
     def train(self):
@@ -216,134 +226,151 @@ class MDNTrainer(BaseTrainer):
         return pi.cpu().numpy(), mu.cpu().numpy(), sigma.cpu().numpy(), sample
 
 
-# Example usage of the MDNTrainer class
+#----------------- Genrating some data to test the method -----------------#
+# # Example usage of the MDNTrainer class
+# def generate_data(num_samples, mixture_weights, means, std_devs):
+#     # Decide the number of samples from each component
+#     num_samples_components = np.random.multinomial(num_samples, mixture_weights)
+    
+#     # Generate samples from each component
+#     samples = []
+#     for i, (num, mean, std_dev) in enumerate(zip(num_samples_components, means, std_devs)):
+#         samples.extend(np.random.normal(mean, std_dev, num))
+    
+#     return np.array(samples)
 
-# Assuming that your data is numpy arrays
-X = np.random.rand(1000, 20)
-y = np.random.rand(1000)
-
-# we also set the seeds for the models
+# Set seed
 torch.manual_seed(42)
 np.random.seed(42)
 
-# Create an instance of the MDNTrainer class
-trainer = MDNTrainer(X=X, y=y, n_hidden=20, n_gaussians=5, num_epochs=5000, batch_size=1000, lr=0.2, patience=3)
+# # Assuming that your data is numpy arrays
+# # Generate bimodal data
+# num_samples = 10000
+# mixture_weights = [0.9, 0.1]  # Adjust the weights to get bimodal distribution
+# means = [-3.0, 3.0]  # Means for the two modes
+# std_devs = [0.5, 0.5]  # Standard deviations for the two modes
 
-# Train the model
-trainer.train()
+# X = np.random.rand(num_samples, 20)  # 20 random input features
+# y = generate_data(num_samples, mixture_weights, means, std_devs)
 
-# Make predictions with uncertainty
-pi, mu, sigma, y_pred = trainer.predict_with_uncertainty(trainer.X_val.numpy())
+#----------------- Generate mixture data -----------------#
+import math
 
-#print(pi,mu,sigma)
-
-# Compute R2 score for validation set
-print('R2 Score:', r2_score(trainer.y_val, y_pred))
-
-# ------------------------------
-# plot the prediction for one instance
-# import matplotlib.pyplot as plt
-# from scipy.stats import norm
-
-# # Assume you want to see the distribution for the first sample in your validation set
-# sample_idx = 0
-
-# # Make prediction for a single instance
-# instance = trainer.X_val[sample_idx].numpy()
-# sample_pi, sample_mu, sample_sigma, y_pred = trainer.predict_with_uncertainty(instance)
-
-# # # Get the parameters for the mixture model for this sample
-# # sample_pi = pi[sample_idx]
-# # sample_mu = mu[sample_idx]
-# # sample_sigma = sigma[sample_idx]
-
-# # Generate a range of x values
-# x_values = np.linspace(-10, 10, 400)
-
-# # Compute the total density function
-# total_density = np.zeros_like(x_values)
-# for i in range(len(sample_pi)):
-#     density = sample_pi[i] * norm.pdf(x_values, sample_mu[i], sample_sigma[i])
-#     total_density += density
-#     plt.plot(x_values, density, label=f'Component {i+1}')
-
-# # Plot the total density function
-# plt.plot(x_values, total_density, label='Total', linestyle='--')
-# plt.legend()
-# plt.show()
-
-import matplotlib.pyplot as plt
-from scipy.stats import norm
-
-# Let's assume you want to see the distribution for the first sample in your validation set
-def plot_mixture_model(instance_num, pi, mu, sigma):
-    # Get the parameters for the mixture model for this instance
-    sample_pi = pi[instance_num]
-    sample_mu = mu[instance_num]
-    sample_sigma = sigma[instance_num]
-
-    # Generate a range of x values
-    x_values = np.linspace(min(sample_mu - 3*sample_sigma), max(sample_mu + 3*sample_sigma), 400)
-
-    # Compute the total density function
-    total_density = np.zeros_like(x_values)
-    for i in range(len(sample_pi)):
-        density = sample_pi[i] * norm.pdf(x_values, sample_mu[i], sample_sigma[i])
-        total_density += density
-        plt.plot(x_values, density, label=f'Component {i+1}')
-
-    # Plot the total density function
-    plt.plot(x_values, total_density, label='Total', linestyle='--')
-    plt.legend()
-    plt.title(f'Instance {instance_num} Mixture Model')
-    plt.show()
-
-
-## Plot the mixture model for instance number 0
-# plot_mixture_model(0, pi, mu, sigma)
-
-#------------------------
-# trying my model with non-normally distributed data
-def generate_data(num_samples, mixture_weights, means, std_devs):
+def generate_mixed_data(num_samples, mixture_weights, means, std_devs, normal_mean, normal_std_dev):
     # Decide the number of samples from each component
-    num_samples_components = np.random.multinomial(num_samples, mixture_weights)
+    num_samples_components = np.random.multinomial(math.floor(num_samples / 2), mixture_weights)
     
     # Generate samples from each component
     samples = []
     for i, (num, mean, std_dev) in enumerate(zip(num_samples_components, means, std_devs)):
         samples.extend(np.random.normal(mean, std_dev, num))
+
+    # Generate samples from normal distribution
+    normal_samples = np.random.normal(normal_mean, normal_std_dev, math.floor(num_samples / 2))
     
-    return np.array(samples)
+    # Concatenate the samples
+    all_samples = np.concatenate((samples, normal_samples))
 
-# Generate the data
+    return all_samples
+
+# Generate bimodal data
 num_samples = 10000
-data = generate_data(num_samples, mixture_weights, means, std_devs)
+mixture_weights = [0.9, 0.1]  # Adjust the weights to get bimodal distribution
+means = [-3.0, 3.0]  # Means for the two modes
+std_devs = [0.5, 0.5]  # Standard deviations for the two modes
+normal_mean = 0.0  # Mean for the normal distribution
+normal_std_dev = 1.0  # Standard deviation for the normal distribution
 
-# Parameters of the Gaussian components
-mixture_weights = [0.3, 0.7]
-means = [0.0, 5.0]
-std_devs = [1.0, 0.5]
+X = np.random.rand(num_samples, 20)  # 20 random input features
+y = generate_mixed_data(num_samples, mixture_weights, means, std_devs, normal_mean, normal_std_dev)
 
-# Generate the data
-num_samples = 10000
-X = np.random.rand(num_samples, 20)
-y = generate_data(num_samples, mixture_weights, means, std_devs)
-
-# we also set the seeds for the models
-torch.manual_seed(42)
-np.random.seed(42)
-
-# Create an instance of the MDNTrainer class
-trainer = MDNTrainer(X=X, y=y, n_hidden=20, n_gaussians=5, num_epochs=5000, batch_size=1000, lr=0.01, patience=3)
-
-# Train the model
+#----------------- Training the MDN -----------------#
+# # Initialize and train the MDN trainer
+# trainer = MDNTrainer(X, y, num_epochs=100, lr=0.01, n_hidden=20, n_gaussians=4)
+# def __init__(self, X, y, sample_weights=None, test_size=0.2, random_state=42, num_epochs=50, batch_size=256, optimizer_fn_name="Adam", lr=0.01, use_scheduler=False, patience=10, dtype=torch.float32):
+trainer = MDNTrainer(X, y, num_epochs=100, lr=0.001, patience=20, n_hidden=20, n_gaussians=4,dtype=torch.float32)
 trainer.train()
 
-# Make predictions with uncertainty
-pi, mu, sigma, y_pred = trainer.predict_with_uncertainty(trainer.X_val.numpy())
+#----------------- Plotting the results -----------------#
 
-# Compute R2 score for validation set
-print('R2 Score:', r2_score(trainer.y_val, y_pred))
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-# Plot the mixture model for instance number 0
-plot_mixture_model(0, pi, mu, sigma)
+def compare_distributions(trainer, x_instance, y_actual=None, num_samples=10000):
+    """
+    Compare the actual and predicted outcome distributions.
+
+    Args:
+        trainer (MDNTrainer): The trained MDNTrainer instance.
+        x_instance (np.ndarray): The instance for which to predict the outcome distribution.
+        y_actual (float or np.ndarray, optional): The actual outcome(s). If a single value, plot as a vertical line.
+                                                  If an array or list, plot as a KDE. If None, don't plot actual outcome.
+        num_samples (int, optional): The number of samples to generate from the predicted and actual distributions.
+                                     Default is 10000.
+    """
+    # Ensure x_instance is a 2D array
+    if x_instance.ndim == 1:
+        x_instance = np.expand_dims(x_instance, axis=0)
+    
+    # Get the predicted parameters of the mixture distribution
+    pi, mu, sigma, pred = trainer.predict_with_uncertainty(x_instance)
+    
+    # Generate samples from the predicted distribution
+    predicted_samples = []
+    
+    print ("The weights are: ",pi, "\n", 
+           "The means are: ",mu, "\n",
+           "The sigmas are: ",sigma, "\n",
+           "The final prediction is: ",pred, "\n")
+
+    for _ in range(num_samples):
+        # Choose Gaussian
+        idx = np.random.choice(np.arange(len(pi[0])), p=pi[0])
+        # Sample from Gaussian
+        sample = np.random.normal(mu[0, idx], sigma[0, idx])
+        predicted_samples.append(sample)
+    
+    # Plot KDE of predicted samples
+    sns.kdeplot(predicted_samples, fill=True, color="r", label="Predicted distribution")
+
+    # If y_actual is provided
+    if y_actual is not None:
+        # If y_actual is a single value, plot it as a vertical line
+        if np.isscalar(y_actual):
+            plt.axvline(y_actual, color='b', linestyle='--', label='Ground truth')
+        else:
+            # If y_actual is a list or array, plot it as a KDE
+            sns.kdeplot(y_actual, fill=True, color="b", label="Actual")
+        plt.title('Outcome Distributions: Actual vs Predicted')
+    else:
+        plt.title('Outcome Distributions: Predicted')
+        
+    # plot the predicted value
+    plt.axvline(pred.numpy(), color='r', linestyle='--', label='Predicted mean')
+    plt.xlabel('Value')
+    plt.ylabel('Density')
+    plt.grid(axis='y', alpha=0.75)
+    plt.legend()
+    plt.show()
+
+# Generate some testing data
+X_test = np.random.rand(1000, 20)
+# Call the function with the actual distribution
+#Y_test = generate_mixed_data(num_samples, mixture_weights, means, std_devs)
+Y_test = generate_mixed_data(num_samples, mixture_weights, means, std_devs, normal_mean, normal_std_dev)
+
+# Choose a test instance
+index_instance = 900
+test_instance = X_test[index_instance, :]
+test_instance = test_instance.astype(np.float64)
+
+print(test_instance)
+
+# Get the predicted parameters of the mixture distribution
+pi, mu, sigma, _ = trainer.predict_with_uncertainty(test_instance)
+
+# print(test_instance.shape)
+# # Call the function with the actual value
+# compare_distributions(trainer, test_instance)
+
+compare_distributions(trainer, test_instance, y_actual=Y_test[index_instance])
