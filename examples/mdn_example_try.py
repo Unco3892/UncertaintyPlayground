@@ -40,7 +40,6 @@ class MDN(nn.Module):
             sample[i] = sample[i]*sigma[i,pis[i]] + mu[i,pis[i]]
         return sample
 
-
 # def mdn_loss(y, mu, sigma, pi):
 #     m = Normal(loc=mu, scale=sigma)
 #     loss = -torch.sum(pi * m.log_prob(y.unsqueeze(1)))
@@ -86,6 +85,7 @@ class EarlyStopping:
 
         return False
 
+# CHANGED THE INPUT TYPE HERE
 class BaseTrainer:
     def __init__(self, X, y, sample_weights=None, test_size=0.2, random_state=42, num_epochs=50, batch_size=256, optimizer_fn_name="Adam", lr=0.01, use_scheduler=False, patience=10, dtype=torch.float32):
         self.X = X
@@ -155,13 +155,15 @@ class BaseTrainer:
         self.train_loader = DataLoader(
             train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)
 
+# CHANGED PREDICT WITH UNCERTAINTY HERE
 class MDNTrainer(BaseTrainer):
     def __init__(self, *args, n_hidden=20, n_gaussians=5, **kwargs):
         super().__init__(*args, **kwargs)
         self.n_gaussians = n_gaussians
 
         self.model = MDN(n_hidden=n_hidden, n_gaussians=self.n_gaussians).to(self.device)
-        # self.model = self.model.double()  # convert model parameters to float64
+        if self.dtype == torch.float64:
+            self.model = self.model.double()  # convert model parameters to float64
         self.optimizer = Adam(self.model.parameters(), lr=self.lr)
 
     def train(self):
@@ -213,7 +215,7 @@ class MDNTrainer(BaseTrainer):
 
         # Convert numpy array to PyTorch tensor if necessary
         if isinstance(X, np.ndarray):
-            X = torch.from_numpy(X).float().to(self.device)
+            X = torch.from_numpy(X).to(self.device)
 
         # Check if X is a single instance and add an extra dimension if necessary
         if X.ndim == 1:
@@ -224,6 +226,7 @@ class MDNTrainer(BaseTrainer):
             sample = self.model.sample(X)
 
         return pi.cpu().numpy(), mu.cpu().numpy(), sigma.cpu().numpy(), sample
+
 
 
 #----------------- Genrating some data to test the method -----------------#
@@ -288,7 +291,7 @@ y = generate_mixed_data(num_samples, mixture_weights, means, std_devs, normal_me
 # # Initialize and train the MDN trainer
 # trainer = MDNTrainer(X, y, num_epochs=100, lr=0.01, n_hidden=20, n_gaussians=4)
 # def __init__(self, X, y, sample_weights=None, test_size=0.2, random_state=42, num_epochs=50, batch_size=256, optimizer_fn_name="Adam", lr=0.01, use_scheduler=False, patience=10, dtype=torch.float32):
-trainer = MDNTrainer(X, y, num_epochs=100, lr=0.001, patience=20, n_hidden=20, n_gaussians=4,dtype=torch.float32)
+trainer = MDNTrainer(X, y, num_epochs=10, lr=0.001, patience=20, n_hidden=20, n_gaussians=4,dtype=torch.float32)
 trainer.train()
 
 #----------------- Plotting the results -----------------#
@@ -362,7 +365,8 @@ Y_test = generate_mixed_data(num_samples, mixture_weights, means, std_devs, norm
 # Choose a test instance
 index_instance = 900
 test_instance = X_test[index_instance, :]
-test_instance = test_instance.astype(np.float64)
+# MAKE A NOTE THAT BOTH TRAINING AND TESTING DATA MUST BE OF THE SAME FLOAT TYPE
+test_instance = test_instance.astype(np.float32)
 
 print(test_instance)
 
