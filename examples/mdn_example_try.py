@@ -7,11 +7,10 @@ from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 from sklearn.model_selection import train_test_split
 import os
-from sklearn.metrics import r2_score
 from torch.autograd import Variable
 
 class MDN(nn.Module):
-    def __init__(self, n_hidden, n_gaussians):
+    def __init__(self, n_hidden, n_gaussians, prediction_method='max_weight_sample'):
         super(MDN, self).__init__()
         self.z_h = nn.Sequential(
             nn.Linear(20, n_hidden),
@@ -20,6 +19,7 @@ class MDN(nn.Module):
         self.z_pi = nn.Linear(n_hidden, n_gaussians)
         self.z_mu = nn.Linear(n_hidden, n_gaussians)
         self.z_sigma = nn.Linear(n_hidden, n_gaussians)
+        self.prediction_method = prediction_method
 
     def forward(self, x):
         z_h = self.z_h(x)
@@ -28,16 +28,42 @@ class MDN(nn.Module):
         sigma = torch.exp(self.z_sigma(z_h))
         return pi, mu, sigma
 
-    def sample(self, x):
+    def sample(self, x, num_samples=100):
         pi, mu, sigma = self.forward(x)
+        
+        # this method siomply returns the mean of the biggest component
+        if self.prediction_method == 'max_weight_mean':
+            # Choose component with the highest weight
+            pis = torch.argmax(pi, dim=1)
+            # Return the mean of the chosen component
+            sample = mu[torch.arange(mu.size(0)), pis]
 
-        # Choose component from the mixture
-        categorical = torch.distributions.Categorical(pi)
-        pis = list(categorical.sample().data)
+        elif self.prediction_method == 'max_weight_sample':
+            # Choose component from the mixture
+            categorical = torch.distributions.Categorical(pi)
+            pis = list(categorical.sample().data)
+            # Sample from the chosen component
+            sample = Variable(sigma.data.new(sigma.size(0)).normal_())
+            for i in range(sigma.size(0)):
+                sample[i] = sample[i]*sigma[i,pis[i]] + mu[i,pis[i]]
 
-        sample = Variable(sigma.data.new(sigma.size(0)).normal_())
-        for i in range(sigma.size(0)):
-            sample[i] = sample[i]*sigma[i,pis[i]] + mu[i,pis[i]]
+        elif self.prediction_method == 'average_sample':
+            # Draw multiple samples and take the average
+            samples = []
+            for _ in range(num_samples):
+                # Choose component from the mixture
+                categorical = torch.distributions.Categorical(pi)
+                pis = list(categorical.sample().data)
+                # Sample from the chosen component
+                sample = Variable(sigma.data.new(sigma.size(0)).normal_())
+                for i in range(sigma.size(0)):
+                    sample[i] = sample[i]*sigma[i,pis[i]] + mu[i,pis[i]]
+                samples.append(sample)
+            sample = torch.mean(torch.stack(samples), dim=0)
+
+        else:
+            raise ValueError(f"Invalid prediction method: {self.prediction_method}")
+
         return sample
 
 # def mdn_loss(y, mu, sigma, pi):
@@ -164,8 +190,10 @@ class MDNTrainer(BaseTrainer):
         self.model = MDN(n_hidden=n_hidden, n_gaussians=self.n_gaussians).to(self.device)
         if self.dtype == torch.float64:
             self.model = self.model.double()  # convert model parameters to float64
-        self.optimizer = Adam(self.model.parameters(), lr=self.lr)
-
+        #self.optimizer = Adam(self.model.parameters(), lr=self.lr)
+        optimizer_fn = getattr(torch.optim, self.optimizer_fn_name)
+        self.optimizer = optimizer_fn(self.model.parameters(), lr=self.lr)
+        
     def train(self):
         self.model.train()
         early_stopping = EarlyStopping(patience=self.patience, compare_fn=lambda x, y: x < y)
@@ -223,83 +251,16 @@ class MDNTrainer(BaseTrainer):
 
         with torch.no_grad():
             pi, mu, sigma = self.model(X)
-            sample = self.model.sample(X)
+            sample = self.model.sample(X, num_samples = 1000)
 
         return pi.cpu().numpy(), mu.cpu().numpy(), sigma.cpu().numpy(), sample
-
-
-
-#----------------- Genrating some data to test the method -----------------#
-# # Example usage of the MDNTrainer class
-# def generate_data(num_samples, mixture_weights, means, std_devs):
-#     # Decide the number of samples from each component
-#     num_samples_components = np.random.multinomial(num_samples, mixture_weights)
-    
-#     # Generate samples from each component
-#     samples = []
-#     for i, (num, mean, std_dev) in enumerate(zip(num_samples_components, means, std_devs)):
-#         samples.extend(np.random.normal(mean, std_dev, num))
-    
-#     return np.array(samples)
-
-# Set seed
-torch.manual_seed(42)
-np.random.seed(42)
-
-# # Assuming that your data is numpy arrays
-# # Generate bimodal data
-# num_samples = 10000
-# mixture_weights = [0.9, 0.1]  # Adjust the weights to get bimodal distribution
-# means = [-3.0, 3.0]  # Means for the two modes
-# std_devs = [0.5, 0.5]  # Standard deviations for the two modes
-
-# X = np.random.rand(num_samples, 20)  # 20 random input features
-# y = generate_data(num_samples, mixture_weights, means, std_devs)
-
-#----------------- Generate mixture data -----------------#
-import math
-
-def generate_mixed_data(num_samples, mixture_weights, means, std_devs, normal_mean, normal_std_dev):
-    # Decide the number of samples from each component
-    num_samples_components = np.random.multinomial(math.floor(num_samples / 2), mixture_weights)
-    
-    # Generate samples from each component
-    samples = []
-    for i, (num, mean, std_dev) in enumerate(zip(num_samples_components, means, std_devs)):
-        samples.extend(np.random.normal(mean, std_dev, num))
-
-    # Generate samples from normal distribution
-    normal_samples = np.random.normal(normal_mean, normal_std_dev, math.floor(num_samples / 2))
-    
-    # Concatenate the samples
-    all_samples = np.concatenate((samples, normal_samples))
-
-    return all_samples
-
-# Generate bimodal data
-num_samples = 10000
-mixture_weights = [0.9, 0.1]  # Adjust the weights to get bimodal distribution
-means = [-3.0, 3.0]  # Means for the two modes
-std_devs = [0.5, 0.5]  # Standard deviations for the two modes
-normal_mean = 0.0  # Mean for the normal distribution
-normal_std_dev = 1.0  # Standard deviation for the normal distribution
-
-X = np.random.rand(num_samples, 20)  # 20 random input features
-y = generate_mixed_data(num_samples, mixture_weights, means, std_devs, normal_mean, normal_std_dev)
-
-#----------------- Training the MDN -----------------#
-# # Initialize and train the MDN trainer
-# trainer = MDNTrainer(X, y, num_epochs=100, lr=0.01, n_hidden=20, n_gaussians=4)
-# def __init__(self, X, y, sample_weights=None, test_size=0.2, random_state=42, num_epochs=50, batch_size=256, optimizer_fn_name="Adam", lr=0.01, use_scheduler=False, patience=10, dtype=torch.float32):
-trainer = MDNTrainer(X, y, num_epochs=10, lr=0.001, patience=20, n_hidden=20, n_gaussians=4,dtype=torch.float32)
-trainer.train()
 
 #----------------- Plotting the results -----------------#
 
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def compare_distributions(trainer, x_instance, y_actual=None, num_samples=10000):
+def compare_distributions(trainer, x_instance, y_actual=None, num_samples=10000, ax=None):
     """
     Compare the actual and predicted outcome distributions.
 
@@ -311,6 +272,7 @@ def compare_distributions(trainer, x_instance, y_actual=None, num_samples=10000)
         num_samples (int, optional): The number of samples to generate from the predicted and actual distributions.
                                      Default is 10000.
     """
+
     # Ensure x_instance is a 2D array
     if x_instance.ndim == 1:
         x_instance = np.expand_dims(x_instance, axis=0)
@@ -321,9 +283,11 @@ def compare_distributions(trainer, x_instance, y_actual=None, num_samples=10000)
     # Generate samples from the predicted distribution
     predicted_samples = []
     
-    print ("The weights are: ",pi, "\n", 
-           "The means are: ",mu, "\n",
-           "The sigmas are: ",sigma, "\n",
+    print ("The actual input was: ",x_instance, "\n",
+           "The ground truth was: ",y_actual, "\n",
+           "The predicted weights are: ",pi, "\n", 
+           "The predicted means are: ",mu, "\n",
+           "The predicted sigmas are: ",sigma, "\n",
            "The final prediction is: ",pred, "\n")
 
     for _ in range(num_samples):
@@ -332,49 +296,131 @@ def compare_distributions(trainer, x_instance, y_actual=None, num_samples=10000)
         # Sample from Gaussian
         sample = np.random.normal(mu[0, idx], sigma[0, idx])
         predicted_samples.append(sample)
-    
-    # Plot KDE of predicted samples
-    sns.kdeplot(predicted_samples, fill=True, color="r", label="Predicted distribution")
 
-    # If y_actual is provided
-    if y_actual is not None:
-        # If y_actual is a single value, plot it as a vertical line
-        if np.isscalar(y_actual):
-            plt.axvline(y_actual, color='b', linestyle='--', label='Ground truth')
-        else:
-            # If y_actual is a list or array, plot it as a KDE
-            sns.kdeplot(y_actual, fill=True, color="b", label="Actual")
-        plt.title('Outcome Distributions: Actual vs Predicted')
+    # Plot KDE of predicted samples
+    if ax is None:
+        sns.kdeplot(predicted_samples, fill=True, color="r", label="Predicted distribution")
+        plt.axvline(pred[0], color="r", linestyle="--", label="Predicted value")
     else:
-        plt.title('Outcome Distributions: Predicted')
-        
-    # plot the predicted value
-    plt.axvline(pred.numpy(), color='r', linestyle='--', label='Predicted mean')
-    plt.xlabel('Value')
-    plt.ylabel('Density')
-    plt.grid(axis='y', alpha=0.75)
-    plt.legend()
-    plt.show()
+        sns.kdeplot(predicted_samples, fill=True, color="r", label="Predicted distribution", ax=ax)
+        ax.axvline(pred[0], color="r", linestyle="--", label="Predicted value")
+
+    # Plot the actual value(s)
+    if y_actual is not None:
+        if np.isscalar(y_actual):
+            if ax is None:
+                plt.axvline(y_actual, color="b", linestyle="--", label="Ground truth")
+            else:
+                ax.axvline(y_actual, color="b", linestyle="--", label="Ground truth")
+        else:
+            if ax is None:
+                sns.kdeplot(y_actual, fill=True, color="b", label="Actual")
+            else:
+                sns.kdeplot(y_actual, fill=True, color="b", label="Actual", ax=ax)
+
+    # Set an option when doing multiple plots
+    if ax is None:
+        plt.xlabel('Value')
+        plt.ylabel('Density')
+        plt.legend()
+        plt.grid(axis='y', alpha=0.75)
+        plt.show()
+
+# # Generate some testing data
+def generate_multi_modal_data(num_samples, modes):
+    samples = []
+    for mode in modes:
+        mean, std_dev = mode['mean'], mode['std_dev']
+        num = int(num_samples * mode['weight'])
+        samples.extend(np.random.normal(mean, std_dev, num))
+    return np.array(samples)
+
+# Define the modes for the multi-modal data
+modes = [
+    {'mean': -3.0, 'std_dev': 0.5, 'weight': 0.3},
+    {'mean': 0.0, 'std_dev': 1.0, 'weight': 0.4},
+    {'mean': 3.0, 'std_dev': 0.7, 'weight': 0.3}
+]
+
+# Generate multi-modal data
+torch.manual_seed(1)
+np.random.seed(42)
+
+num_samples = 10000
+X = np.random.rand(num_samples, 20)
+y = generate_multi_modal_data(num_samples, modes)
+
+
+# Initialize and train the MDN trainer
+trainer = MDNTrainer(X, y, num_epochs=100, lr=0.01, n_hidden=20, n_gaussians=3)
+trainer.train()
 
 # Generate some testing data
 X_test = np.random.rand(1000, 20)
-# Call the function with the actual distribution
-#Y_test = generate_mixed_data(num_samples, mixture_weights, means, std_devs)
-Y_test = generate_mixed_data(num_samples, mixture_weights, means, std_devs, normal_mean, normal_std_dev)
+Y_test = generate_multi_modal_data(1000, modes)
 
 # Choose a test instance
 index_instance = 900
 test_instance = X_test[index_instance, :]
-# MAKE A NOTE THAT BOTH TRAINING AND TESTING DATA MUST BE OF THE SAME FLOAT TYPE
 test_instance = test_instance.astype(np.float32)
 
-print(test_instance)
-
-# Get the predicted parameters of the mixture distribution
-pi, mu, sigma, _ = trainer.predict_with_uncertainty(test_instance)
-
-# print(test_instance.shape)
-# # Call the function with the actual value
-# compare_distributions(trainer, test_instance)
-
+# Call the function with the actual value
 compare_distributions(trainer, test_instance, y_actual=Y_test[index_instance])
+
+indices = [900, 100]  # Example indices
+plot_results_grid(trainer, X_test, Y_test, indices)
+
+
+
+#----------------- Generate mixture data -----------------#
+
+# import matplotlib.pyplot as plt
+# Define your indices
+# indices = [900, 910]  # replace with your indices
+
+# Create a figure and a set of subplots
+# fig, axs = plt.subplots(1, len(indices), figsize=(15,5))
+
+# Loop over each index and subplot
+# for i, idx in enumerate(indices):
+#     # Call your function and plot on the specific subplot
+#     compare_distributions(trainer, X_test[idx].astype(np.float32), y_actual=Y_test[idx], ax=axs[i])  # replace with the correct call to your function
+#     axs[i].set_title(f'Index {idx}')
+#     axs[i].grid(True)
+#     axs[i].legend(True)
+
+
+# Show the plot
+# plt.show()
+
+
+#----------------- Generate mixture data -----------------#
+# import math
+
+# def generate_mixed_data(num_samples, mixture_weights, means, std_devs, normal_mean, normal_std_dev):
+#     # Decide the number of samples from each component
+#     num_samples_components = np.random.multinomial(math.floor(num_samples / 2), mixture_weights)
+    
+#     # Generate samples from each component
+#     samples = []
+#     for i, (num, mean, std_dev) in enumerate(zip(num_samples_components, means, std_devs)):
+#         samples.extend(np.random.normal(mean, std_dev, num))
+
+#     # Generate samples from normal distribution
+#     normal_samples = np.random.normal(normal_mean, normal_std_dev, math.floor(num_samples / 2))
+    
+#     # Concatenate the samples
+#     all_samples = np.concatenate((samples, normal_samples))
+
+#     return all_samples
+
+# # Generate bimodal data
+# num_samples = 10000
+# mixture_weights = [0.9, 0.1]  # Adjust the weights to get bimodal distribution
+# means = [-3.0, 3.0]  # Means for the two modes
+# std_devs = [0.5, 0.5]  # Standard deviations for the two modes
+# normal_mean = 0.0  # Mean for the normal distribution
+# normal_std_dev = 1.0  # Standard deviation for the normal distribution
+
+# X = np.random.rand(num_samples, 20)  # 20 random input features
+# y = generate_mixed_data(num_samples, mixture_weights, means, std_devs, normal_mean, normal_std_dev)
