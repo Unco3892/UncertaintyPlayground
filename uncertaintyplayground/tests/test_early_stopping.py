@@ -37,6 +37,5 @@ class TestEarlyStopping(unittest.TestCase):
         self.assertEqual(self.early_stopping.best_val_metric, 10)
         self.assertEqual(self.early_stopping.counter, 1)
 
-
 if __name__ == "__main__":
     unittest.main()

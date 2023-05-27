@@ -1,8 +1,8 @@
 import torch
 import numpy as np
 from .base_trainer import BaseTrainer
-from ..models.mdn_model import MDN, mdn_loss
-from ..utils.early_stopping import EarlyStopping
+from models.mdn_model import MDN, mdn_loss
+from utils.early_stopping import EarlyStopping
 
 class MDNTrainer(BaseTrainer):
     """
@@ -96,5 +96,5 @@ class MDNTrainer(BaseTrainer):
             pi, mu, sigma = self.model(X)
             sample = self.model.sample(X, num_samples=1000)
 
-        return pi.cpu().numpy(), mu.cpu().numpy(), sigma.cpu().numpy(), sample
+        return pi.cpu().numpy(), mu.cpu().numpy(), sigma.cpu().numpy(), sample.cpu().numpy()
 
