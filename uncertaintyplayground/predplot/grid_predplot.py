@@ -1,4 +1,3 @@
-import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -40,3 +39,17 @@ def plot_results_grid(trainer, compare_func, X_test, Y_test, indices, ncols=2, d
 
     plt.tight_layout()
     plt.show()
+
+# Designig a context manager to disable the display of matplotlib plots when testing the plots
+class DisablePlotDisplay:
+    """
+    Context manager to disable the display of matplotlib plots.
+    """
+
+    def __enter__(self):
+        plt.ioff()  # Turn off interactive mode
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        plt.close()  # Close the plot
+
