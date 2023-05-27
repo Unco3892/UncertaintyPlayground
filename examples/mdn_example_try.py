@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import os
 from torch.autograd import Variable
+import matplotlib.pyplot as plt
 
 class MDN(nn.Module):
     def __init__(self, n_hidden, n_gaussians, prediction_method='max_weight_sample'):
@@ -367,8 +368,8 @@ test_instance = test_instance.astype(np.float32)
 # Call the function with the actual value
 compare_distributions(trainer, test_instance, y_actual=Y_test[index_instance])
 
-indices = [900, 100]  # Example indices
-plot_results_grid(trainer, X_test, Y_test, indices)
+# indices = [900, 100]  # Example indices
+# plot_results_grid(trainer, X_test, Y_test, indices)
 
 
 

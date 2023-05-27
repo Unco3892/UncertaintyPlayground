@@ -2,6 +2,9 @@ import torch
 import gpytorch
 import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
+from .base_trainer import BaseTrainer
+from ..models.svgp_model import SVGP
+from ..utils.early_stopping import EarlyStopping
 
 class SparseGPTrainer(BaseTrainer):
     def __init__(self, *args, num_inducing_points=100, **kwargs):

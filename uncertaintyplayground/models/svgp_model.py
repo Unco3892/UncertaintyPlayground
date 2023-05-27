@@ -8,6 +8,10 @@ class SVGP(gpytorch.models.ApproximateGP):
     A scalable Gaussian Process (GP) model based on stochastic variational inference.
     Inherits from the gpytorch.models.ApproximateGP class.
 
+    Args:
+        inducing_points (torch.Tensor): Inducing points tensor.
+        dtype (torch.dtype, optional): Data type of the model. Defaults to torch.float32.
+
     Attributes:
         mean_module (gpytorch.means.ConstantMean): Constant mean module.
         covar_module (gpytorch.kernels.ScaleKernel): Scaled RBF kernel.
