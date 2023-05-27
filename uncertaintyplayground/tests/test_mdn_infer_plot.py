@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from trainers.mdn_trainer import MDNTrainer
 from utils.generate_data import generate_multi_modal_data
-from utils.mdn_infer_plot import compare_distributions, plot_results_grid
+from utils.mdn_infer_plot import compare_distributions_mdn, plot_results_grid
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -58,7 +58,7 @@ class TestDistributionComparison(unittest.TestCase):
         # Disable the display of plots within the test
         with DisablePlotDisplay():
             # Call the function without asserting the return value
-            compare_distributions(self.trainer, test_instance, y_actual=self.Y_test[index_instance])
+            compare_distributions_mdn(self.trainer, test_instance, y_actual=self.Y_test[index_instance])
 
     def test_plot_results_grid(self):
         """

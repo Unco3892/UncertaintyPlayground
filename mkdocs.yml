@@ -1,0 +1,48 @@
+site_name: Uncertainty playground
+
+theme:
+  name: "material"
+  font: 
+      text: Fira Sans
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      primary: amber
+      accent:  deep orange
+      scheme: default
+      toggle:
+        icon: material/brightness-3
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      primary: deep purple
+      accent:  purple
+      scheme: slate
+      toggle:
+        icon: material/brightness-6
+        name: Switch to light mode
+
+
+plugins:
+  - search
+  - gen-files:
+      scripts:
+      - docs/gen_ref_pages.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [uncertaintyplayground]
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+nav:
+  - About: index.md
+  - Example: example.md
+  - Code Reference: reference/
+  - Bibliography: bib.md

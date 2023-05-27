@@ -3,10 +3,33 @@ import gpytorch
 import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
 from .base_trainer import BaseTrainer
-from ..models.svgp_model import SVGP
-from ..utils.early_stopping import EarlyStopping
+from models.svgp_model import SVGP
+from utils.early_stopping import EarlyStopping
 
 class SparseGPTrainer(BaseTrainer):
+    """
+    Trains an SVGP model using specified parameters and early stopping.
+    
+    Attributes:
+        num_inducing_points (int): Number of inducing points for the SVGP.
+        model (SVGP): The Stochastic Variational Gaussian Process model.
+        likelihood (gpytorch.likelihoods.GaussianLikelihood): The likelihood of the model.
+    
+    Args:
+        X (array-like): The input features.
+        y (array-like): The target outputs.
+        num_inducing_points (int): Number of inducing points to use in the SVGP model.
+        sample_weights (array-like, optional): Sample weights for each data point. Defaults to None.
+        test_size (float, optional): Fraction of the dataset to be used as test data. Defaults to 0.2.
+        random_state (int, optional): Random seed for reproducible results. Defaults to 42.
+        num_epochs (int, optional): Maximum number of training epochs. Defaults to 50.
+        batch_size (int, optional): Batch size for training. Defaults to 256.
+        optimizer_fn_name (str, optional): Name of the optimizer to use. Defaults to "Adam".
+        lr (float, optional): Learning rate for the optimizer. Defaults to 0.01.
+        use_scheduler (bool, optional): Whether to use a learning rate scheduler. Defaults to False.
+        patience (int, optional): Number of epochs with no improvement before stopping training. Defaults to 10.
+        dtype (torch.dtype, optional): The dtype to use for input tensors. Defaults to torch.float32.
+    """
     def __init__(self, *args, num_inducing_points=100, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_inducing_points = num_inducing_points
@@ -64,12 +87,10 @@ class SparseGPTrainer(BaseTrainer):
                 
                 # the scheduler is called after the optimizer
                 if self.use_scheduler:
-                    scheduler.step()
-                
+                    scheduler.step()                
             
             # if self.use_scheduler and i >= 2:
             #     scheduler.step()
-
             # if self.use_scheduler:
             #     scheduler.step()
 
