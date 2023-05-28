@@ -1,22 +1,20 @@
-# UncertaintyPlayground: Fast *(and easy)* estimation of prediction intervals with neural networks via `PyTorch` and `GPyTorch`
+# UncertaintyPlayground: Fast *(and easy)* estimation of prediction intervals with neural networks
 
 <!-- CI test badge will be added once the repo is made public -->
-<!-- ![CI Test Suite](https://github.com/unco3892/UncertaintyPlaygroundV1/actions/workflows/ci_test.yml/badge.svg?branch=main) -->
-[![Documentation Status](0.1)](docs/)
+<!-- ![CI Test Suite](https://github.com/unco3892/UncertaintyPlayground/actions/workflows/ci_test.yml/badge.svg?branch=main) -->
+[![Python Version](https://img.shields.io/badge/python-3.8+-green.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-
-[![Python Version](https://img.shields.io/badge/python-3.8+-red.svg)](https://www.python.org/downloads/)
 
 # Installation
 
-**Requirements*
+*Requirements*:
 - Python >= 3.8
 - PyTorch == 2.0.1
 - GPyTorch == 1.10
-- Numpy >= 1.24.0
-- Seaborn >= 0.12.2
+- Numpy == 1.24.0
+- Seaborn == 0.12.2
 
-From the root directory of the repo, please run the following command in your terminal to get all thge files and required packages:
+From the root directory of the repo, run the following in your terminal:
 ```bash
 pip install .
 ```
@@ -86,4 +84,4 @@ Here are some ideas on how to this packaeg can be further developed:
 
 ## License
 
-`UncertinatyPlayground` is [MIT licensed](LICENSE).
+Please see the project MIT licensed [here](LICENSE).
