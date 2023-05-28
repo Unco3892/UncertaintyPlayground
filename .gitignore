@@ -1,7 +1,8 @@
 .python-version
 uncertaintyplayground/myenv/
 __pycache__/
-.tox/
 .vscode/
+.tox/
 build/
+dist/
 *.egg-info/
