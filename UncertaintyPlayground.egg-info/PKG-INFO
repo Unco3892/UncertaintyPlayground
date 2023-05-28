@@ -6,14 +6,9 @@ Home-page: https://github.com/Unco3892/UncertaintyPlayground
 Author: Ilia Azizi
 Author-email: ilia.azizi@unil.ch
 Classifier: Development Status :: 3 - Alpha
-Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.6
-Classifier: Programming Language :: Python :: 3.7
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
-Classifier: Programming Language :: Python :: 3.10
 Description-Content-Type: text/markdown
 
 Package structure
