@@ -1,3 +1,4 @@
 uncertaintyplayground/myenv/
 __pycache__/
 .tox/
+.python-version

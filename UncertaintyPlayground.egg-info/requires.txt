@@ -1,0 +1,6 @@
+torch==2.0.1
+gpytorch==1.10
+numpy==1.24.2
+scikit-learn==1.2.2
+matplotlib==3.7.1
+seaborn==0.12.2

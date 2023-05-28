@@ -1,3 +1,18 @@
+Metadata-Version: 2.1
+Name: UncertaintyPlayground
+Version: 0.1
+Summary: A Python library for uncertainty estimation in supervised learning tasks
+Home-page: https://github.com/Unco3892/UncertaintyPlayground
+Author: Ilia Azizi
+Author-email: ilia.azizi@unil.ch
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Description-Content-Type: text/markdown
+
 Package structure
 
 <!-- ![CI Workflow](https://github.com/unco3892/UncertaintyPlaygroundV1/actions/workflows/ci_test.yml/badge.svg?branch=main) -->
