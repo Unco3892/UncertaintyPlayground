@@ -7,7 +7,7 @@ theme:
   palette:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
-      primary: amber
+      primary: white
       accent:  deep orange
       scheme: default
       toggle:
@@ -42,7 +42,7 @@ markdown_extensions:
   - pymdownx.superfences
 
 nav:
+  - Code Reference: reference/
   - About: index.md
   - Example: example.md
-  - Code Reference: reference/
   - Bibliography: bib.md
