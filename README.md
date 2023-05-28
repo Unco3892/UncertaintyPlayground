@@ -31,27 +31,27 @@ import uncertaintyplayground as up
 
 ```bash
 UncertaintyPlayground/
+├── README.md
+├── setup.py
+├── LICENSE
+├── MANIFEST.in
+├── tox.ini # Local continuous integration
+├── mkdocs.yml
 ├── docs # Documentation
 │   ├── bib.md
 │   ├── example.md
 │   ├── gen_ref_pages.py
 │   ├── index.md
 │   └── README.md
-├── examples # Examples to run
+├── examples # Examples of the package
 │   ├── mdn_example.py
 │   └── svgp_example.py
-├── LICENSE
-├── MANIFEST.in
-├── mkdocs.yml
-├── README.md
-├── setup.py
-├── tox.ini # Local continuous integration
 └── uncertaintyplayground # Main package
     ├── requirements.txt
     ├── models # Models
     │   ├── mdn_model.py
     │   └── svgp_model.py
-    ├── trainers # Trainers to train the models
+    ├── trainers # Training the models
     │   ├── base_trainer.py
     │   ├── mdn_trainer.py
     │   └── svgp_trainer.py
@@ -62,7 +62,7 @@ UncertaintyPlayground/
     ├── utils # Utility functions
     │   ├── early_stopping.py
     │   └── generate_data.py
-    └── tests
+    └── tests # Unit tests
         ├── test_early_stopping.py
         ├── test_generate_data.py
         ├── test_mdn_model.py

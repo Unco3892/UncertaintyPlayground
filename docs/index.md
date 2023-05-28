@@ -26,6 +26,12 @@ import uncertaintyplayground as up
 
 ```bash
 UncertaintyPlayground/
+├── README.md
+├── setup.py
+├── LICENSE
+├── MANIFEST.in
+├── tox.ini # Local continuous integration
+├── mkdocs.yml
 ├── docs # Documentation
 │   ├── bib.md
 │   ├── example.md
@@ -35,12 +41,6 @@ UncertaintyPlayground/
 ├── examples # Examples of the package
 │   ├── mdn_example.py
 │   └── svgp_example.py
-├── LICENSE
-├── MANIFEST.in
-├── mkdocs.yml
-├── README.md
-├── setup.py
-├── tox.ini # Local continuous integration
 └── uncertaintyplayground # Main package
     ├── requirements.txt
     ├── models # Models
