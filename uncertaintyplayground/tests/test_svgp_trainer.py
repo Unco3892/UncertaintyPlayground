@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from trainers.svgp_trainer import SparseGPTrainer
+from uncertaintyplayground.trainers.svgp_trainer import SparseGPTrainer
 
 class TestSparseGPTrainer(unittest.TestCase):
     """

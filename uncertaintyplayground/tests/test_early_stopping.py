@@ -1,7 +1,7 @@
 import unittest
 import torch
 import numpy as np
-from utils.early_stopping import EarlyStopping
+from uncertaintyplayground.utils.early_stopping import EarlyStopping
 
 class TestEarlyStopping(unittest.TestCase):
     """

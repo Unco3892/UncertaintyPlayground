@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import torch
-from trainers.mdn_trainer import MDNTrainer
+from uncertaintyplayground.trainers.mdn_trainer import MDNTrainer
 from utils.generate_data import generate_multi_modal_data
 from uncertaintyplayground.predplot.grid_predplot import plot_results_grid, DisablePlotDisplay
 from uncertaintyplayground.predplot.mdn_predplot import compare_distributions_mdn

@@ -1,8 +1,8 @@
 import unittest
 import numpy as np
 import torch
-from utils.generate_data import generate_multi_modal_data
-from trainers.mdn_trainer import MDNTrainer
+from uncertaintyplayground.utils.generate_data import generate_multi_modal_data
+from uncertaintyplayground.trainers.mdn_trainer import MDNTrainer
 
 class TestMDNTrainer(unittest.TestCase):
     """

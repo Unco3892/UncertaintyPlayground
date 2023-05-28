@@ -1,8 +1,8 @@
 import unittest
 import torch
 import numpy as np
-from trainers.svgp_trainer import SparseGPTrainer
-from utils.generate_data import generate_multi_modal_data
+from uncertaintyplayground.trainers.svgp_trainer import SparseGPTrainer
+from uncertaintyplayground.utils.generate_data import generate_multi_modal_data
 from uncertaintyplayground.predplot.svgp_predplot import compare_distributions_svgpr
 from uncertaintyplayground.predplot.grid_predplot import plot_results_grid, DisablePlotDisplay
 import matplotlib

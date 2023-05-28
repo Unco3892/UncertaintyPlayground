@@ -1,7 +1,7 @@
 import unittest
 import torch
 import gpytorch
-from models.svgp_model import SVGP
+from uncertaintyplayground.models.svgp_model import SVGP
 
 class TestSVGP(unittest.TestCase):
     """

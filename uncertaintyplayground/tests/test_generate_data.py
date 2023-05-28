@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from utils.generate_data import generate_multi_modal_data
+from uncertaintyplayground.utils.generate_data import generate_multi_modal_data
 
 def test_generate_multi_modal_data():
     """

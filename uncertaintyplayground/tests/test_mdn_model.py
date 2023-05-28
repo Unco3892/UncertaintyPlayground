@@ -1,6 +1,6 @@
 import unittest
 import torch
-from models.mdn_model import MDN
+from uncertaintyplayground.models.mdn_model import MDN
 
 class TestMDN(unittest.TestCase):
     """Tests for the class MDN"""
