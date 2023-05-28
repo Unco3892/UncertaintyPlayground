@@ -4,19 +4,73 @@ This Python library provides fast ( and *easy*) uncertainty estimation for regre
 
 ## Installation
 
-**Requirements*
+*Requirements*:
 - Python >= 3.8
 - PyTorch == 2.0.1
 - GPyTorch == 1.10
-- Numpy >= 1.24.0
-- Seaborn >= 0.12.2
+- Numpy == 1.24.0
+- Seaborn == 0.12.2
 
-From the root directory of the repo, please run the following command in your terminal to get all thge files and required packages:
+From the root directory of the repo, run the following in your terminal:
 ```bash
 pip install .
 ```
 
-## Project layout
+Then, you can import the module:
+
+```python
+import uncertaintyplayground as up
+```
+
+## Package layout
+
+```bash
+UncertaintyPlayground/
+├── docs # Documentation
+│   ├── bib.md
+│   ├── example.md
+│   ├── gen_ref_pages.py
+│   ├── index.md
+│   └── README.md
+├── examples # Examples of the package
+│   ├── mdn_example.py
+│   └── svgp_example.py
+├── LICENSE
+├── MANIFEST.in
+├── mkdocs.yml
+├── README.md
+├── setup.py
+├── tox.ini # Local continuous integration
+└── uncertaintyplayground # Main package
+    ├── requirements.txt
+    ├── models # Models
+    │   ├── mdn_model.py
+    │   └── svgp_model.py
+    ├── trainers # Training the models
+    │   ├── base_trainer.py
+    │   ├── mdn_trainer.py
+    │   └── svgp_trainer.py
+    ├── predplot # Single instance prediction (inference) plot
+    │   ├── grid_predplot.py
+    │   ├── mdn_predplot.py
+    │   └── svgp_predplot.py
+    ├── utils # Utility functions
+    │   ├── early_stopping.py
+    │   └── generate_data.py
+    └── tests # Unit tests
+        ├── test_early_stopping.py
+        ├── test_generate_data.py
+        ├── test_mdn_model.py
+        ├── test_mdn_predplot.py
+        ├── test_mdn_trainer.py
+        ├── test_svgp_model.py
+        ├── test_svgp_predplot.py
+        └── test_svgp_trainer.py
+```
+
+
+## Documentation layout
+
 POST THE FINAL LAYOUT HERE
 
     mkdocs.yml    # The configuration file.

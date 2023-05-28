@@ -5,7 +5,7 @@
 [![Python Version](https://img.shields.io/badge/python-3.8+-green.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-# Installation
+## Installation
 
 *Requirements*:
 - Python >= 3.8
@@ -25,48 +25,53 @@ Then, you can import the module:
 import uncertaintyplayground as up
 ```
 
-# Examples, Tutorials, and Documentation
+<!-- ## Examples, Tutorials, and Documentation -->
 
-# Package structure
+## Package structure
 
 ```bash
 UncertaintyPlayground/
-├── uncertaintyplayground/
-│   ├── __init__.py
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── svgp.py  # Contains both regression and classification models
-│   │   └── mdn.py   # Contains both regression and classification models
-│   ├── utils/
-│   │   ├── __init__.py
-│   │   └── early_stopping.py
-│   ├── trainers/
-│   │   ├── __init__.py
-│   │   ├── base_trainer.py
-│   │   ├── svgp_trainer.py  # Contains both regression and classification trainers
-│   │   └── mdn_trainer.py  # Contains both regression and classification trainers
-│   ├── tests/
-│   │   ├── __init__.py
-│   │   └── test_models.py/
-│   │       ├── __init__.py
-│   │       ├── test_svgp_regression.py  # Tests for the SVGP regression model
-│   │       ├── test_svgp_classification.py  # Tests for the SVGP classification model
-│   │       ├── test_mdn_regression.py  # Tests for the MDN regression model
-│   │       └── test_mdn_classification.py  # Tests for the MDN classification model
-├── docs/
-│   ├── index.rst
-│   └── modules.rst
-├── examples/
-│   ├── svgp_example.py # Contains SVGP both regression and classification examples
-│   └── mdn_example.py # Contains MDN both regression and classification examples
-├── benchmarks/
-│   ├── benchmark_regression.py
-│   └── benchmark_classification.py
-├── setup.py
+├── docs # Documentation
+│   ├── bib.md
+│   ├── example.md
+│   ├── gen_ref_pages.py
+│   ├── index.md
+│   └── README.md
+├── examples # Examples to run
+│   ├── mdn_example.py
+│   └── svgp_example.py
+├── LICENSE
+├── MANIFEST.in
+├── mkdocs.yml
 ├── README.md
-└── .gitignore
+├── setup.py
+├── tox.ini # Local continuous integration
+└── uncertaintyplayground # Main package
+    ├── requirements.txt
+    ├── models # Models
+    │   ├── mdn_model.py
+    │   └── svgp_model.py
+    ├── trainers # Trainers to train the models
+    │   ├── base_trainer.py
+    │   ├── mdn_trainer.py
+    │   └── svgp_trainer.py
+    ├── predplot # Single instance prediction (inference) plot
+    │   ├── grid_predplot.py
+    │   ├── mdn_predplot.py
+    │   └── svgp_predplot.py
+    ├── utils # Utility functions
+    │   ├── early_stopping.py
+    │   └── generate_data.py
+    └── tests
+        ├── test_early_stopping.py
+        ├── test_generate_data.py
+        ├── test_mdn_model.py
+        ├── test_mdn_predplot.py
+        ├── test_mdn_trainer.py
+        ├── test_svgp_model.py
+        ├── test_svgp_predplot.py
+        └── test_svgp_trainer.py
 ```
-
 
 ## Further Development
 Here are some ideas on how to this packaeg can be further developed:
