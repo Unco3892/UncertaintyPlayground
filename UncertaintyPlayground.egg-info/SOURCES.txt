@@ -1,3 +1,4 @@
+MANIFEST.in
 README.md
 setup.py
 UncertaintyPlayground.egg-info/PKG-INFO
@@ -6,6 +7,7 @@ UncertaintyPlayground.egg-info/dependency_links.txt
 UncertaintyPlayground.egg-info/requires.txt
 UncertaintyPlayground.egg-info/top_level.txt
 uncertaintyplayground/__init__.py
+uncertaintyplayground/requirements.txt
 uncertaintyplayground/models/__init__.py
 uncertaintyplayground/models/mdn_model.py
 uncertaintyplayground/models/svgp_model.py

@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
@@ -35,3 +34,4 @@ jobs:
     - name: Run tests
       run: |
         python -m unittest discover -s uncertaintyplayground/tests
+
