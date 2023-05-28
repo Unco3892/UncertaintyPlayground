@@ -1,6 +1,32 @@
-Package structure
 
-<!-- ![CI Workflow](https://github.com/unco3892/UncertaintyPlaygroundV1/actions/workflows/ci_test.yml/badge.svg?branch=main) -->
+# Installation
+
+Requirements
+- Python >= 3.8
+- PyTorch >= 1.8.1
+- GPyTorch >= 1.5.0
+- Pyro >= 1.6.0
+
+## Installation
+From the root directory of the repo, please run the following command in your terminal:
+```bash
+pip install .
+```
+
+# Examples, Tutorials, and Documentation
+
+## Testing
+```python
+import uncertaintyplayground as up
+```
+
+# Package structure
+
+<!-- ![CI Test Suite](https://github.com/unco3892/UncertaintyPlaygroundV1/actions/workflows/ci_test.yml/badge.svg?branch=main) -->
+[![Documentation Status](0.1)](docs/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+[![Python Version](https://img.shields.io/badge/python-3.8+-red.svg)](https://www.python.org/downloads/)
 
 ```bash
 UncertaintyPlayground/

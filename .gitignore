@@ -1,8 +1,17 @@
-.python-version
-uncertaintyplayground/myenv/
-__pycache__/
-.vscode/
-.tox/
+
+# Distribution / packaging
 build/
 dist/
 *.egg-info/
+
+# Unit test / coverage reports
+.tox/
+
+# VS Code settings
+.vscode/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Pyenv setting useful (same versions as the `tox.ini` file)
+.python-version
