@@ -1,5 +1,4 @@
-# `UncertaintyPlayground`
-Fast *(and easy)* estimation of prediction intervals with neural networks
+# **UncertaintyPlayground**: Fast *(and easy)* estimation of prediction intervals with neural networks
 
 <!-- CI test badge will be added once the repo is made public -->
 <!-- ![CI Test Suite](https://github.com/unco3892/UncertaintyPlayground/actions/workflows/ci_test.yml/badge.svg?branch=main) -->
