@@ -5,6 +5,7 @@ This Python library provides fast ( and *easy*) uncertainty estimation for regre
 ## Installation
 
 *Requirements*:
+
 - Python >= 3.8
 - PyTorch == 2.0.1
 - GPyTorch == 1.10
@@ -12,6 +13,7 @@ This Python library provides fast ( and *easy*) uncertainty estimation for regre
 - Seaborn == 0.12.2
 
 From the root directory of the repo, run the following in your terminal:
+
 ```bash
 pip install .
 ```
@@ -22,7 +24,7 @@ Then, you can import the module:
 import uncertaintyplayground as up
 ```
 
-## Package layout
+## Package structure
 
 ```bash
 UncertaintyPlayground/

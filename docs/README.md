@@ -12,6 +12,7 @@ $ source venv/bin/activate
 ```
 
 Or alternatively, this one liner:
+
 ```bash
 python3 -m venv venv && source venv/bin/activate && python -m pip install mkdocs "mkdocstrings[python]" mkdocs-material mkdocs-gen-files mkdocs-literate-nav mkdocs-section-index
 ```
