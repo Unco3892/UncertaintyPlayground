@@ -18,7 +18,6 @@ python3 -m venv venv && source venv/bin/activate && python -m pip install mkdocs
 
 Then at the root of the project, feel free to run the following commands to read the documentations:
 
-```bash
 * `mkdocs serve` - Start the live-reloading docs server.
 * `mkdocs build` - Build the documentation site.
 * `mkdocs -h` - Print help message and exit.
