@@ -2,9 +2,9 @@ import torch
 import gpytorch
 import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
-from .base_trainer import BaseTrainer
-from models.svgp_model import SVGP
-from utils.early_stopping import EarlyStopping
+from uncertaintyplayground.trainers.base_trainer import BaseTrainer
+from uncertaintyplayground.models.svgp_model import SVGP
+from uncertaintyplayground.utils.early_stopping import EarlyStopping
 
 class SparseGPTrainer(BaseTrainer):
     """

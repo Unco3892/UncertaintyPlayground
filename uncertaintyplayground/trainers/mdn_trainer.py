@@ -1,8 +1,8 @@
 import torch
 import numpy as np
-from .base_trainer import BaseTrainer
-from models.mdn_model import MDN, mdn_loss
-from utils.early_stopping import EarlyStopping
+from uncertaintyplayground.trainers.base_trainer import BaseTrainer
+from uncertaintyplayground.models.mdn_model import MDN, mdn_loss
+from uncertaintyplayground.utils.early_stopping import EarlyStopping
 
 class MDNTrainer(BaseTrainer):
     """
