@@ -101,8 +101,9 @@ class MDN(nn.Module):
             raise ValueError(f"Invalid prediction method: {self.prediction_method}")
 
         return sample
-    
-    # Define the loss function to be used by the MDN model
+
+
+# Define the loss function to be used by the MDN model (in the next iterations, this can be moved to the model class)
 def mdn_loss(y, mu, sigma, pi):
     """
     Compute the MDN loss.
