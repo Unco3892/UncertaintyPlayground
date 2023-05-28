@@ -1,32 +1,35 @@
+# UncertaintyPlayground: Fast *(and easy)* estimation of prediction intervals with neural networks via `PyTorch` and `GPyTorch`
 
-# Installation
-
-Requirements
-- Python >= 3.8
-- PyTorch >= 1.8.1
-- GPyTorch >= 1.5.0
-- Pyro >= 1.6.0
-
-## Installation
-From the root directory of the repo, please run the following command in your terminal:
-```bash
-pip install .
-```
-
-# Examples, Tutorials, and Documentation
-
-## Testing
-```python
-import uncertaintyplayground as up
-```
-
-# Package structure
-
+<!-- CI test badge will be added once the repo is made public -->
 <!-- ![CI Test Suite](https://github.com/unco3892/UncertaintyPlaygroundV1/actions/workflows/ci_test.yml/badge.svg?branch=main) -->
 [![Documentation Status](0.1)](docs/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 [![Python Version](https://img.shields.io/badge/python-3.8+-red.svg)](https://www.python.org/downloads/)
+
+# Installation
+
+**Requirements*
+- Python >= 3.8
+- PyTorch == 2.0.1
+- GPyTorch == 1.10
+- Numpy >= 1.24.0
+- Seaborn >= 0.12.2
+
+From the root directory of the repo, please run the following command in your terminal to get all thge files and required packages:
+```bash
+pip install .
+```
+
+Then, you can import the module:
+
+```python
+import uncertaintyplayground as up
+```
+
+# Examples, Tutorials, and Documentation
+
+# Package structure
 
 ```bash
 UncertaintyPlayground/
@@ -64,25 +67,23 @@ UncertaintyPlayground/
 ├── setup.py
 ├── README.md
 └── .gitignore
-
 ```
 
-Or for the docs, should do the following instead?
 
-```bash
-|-- docs/
-|   |-- index.md
-|   |-- installation.md
-|   |-- usage.md
-```
-
-Also, how should I define the modules for the testing part? Should they be seperate? Look at the best practices for how to place your tests.
-
-Other TODOS:
+## Further Development
+Here are some ideas on how to this packaeg can be further developed:
 - Can also use other kernels than RBF -> Option can also be added so that it's modular for that too
 - Adding multi-GPU support -> At the moment, we use the best hardware available
+- Use SVGP also for classification, we requires:
+    - Change the likelihood: For classification problems, you'll typically use a BernoulliLikelihood or SoftmaxLikelihood depending on whether it's binary or multiclass classification.
+    - Change the performance metric: Accuracy, AUC, or F1-score might be a more appropriate metric than MSE for classification.
+    - Change the loss function: Instead of the Mean Squared Error Loss, you might want to use Binary Cross-Entropy (for binary classification) or Cross-Entropy Loss (for multi-class classification).
 
-To use SVGP for both regression and classification, we must:
-- Change the likelihood: For classification problems, you'll typically use a BernoulliLikelihood or SoftmaxLikelihood depending on whether it's binary or multiclass classification.
-- Change the performance metric: Accuracy, AUC, or F1-score might be a more appropriate metric than MSE for classification.
-- Change the loss function: Instead of the Mean Squared Error Loss, you might want to use Binary Cross-Entropy (for binary classification) or Cross-Entropy Loss (for multi-class classification).
+## Contributors
+
+`UncertinatyPlayground` is maintained by [Ilia Azizi](https://iliaazizi.com/) (University of Lausanne). Any other contributors are welcome to join! Feel free to get in touch with (contact links on my website).
+<!-- Please see the [contributing guide](CONTRIBUTING.md) for more details. -->
+
+## License
+
+`UncertinatyPlayground` is [MIT licensed](LICENSE).

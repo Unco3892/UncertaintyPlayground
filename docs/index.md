@@ -4,8 +4,16 @@ This Python library provides fast ( and *easy*) uncertainty estimation for regre
 
 ## Installation
 
-```bash
+**Requirements*
+- Python >= 3.8
+- PyTorch == 2.0.1
+- GPyTorch == 1.10
+- Numpy >= 1.24.0
+- Seaborn >= 0.12.2
 
+From the root directory of the repo, please run the following command in your terminal to get all thge files and required packages:
+```bash
+pip install .
 ```
 
 ## Project layout
