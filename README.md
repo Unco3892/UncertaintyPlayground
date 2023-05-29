@@ -64,6 +64,7 @@ plot_results_grid(trainer=california_trainer_svgp, compare_func=compare_distribu
 plot_results_grid(trainer=california_trainer_mdn, compare_func=compare_distributions_mdn, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)
 ```
 
+You can find another example for MDN in the `examples` folder.
 
 <!-- ## Examples, Tutorials, and Documentation -->
 
@@ -84,6 +85,7 @@ UncertaintyPlayground/
 │   ├── index.md
 │   └── README.md
 ├── examples # Examples of the package
+│   ├── compare_models_example.py
 │   ├── mdn_example.py
 │   └── svgp_example.py
 └── uncertaintyplayground # Main package

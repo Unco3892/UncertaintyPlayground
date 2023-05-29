@@ -1,6 +1,6 @@
 ## Real data
 
-You can train and visualize the results of the models in the following way (this example uses the [California Housing dataset from Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html)):
+This example uses the [California Housing dataset from Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html). You can train and visualize the results of the models in the following way:
 
 ```python
 from uncertaintyplayground.trainers.svgp_trainer import SparseGPTrainer
