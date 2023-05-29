@@ -16,3 +16,4 @@ __pycache__/
 # Pyenv setting useful (same versions as the `tox.ini` file)
 .python-version
 join.py
+outcome.txt

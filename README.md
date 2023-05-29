@@ -115,15 +115,6 @@ UncertaintyPlayground/
         └── test_svgp_trainer.py
 ```
 
-## Further Development
-Here are some ideas on how to this packaeg can be further developed:
-- Can also use other kernels than RBF -> Option can also be added so that it's modular for that too
-- Adding multi-GPU support -> At the moment, we use the best hardware available
-- Use SVGP also for classification, we requires:
-    - Change the likelihood: For classification problems, you'll typically use a BernoulliLikelihood or SoftmaxLikelihood depending on whether it's binary or multiclass classification.
-    - Change the performance metric: Accuracy, AUC, or F1-score might be a more appropriate metric than MSE for classification.
-    - Change the loss function: Instead of the Mean Squared Error Loss, you might want to use Binary Cross-Entropy (for binary classification) or Cross-Entropy Loss (for multi-class classification).
-
 ## Contributors
 
 `UncertinatyPlayground` is maintained by [Ilia Azizi](https://iliaazizi.com/) (University of Lausanne). Any other contributors are welcome to join! Feel free to get in touch with (contact links on my website).

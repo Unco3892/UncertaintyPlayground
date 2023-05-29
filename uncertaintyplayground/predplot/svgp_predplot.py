@@ -4,7 +4,7 @@ import numpy as np
 
 def compare_distributions_svgpr(trainer, x_instance, y_actual=None, num_samples=10000, ax=None, dtype=np.float32):
     """
-    Compare the actual and predicted outcome distributions.
+    Compare the actual and predicted outcome value/distributions for the SVGPR model.
 
     Args:
         trainer (SVGPRTrainer): The trained SVGPRTrainer instance.

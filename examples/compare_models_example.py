@@ -7,6 +7,7 @@ import torch
 import numpy as np
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 # Load the California Housing dataset
 california = fetch_california_housing()
@@ -30,9 +31,30 @@ california_trainer_svgp.train()
 california_trainer_mdn = MDNTrainer(X_train, y_train, num_epochs=100, lr=0.001, dense1_units=50, n_gaussians=10)
 california_trainer_mdn.train()
 
+# Set an index for plotting
+index_instance = 900
+
+# SVPGR: Visualize the SVGPR's predictions for a single instance
+plt.show = lambda: plt.savefig('svgpr_solo_plot.png', dpi=300)
+compare_distributions_svgpr(trainer = california_trainer_svgp, x_instance = X_test[index_instance,], y_actual = y_test[index_instance])
+
+# clear the plot
+plt.clf()
+
+# MDN: Visualize the MDN's predictions for a single instance
+plt.show = lambda: plt.savefig('mdn_solo_plot.png', dpi=300)
+compare_distributions_mdn(trainer = california_trainer_mdn, x_instance = X_test[index_instance,], y_actual = y_test[index_instance])
+
+# clear the plot
+plt.clf()
+
 # SVPGR: Visualize the SVGPR's predictions for multiple instances
+plt.show = lambda: plt.savefig('svgpr_grid_plot.png', dpi=300)
 plot_results_grid(trainer=california_trainer_svgp, compare_func=compare_distributions_svgpr, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)
 
-# MDN: Visualize the MDN's predictions for multiple instances
-plot_results_grid(trainer=california_trainer_mdn, compare_func=compare_distributions_mdn, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)
+# clear the plot
+plt.clf()
 
+# MDN: Visualize the MDN's predictions for multiple instances
+plt.show = lambda: plt.savefig('mdn_grid_plot.png', dpi=300)
+plot_results_grid(trainer=california_trainer_mdn, compare_func=compare_distributions_mdn, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=1)

@@ -5,7 +5,7 @@ import warnings
 
 def compare_distributions_mdn(trainer, x_instance, y_actual=None, num_samples=10000, ax=None, dtype=np.float32):
     """
-    Base plot to compare the actual and predicted outcome distributions.
+    Compare the actual and predicted outcome value/distributions for the MDN model.
 
     Args:
         trainer (MDNTrainer): The trained MDNTrainer instance.
