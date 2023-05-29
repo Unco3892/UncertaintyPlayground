@@ -1,6 +1,6 @@
 # **Uncertainty Playground: Fast estimation of prediction intervals with neural networks**
 
-This Python library provides fast ( and *easy*) uncertainty estimation for regression tasks built on top of `PyTorch` & `GPyTorch.` Specifically, the library uses `Sparse & Variational Gaussian Process Regression` for Gaussian cases (normally distributed outcomes) and `Mixed Density Networks` for multi-modal cases. Users can estimate the prediction interval for a given instance with either model. The library was developed and maintained by [Ilia Azizi](https://iliaazizi.com/). Please note that this version is still in early development and not ready for production use. 
+This Python library provides fast ( and *easy*) uncertainty estimation for regression tasks built on top of `PyTorch` & `GPyTorch`. Specifically, the library uses `Sparse & Variational Gaussian Process Regression` for Gaussian cases (normally distributed outcomes) and `Mixed Density Networks` for multi-modal cases. Users can estimate the prediction interval for a given instance with either model. The library was developed and maintained by [Ilia Azizi](https://iliaazizi.com/). Please note that this version is still in early development and not ready for production use. 
 
 ## Installation
 
@@ -24,6 +24,8 @@ Then, you can import the module:
 import uncertaintyplayground as up
 ```
 
+<!-- ## Examples, Tutorials, and Documentation -->
+
 ## Package structure
 
 ```bash
@@ -41,6 +43,7 @@ UncertaintyPlayground/
 │   ├── index.md
 │   └── README.md
 ├── examples # Examples of the package
+│   ├── compare_models_example.py
 │   ├── mdn_example.py
 │   └── svgp_example.py
 └── uncertaintyplayground # Main package
@@ -70,13 +73,6 @@ UncertaintyPlayground/
         └── test_svgp_trainer.py
 ```
 
-
 ## Documentation layout
 
-POST THE FINAL LAYOUT HERE
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
-
+Aside from this page, there are three other sections in this documentation. The most important is the `Code Reference` which relates the source code and all the arguments for the functions.  The `Usage` section contains a couple of examples of using this package with real and simulated data. Finally, the `Bibliography` section contains the list of papers that are used in this package.

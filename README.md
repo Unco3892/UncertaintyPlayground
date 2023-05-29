@@ -22,47 +22,48 @@ pip install .
 
 ## Usage
 
-Import the module and train SVGPR:
+You can train and visualize the results of the models in the following way (this example uses the [California Housing dataset from Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html)):
 
 ```python
-import uncertaintyplayground as up
+from uncertaintyplayground.trainers.svgp_trainer import SparseGPTrainer
+from uncertaintyplayground.trainers.mdn_trainer import MDNTrainer
+from uncertaintyplayground.predplot.svgp_predplot import compare_distributions_svgpr
+from uncertaintyplayground.predplot.mdn_predplot import compare_distributions_mdn
+from uncertaintyplayground.predplot.grid_predplot import plot_results_grid
 import torch
-from src.blocks import MixtureDensityNetwork
+import numpy as np
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
 
-x = torch.randn(5, 1)
-y = torch.randn(5, 1)
+# Load the California Housing dataset
+california = fetch_california_housing()
 
-# 1D input, 1D output, 3 mixture components
-model = MixtureDensityNetwork(1, 1, n_components=3, hidden_dim=50)
-pred_parameters = model(x)
+# Convert X and y to numpy arrays of float32
+X = np.array(california.data, dtype=np.float32)
+y = np.array(california.target, dtype=np.float32)
 
-# use this to backprop
-loss = model.loss(x, y)
+# Set random seed for reproducibility
+np.random.seed(42)
+torch.manual_seed(1)
 
-# use this to sample a trained model
-samples = model.sample(x)
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# SVGPR: Initialize and train a SVGPR model with 100 inducing points
+california_trainer_svgp = SparseGPTrainer(X_train, y_train, num_inducing_points=100, num_epochs=30, batch_size=512, lr=0.1, patience=3)
+california_trainer_svgp.train()
+
+# MDN: Initialize and train an MDN model
+california_trainer_mdn = MDNTrainer(X_train, y_train, num_epochs=100, lr=0.001, dense1_units=50, n_gaussians=10)
+california_trainer_mdn.train()
+
+# SVPGR: Visualize the SVGPR's predictions for multiple instances
+plot_results_grid(trainer=california_trainer_svgp, compare_func=compare_distributions_svgpr, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)
+
+# MDN: Visualize the MDN's predictions for multiple instances
+plot_results_grid(trainer=california_trainer_mdn, compare_func=compare_distributions_mdn, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)
 ```
 
-Import the module and train MDN:
-
-```python
-import uncertaintyplayground as up
-import torch
-from src.blocks import MixtureDensityNetwork
-
-x = torch.randn(5, 1)
-y = torch.randn(5, 1)
-
-# 1D input, 1D output, 3 mixture components
-model = MixtureDensityNetwork(1, 1, n_components=3, hidden_dim=50)
-pred_parameters = model(x)
-
-# use this to backprop
-loss = model.loss(x, y)
-
-# use this to sample a trained model
-samples = model.sample(x)
-```
 
 <!-- ## Examples, Tutorials, and Documentation -->
 

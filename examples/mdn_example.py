@@ -1,6 +1,5 @@
 import torch
 import numpy as np
-# from uncertaintyplayground.models.mdn_model import MDN
 from uncertaintyplayground.trainers.mdn_trainer import MDNTrainer
 from uncertaintyplayground.utils.generate_data import generate_multi_modal_data
 from uncertaintyplayground.predplot.grid_predplot import plot_results_grid
@@ -23,7 +22,7 @@ num_samples = 1000
 X = np.random.rand(num_samples, 10)
 y = generate_multi_modal_data(num_samples, modes)
 
-# Train an MDN model with 20 hidden units and 5 Gaussian components
+# Train an MDN model with 50 hidden units and 5 Gaussian components
 mdn_trainer = MDNTrainer(X, y, num_epochs=100, lr=0.01, n_gaussians=5, dense1_units=50)
 mdn_trainer.train()
 
@@ -33,18 +32,17 @@ index_instance = 900
 # With an actual y value (diagnostic)
 compare_distributions_mdn(trainer=mdn_trainer, x_instance=X[index_instance, :],y_actual=y[index_instance], num_samples=1000)
 # You can also make any of the plots without a `y` (default set to None)
-# # Without an actual y value (pure inference)
-# compare_distributions_mdn(trainer = mdn_trainer, x_instance = X[index_instance, :])
+# Without an actual y value (pure inference)
+compare_distributions_mdn(trainer = mdn_trainer, x_instance = X[index_instance, :])
 
-# # Visualize the model's predictions and uncertainties for more than one instance
-# indices = [900, 500]  # Example indices
-# # With an actual y value (diagnostic)
-# plot_results_grid(trainer=mdn_trainer, compare_func=compare_distributions_mdn,
-#                   X_test=X, Y_test=y, indices=indices, ncols=2)
+# Visualize the model's predictions and uncertainties for more than one instance
+indices = [900, 500]  # Example indices
+# With an actual y value (diagnostic)
+plot_results_grid(trainer=mdn_trainer, compare_func=compare_distributions_mdn,
+                  X_test=X, Y_test=y, indices=indices, ncols=2)
 
-# # Without an actual y value (pure inference)
-# # plot_results_grid(trainer=mdn_trainer, compare_func=compare_distributions_mdn,
-# #                   X_test=X, Y_test=None, indices=indices, ncols=2)
+# Without an actual y value (pure inference)
+# plot_results_grid(trainer=mdn_trainer, compare_func=compare_distributions_mdn, X_test=X, Y_test=None, indices=indices, ncols=2)
 
 #-------------------------------------------------------------
 # Example 2: Using MDN model with real data
