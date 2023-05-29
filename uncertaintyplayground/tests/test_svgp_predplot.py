@@ -38,11 +38,9 @@ class TestSVGPRPlots(unittest.TestCase):
         Tests the compare_distributions function for the SVGPR model.
         """
         index_instance = 900
-        test_instance = self.X_test[index_instance, :]
-        test_instance = test_instance.astype(np.float32)
 
         with DisablePlotDisplay():
-            compare_distributions_svgpr(self.svgpr_trainer, test_instance, y_actual=self.Y_test[index_instance])
+            compare_distributions_svgpr(self.svgpr_trainer, x_instance = self.X_test[index_instance, :], y_actual=self.Y_test[index_instance])
 
     def test_plot_results_grid_svgpr(self):
         """
@@ -50,8 +48,13 @@ class TestSVGPRPlots(unittest.TestCase):
         """
         indices = [900, 100]  # Example indices
 
+        # Testing with actual y values
         with DisablePlotDisplay():
-            plot_results_grid(self.svgpr_trainer, compare_distributions_svgpr, self.X_test, self.Y_test, indices)
+            plot_results_grid(self.svgpr_trainer, compare_distributions_svgpr, self.X_test, indices, self.Y_test)
+
+        # Testing without actual y values
+        with DisablePlotDisplay():
+            plot_results_grid(self.svgpr_trainer, compare_distributions_svgpr, self.X_test, indices, None)
 
 if __name__ == '__main__':
     unittest.main()

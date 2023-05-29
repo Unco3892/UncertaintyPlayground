@@ -30,14 +30,14 @@ class TestMDNTrainer(unittest.TestCase):
         """
         Tests the train method of the MDNTrainer class.
         """
-        trainer = MDNTrainer(self.X, self.y, num_epochs=3, lr=0.01, n_hidden=20, n_gaussians=3, dtype = torch.float32)
+        trainer = MDNTrainer(self.X, self.y, num_epochs=3, lr=0.01, dense1_units=5, n_gaussians=3, dtype = torch.float32)
         trainer.train()
 
     def test_predict_with_uncertainty(self):
         """
         Tests the predict_with_uncertainty method of the MDNTrainer class.
         """
-        trainer = MDNTrainer(self.X, self.y, num_epochs=2, lr=0.01, n_hidden=20, n_gaussians=3)
+        trainer = MDNTrainer(self.X, self.y, num_epochs=2, lr=0.01, dense1_units=5, n_gaussians=3)
         trainer.train()
 
         # Generate a test instance

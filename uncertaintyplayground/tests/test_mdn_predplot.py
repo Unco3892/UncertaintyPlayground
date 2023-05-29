@@ -29,7 +29,7 @@ class TestMDNPlots(unittest.TestCase):
         self.X_test = np.random.rand(self.num_samples, 20)
         self.Y_test = generate_multi_modal_data(self.num_samples, self.modes)
 
-        self.mdn_trainer = MDNTrainer(self.X_test, self.Y_test, num_epochs=5, lr=0.01, n_hidden=20, n_gaussians=3)
+        self.mdn_trainer = MDNTrainer(self.X_test, self.Y_test, num_epochs=5, lr=0.01, dense1_units=5, n_gaussians=3)
         self.mdn_trainer.train()
 
     def test_compare_distributions_mdn(self):
@@ -37,11 +37,9 @@ class TestMDNPlots(unittest.TestCase):
         Tests the compare_distributions function for the MDN model.
         """
         index_instance = 900
-        test_instance = self.X_test[index_instance, :]
-        test_instance = test_instance.astype(np.float32)
 
         with DisablePlotDisplay():
-            compare_distributions_mdn(self.mdn_trainer, test_instance, y_actual=self.Y_test[index_instance])
+            compare_distributions_mdn(self.mdn_trainer, x_instance = self.X_test[index_instance, :], y_actual=self.Y_test[index_instance])
 
     def test_plot_results_grid_mdn(self):
         """
@@ -49,8 +47,12 @@ class TestMDNPlots(unittest.TestCase):
         """
         indices = [900, 100]  # Example indices
 
+        # Testing with existing actual values
         with DisablePlotDisplay():
-            plot_results_grid(self.mdn_trainer, compare_distributions_mdn, self.X_test, self.Y_test, indices)
+            plot_results_grid(self.mdn_trainer, compare_distributions_mdn, self.X_test, indices, self.Y_test)
+        # Testing with no y values
+        with DisablePlotDisplay():
+            plot_results_grid(self.mdn_trainer, compare_distributions_mdn, self.X_test, indices, None)
 
 if __name__ == '__main__':
     unittest.main()

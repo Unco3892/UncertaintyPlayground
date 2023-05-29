@@ -11,7 +11,7 @@ class MDNTrainer(BaseTrainer):
     This class handles the training process for the MDN model.
 
     Args:
-        n_hidden (int): Number of hidden units in the neural network.
+        dense1_units (int): Number of hidden units in first layer of the neural network.
         n_gaussians (int): Number of Gaussian components in the mixture.
         **kwargs: Additional arguments passed to the BaseTrainer.
 
@@ -21,11 +21,11 @@ class MDNTrainer(BaseTrainer):
         optimizer (torch.optim.Optimizer): The optimizer for model training.
     """
 
-    def __init__(self, *args, n_hidden=20, n_gaussians=5, **kwargs):
+    def __init__(self, *args, dense1_units=20, n_gaussians=5, **kwargs):
         super().__init__(*args, **kwargs)
         self.n_gaussians = n_gaussians
 
-        self.model = MDN(n_hidden=n_hidden, n_gaussians=self.n_gaussians).to(self.device)
+        self.model = MDN(input_dim=self.X.shape[1], n_gaussians=self.n_gaussians, dense1_units = dense1_units).to(self.device)
         if self.dtype == torch.float64:
             self.model = self.model.double()  # Convert model parameters to float64
         optimizer_fn = getattr(torch.optim, self.optimizer_fn_name)

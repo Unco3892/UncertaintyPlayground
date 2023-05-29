@@ -11,8 +11,9 @@ class MDN(nn.Module):
     This model represents a mixture density network for modeling and predicting multi-modal distributions.
 
     Args:
-        n_hidden (int): Number of hidden units in the neural network.
+        input_dim (int): Number of predictors for the first layer of the nueral network.
         n_gaussians (int): Number of Gaussian components in the mixture.
+        dense1_units (int): Number of neurons in the first dense layer. Default is 10.
         prediction_method (str): Method for predicting the output distribution. Options are:
                                  - 'max_weight_mean': Choose the component with the highest weight and return the mean.
                                  - 'max_weight_sample': Choose a component from the mixture and sample from it.
@@ -26,15 +27,15 @@ class MDN(nn.Module):
         prediction_method (str): Method for predicting the output distribution.
     """
 
-    def __init__(self, n_hidden, n_gaussians, prediction_method='max_weight_sample'):
+    def __init__(self, input_dim, n_gaussians, dense1_units = 10, prediction_method='max_weight_sample'):
         super(MDN, self).__init__()
         self.z_h = nn.Sequential(
-            nn.Linear(20, n_hidden),
+            nn.Linear(input_dim,dense1_units),
             nn.Tanh()
         )
-        self.z_pi = nn.Linear(n_hidden, n_gaussians)
-        self.z_mu = nn.Linear(n_hidden, n_gaussians)
-        self.z_sigma = nn.Linear(n_hidden, n_gaussians)
+        self.z_pi = nn.Linear(dense1_units, n_gaussians)
+        self.z_mu = nn.Linear(dense1_units, n_gaussians)
+        self.z_sigma = nn.Linear(dense1_units, n_gaussians)
         self.prediction_method = prediction_method
 
     def forward(self, x):
