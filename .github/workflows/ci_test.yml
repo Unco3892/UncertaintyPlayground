@@ -3,6 +3,8 @@ name: Uncertainty Playground CI
 on:
   push:
     branches: [ main ]
+    tags:
+      - ci_run*
   pull_request:
     branches: [ main ]
 

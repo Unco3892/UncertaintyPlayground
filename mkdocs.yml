@@ -47,5 +47,5 @@ markdown_extensions:
 nav:
   - Code Reference: reference/
   - About: index.md
-  - Example: example.md
+  - Usage: usage.md
   - Bibliography: bib.md

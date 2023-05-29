@@ -15,14 +15,53 @@
 - Seaborn == 0.12.2
 
 From the root directory of the repo, run the following in your terminal:
+
 ```bash
 pip install .
 ```
 
-Then, you can import the module:
+## Usage
+
+Import the module and train SVGPR:
 
 ```python
 import uncertaintyplayground as up
+import torch
+from src.blocks import MixtureDensityNetwork
+
+x = torch.randn(5, 1)
+y = torch.randn(5, 1)
+
+# 1D input, 1D output, 3 mixture components
+model = MixtureDensityNetwork(1, 1, n_components=3, hidden_dim=50)
+pred_parameters = model(x)
+
+# use this to backprop
+loss = model.loss(x, y)
+
+# use this to sample a trained model
+samples = model.sample(x)
+```
+
+Import the module and train MDN:
+
+```python
+import uncertaintyplayground as up
+import torch
+from src.blocks import MixtureDensityNetwork
+
+x = torch.randn(5, 1)
+y = torch.randn(5, 1)
+
+# 1D input, 1D output, 3 mixture components
+model = MixtureDensityNetwork(1, 1, n_components=3, hidden_dim=50)
+pred_parameters = model(x)
+
+# use this to backprop
+loss = model.loss(x, y)
+
+# use this to sample a trained model
+samples = model.sample(x)
 ```
 
 <!-- ## Examples, Tutorials, and Documentation -->
