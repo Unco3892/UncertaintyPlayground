@@ -1,0 +1,1604 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../tests/test_svgp_trainer/">
+      
+      
+        <link rel="next" href="../mdn_trainer/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+    
+    
+      
+        <title>base_trainer - Uncertainty playground</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#trainers.base_trainer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Uncertainty playground" class="md-header__button md-logo" aria-label="Uncertainty playground" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Uncertainty playground
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              base_trainer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 2c-1.05 0-2.05.16-3 .46 4.06 1.27 7 5.04 7 9.54 0 4.5-2.94 8.27-7 9.54.95.3 1.95.46 3 .46a10 10 0 0 0 10-10A10 10 0 0 0 9 2Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18V6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-2.69L23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Unco3892/UncertaintyPlayground/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Unco3892/UncertaintyPlayground
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Uncertainty playground" class="md-nav__button md-logo" aria-label="Uncertainty playground" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Uncertainty playground
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Unco3892/UncertaintyPlayground/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Unco3892/UncertaintyPlayground
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          Code Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Code Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_1" id="__nav_1_1_label" tabindex="0">
+          models
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          models
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/mdn_model/" class="md-nav__link">
+        mdn_model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/svgp_model/" class="md-nav__link">
+        svgp_model
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+          predplot
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          predplot
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../predplot/grid_predplot/" class="md-nav__link">
+        grid_predplot
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../predplot/mdn_predplot/" class="md-nav__link">
+        mdn_predplot
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../predplot/svgp_predplot/" class="md-nav__link">
+        svgp_predplot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+          tests
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          tests
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/test_early_stopping/" class="md-nav__link">
+        test_early_stopping
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/test_generate_data/" class="md-nav__link">
+        test_generate_data
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/test_mdn_model/" class="md-nav__link">
+        test_mdn_model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/test_mdn_predplot/" class="md-nav__link">
+        test_mdn_predplot
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/test_mdn_trainer/" class="md-nav__link">
+        test_mdn_trainer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/test_svgp_model/" class="md-nav__link">
+        test_svgp_model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/test_svgp_predplot/" class="md-nav__link">
+        test_svgp_predplot
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/test_svgp_trainer/" class="md-nav__link">
+        test_svgp_trainer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+          trainers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_1_4">
+          <span class="md-nav__icon md-icon"></span>
+          trainers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          base_trainer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        base_trainer
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#trainers.base_trainer" class="md-nav__link">
+    trainers.base_trainer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer" class="md-nav__link">
+    BaseTrainer
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseTrainer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer.custom_lr_scheduler" class="md-nav__link">
+    custom_lr_scheduler()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer.prepare_dataloader" class="md-nav__link">
+    prepare_dataloader()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer.prepare_inputs" class="md-nav__link">
+    prepare_inputs()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer.split_data" class="md-nav__link">
+    split_data()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mdn_trainer/" class="md-nav__link">
+        mdn_trainer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svgp_trainer/" class="md-nav__link">
+        svgp_trainer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
+          utils
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          utils
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utils/early_stopping/" class="md-nav__link">
+        early_stopping
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utils/generate_data/" class="md-nav__link">
+        generate_data
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/" class="md-nav__link">
+        Usage
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../bib/" class="md-nav__link">
+        Bibliography
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#trainers.base_trainer" class="md-nav__link">
+    trainers.base_trainer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer" class="md-nav__link">
+    BaseTrainer
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseTrainer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer.custom_lr_scheduler" class="md-nav__link">
+    custom_lr_scheduler()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer.prepare_dataloader" class="md-nav__link">
+    prepare_dataloader()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer.prepare_inputs" class="md-nav__link">
+    prepare_inputs()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trainers.base_trainer.BaseTrainer.split_data" class="md-nav__link">
+    split_data()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>base_trainer</h1>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="trainers.base_trainer"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="trainers.base_trainer.BaseTrainer" class="doc doc-heading">
+        <code>BaseTrainer</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Base trainer class for model training.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>X</code></td>
+          <td>
+                <code>np.ndarray or torch.Tensor</code>
+          </td>
+          <td><p>Input data of shape (num_samples, num_features).</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>y</code></td>
+          <td>
+                <code>np.ndarray or torch.Tensor</code>
+          </td>
+          <td><p>Target data of shape (num_samples,).</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sample_weights</code></td>
+          <td>
+                <code>np.ndarray or torch.Tensor</code>
+          </td>
+          <td><p>Optional sample weights of shape (num_samples,).</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>test_size</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td><p>The proportion of the data to include in the validation set.</p></td>
+          <td>
+                <code>0.2</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>random_state</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>The seed used by the random number generator.</p></td>
+          <td>
+                <code>42</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>num_epochs</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Number of training epochs.</p></td>
+          <td>
+                <code>50</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>batch_size</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Batch size for training.</p></td>
+          <td>
+                <code>256</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>optimizer_fn_name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>Name of the optimizer function from the <code>torch.optim</code> module.</p></td>
+          <td>
+                <code>&#39;Adam&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>lr</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td><p>Learning rate for the optimizer.</p></td>
+          <td>
+                <code>0.01</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>use_scheduler</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td><p>Whether to use a learning rate scheduler (<code>not yet fully supported</code>).</p></td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>patience</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Number of consecutive epochs with no improvement after which training will be stopped.</p></td>
+          <td>
+                <code>10</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>dtype</code></td>
+          <td>
+                <code>torch.<span title="torch.dtype">dtype</span></code>
+          </td>
+          <td><p>Data type to use for the tensors.</p></td>
+          <td>
+                <code>torch.float32</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>X</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td><p>Input data tensor.</p></td>
+        </tr>
+        <tr>
+          <td><code>y</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td><p>Target data tensor.</p></td>
+        </tr>
+        <tr>
+          <td><code>sample_weights</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td><p>Sample weights tensor.</p></td>
+        </tr>
+        <tr>
+          <td><code>test_size</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td><p>Proportion of data to include in the validation set.</p></td>
+        </tr>
+        <tr>
+          <td><code>random_state</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Seed used by the random number generator.</p></td>
+        </tr>
+        <tr>
+          <td><code>num_epochs</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Number of training epochs.</p></td>
+        </tr>
+        <tr>
+          <td><code>batch_size</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Batch size for training.</p></td>
+        </tr>
+        <tr>
+          <td><code>optimizer_fn_name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>Name of the optimizer function.</p></td>
+        </tr>
+        <tr>
+          <td><code>lr</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td><p>Learning rate for the optimizer.</p></td>
+        </tr>
+        <tr>
+          <td><code>patience</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Number of consecutive epochs with no improvement after which training will be stopped.</p></td>
+        </tr>
+        <tr>
+          <td><code>dtype</code></td>
+          <td>
+                <code>torch.<span title="torch.dtype">dtype</span></code>
+          </td>
+          <td><p>Data type of the tensors.</p></td>
+        </tr>
+        <tr>
+          <td><code>device</code></td>
+          <td>
+                <code>torch.<span title="torch.device">device</span></code>
+          </td>
+          <td><p>Device (GPU if available, otherwise CPU).</p></td>
+        </tr>
+        <tr>
+          <td><code>train_loader</code></td>
+          <td>
+                <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.DataLoader">DataLoader</span></code>
+          </td>
+          <td><p>DataLoader for training data.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        <details class="quote">
+          <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
+          <pre class="highlight"><code class="language-python">class BaseTrainer:
+    """
+    Base trainer class for model training.
+
+    Args:
+        X (np.ndarray or torch.Tensor): Input data of shape (num_samples, num_features).
+        y (np.ndarray or torch.Tensor): Target data of shape (num_samples,).
+        sample_weights (np.ndarray or torch.Tensor): Optional sample weights of shape (num_samples,).
+        test_size (float): The proportion of the data to include in the validation set.
+        random_state (int): The seed used by the random number generator.
+        num_epochs (int): Number of training epochs.
+        batch_size (int): Batch size for training.
+        optimizer_fn_name (str): Name of the optimizer function from the `torch.optim` module.
+        lr (float): Learning rate for the optimizer.
+        use_scheduler (bool): Whether to use a learning rate scheduler (`not yet fully supported`).
+        patience (int): Number of consecutive epochs with no improvement after which training will be stopped.
+        dtype (torch.dtype): Data type to use for the tensors.
+
+    Attributes:
+        X (torch.Tensor): Input data tensor.
+        y (torch.Tensor): Target data tensor.
+        sample_weights (torch.Tensor): Sample weights tensor.
+        test_size (float): Proportion of data to include in the validation set.
+        random_state (int): Seed used by the random number generator.
+        num_epochs (int): Number of training epochs.
+        batch_size (int): Batch size for training.
+        optimizer_fn_name (str): Name of the optimizer function.
+        lr (float): Learning rate for the optimizer.
+        patience (int): Number of consecutive epochs with no improvement after which training will be stopped.
+        dtype (torch.dtype): Data type of the tensors.
+        device (torch.device): Device (GPU if available, otherwise CPU).
+        train_loader (torch.utils.data.DataLoader): DataLoader for training data.
+    """
+
+    def __init__(
+            self,
+            X,
+            y,
+            sample_weights=None,
+            test_size=0.2,
+            random_state=42,
+            num_epochs=50,
+            batch_size=256,
+            optimizer_fn_name="Adam",
+            lr=0.01,
+            use_scheduler=False,
+            patience=10,
+            dtype=torch.float32
+    ):
+        self.X = X
+        self.y = y
+        self.sample_weights = sample_weights
+        self.test_size = test_size
+        self.random_state = random_state
+        self.num_epochs = num_epochs
+        self.batch_size = batch_size
+        self.optimizer_fn_name = optimizer_fn_name
+        self.lr = lr
+        self.patience = patience
+        self.dtype = dtype
+        self.use_scheduler = use_scheduler
+
+        # Setting for early stopping
+        self.best_epoch = -1
+        self.best_val_mse = np.inf
+
+        # Choose device (GPU if available, otherwise CPU)
+        self.device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu")
+
+        # Convert input tensors to the correct type
+        self.prepare_inputs()
+
+        # Split data into training and validation sets
+        self.split_data()
+
+        # Create DataLoader for training data
+        self.prepare_dataloader()
+
+    def prepare_inputs(self):
+        """
+        Convert input data to the correct type and format.
+        """
+        # Convert X to a tensor if it's a numpy array
+        if isinstance(self.X, np.ndarray):
+            self.X = torch.from_numpy(self.X).to(self.dtype)
+
+        # Convert y to a tensor if it's a list or numpy array
+        if isinstance(self.y, (list, np.ndarray)):
+            self.y = torch.tensor(self.y, dtype=self.dtype)
+
+        # Check if sample_weights is a tensor, numpy array, or list
+        if self.sample_weights is not None:
+            if isinstance(self.sample_weights, (np.ndarray, list)):
+                self.sample_weights = torch.tensor(
+                    self.sample_weights, dtype=self.dtype)
+
+    def split_data(self, test_size=0.2):
+        """
+        Split the data into training and validation sets.
+
+        Args:
+            test_size (float): Proportion of data to include in the validation set.
+        """
+        if self.sample_weights is None:
+            self.sample_weights = torch.ones(self.X.shape[0], dtype=self.dtype)
+
+        self.X_train, self.X_val, self.y_train, self.y_val, self.sample_weights_train, self.sample_weights_val = \
+            train_test_split(self.X, self.y, self.sample_weights,
+                             test_size=test_size, random_state=self.random_state)
+
+    def custom_lr_scheduler(self, epoch):
+        """
+        Custom learning rate scheduler function.
+
+        Args:
+            epoch (int): Current epoch.
+
+        Returns:
+            float: Learning rate for the epoch.
+        """
+        if epoch &lt; 3:
+            return 1 - 0.1 * epoch / self.lr
+        else:
+            return 0.2 / self.lr
+
+    def prepare_dataloader(self):
+        """
+        Prepare the DataLoader for training data.
+        """
+        # Use all available CPU cores or default to 1 if not detected
+        num_workers = os.cpu_count() - 1 or 1
+        train_dataset = TensorDataset(
+            self.X_train, self.y_train, self.sample_weights_train)
+        self.train_loader = DataLoader(
+            train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers, pin_memory=True
+        )</code></pre>
+        </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="trainers.base_trainer.BaseTrainer.custom_lr_scheduler" class="doc doc-heading">
+<code class="highlight language-python">custom_lr_scheduler(epoch)</code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Custom learning rate scheduler function.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>epoch</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Current epoch.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>float</code></td>          <td>
+          </td>
+          <td><p>Learning rate for the epoch.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
+        <pre class="highlight"><code class="language-python">def custom_lr_scheduler(self, epoch):
+    """
+    Custom learning rate scheduler function.
+
+    Args:
+        epoch (int): Current epoch.
+
+    Returns:
+        float: Learning rate for the epoch.
+    """
+    if epoch &lt; 3:
+        return 1 - 0.1 * epoch / self.lr
+    else:
+        return 0.2 / self.lr</code></pre>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="trainers.base_trainer.BaseTrainer.prepare_dataloader" class="doc doc-heading">
+<code class="highlight language-python">prepare_dataloader()</code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Prepare the DataLoader for training data.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
+        <pre class="highlight"><code class="language-python">def prepare_dataloader(self):
+    """
+    Prepare the DataLoader for training data.
+    """
+    # Use all available CPU cores or default to 1 if not detected
+    num_workers = os.cpu_count() - 1 or 1
+    train_dataset = TensorDataset(
+        self.X_train, self.y_train, self.sample_weights_train)
+    self.train_loader = DataLoader(
+        train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers, pin_memory=True
+    )</code></pre>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="trainers.base_trainer.BaseTrainer.prepare_inputs" class="doc doc-heading">
+<code class="highlight language-python">prepare_inputs()</code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Convert input data to the correct type and format.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
+        <pre class="highlight"><code class="language-python">def prepare_inputs(self):
+    """
+    Convert input data to the correct type and format.
+    """
+    # Convert X to a tensor if it's a numpy array
+    if isinstance(self.X, np.ndarray):
+        self.X = torch.from_numpy(self.X).to(self.dtype)
+
+    # Convert y to a tensor if it's a list or numpy array
+    if isinstance(self.y, (list, np.ndarray)):
+        self.y = torch.tensor(self.y, dtype=self.dtype)
+
+    # Check if sample_weights is a tensor, numpy array, or list
+    if self.sample_weights is not None:
+        if isinstance(self.sample_weights, (np.ndarray, list)):
+            self.sample_weights = torch.tensor(
+                self.sample_weights, dtype=self.dtype)</code></pre>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="trainers.base_trainer.BaseTrainer.split_data" class="doc doc-heading">
+<code class="highlight language-python">split_data(test_size=0.2)</code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Split the data into training and validation sets.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>test_size</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td><p>Proportion of data to include in the validation set.</p></td>
+          <td>
+                <code>0.2</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
+        <pre class="highlight"><code class="language-python">def split_data(self, test_size=0.2):
+    """
+    Split the data into training and validation sets.
+
+    Args:
+        test_size (float): Proportion of data to include in the validation set.
+    """
+    if self.sample_weights is None:
+        self.sample_weights = torch.ones(self.X.shape[0], dtype=self.dtype)
+
+    self.X_train, self.X_val, self.y_train, self.y_val, self.sample_weights_train, self.sample_weights_val = \
+        train_test_split(self.X, self.y, self.sample_weights,
+                         test_size=test_size, random_state=self.random_state)</code></pre>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.code.select"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      
+    
+  </body>
+</html>
