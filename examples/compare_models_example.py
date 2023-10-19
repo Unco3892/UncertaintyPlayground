@@ -57,4 +57,4 @@ plt.clf()
 
 # MDN: Visualize the MDN's predictions for multiple instances
 plt.show = lambda: plt.savefig('mdn_grid_plot.png', dpi=300)
-plot_results_grid(trainer=california_trainer_mdn, compare_func=compare_distributions_mdn, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=1)
+plot_results_grid(trainer=california_trainer_mdn, compare_func=compare_distributions_mdn, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)
