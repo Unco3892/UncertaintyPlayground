@@ -25,6 +25,8 @@ theme:
         icon: material/brightness-6
         name: Switch to light mode
 
+repo_name: Unco3892/UncertaintyPlayground
+repo_url: https://github.com/Unco3892/UncertaintyPlayground/
 
 plugins:
   - search
