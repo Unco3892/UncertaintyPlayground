@@ -1,6 +1,6 @@
 # **UncertaintyPlayground**
 
-![CI Test Suite](https://github.com/unco3892/UncertaintyPlayground/actions/workflows/ci_test.yml/badge.svg?branch=main)
+![CI Test Suite](https://github.com/unco3892/UncertaintyPlayground/actions/workflows/ci_cd.yml/badge.svg?branch=main)
 [![Python Version](https://img.shields.io/badge/python-3.8+-green.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
