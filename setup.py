@@ -6,7 +6,7 @@ with open('uncertaintyplayground/requirements.txt') as f:
 
 setup(
     name='UncertaintyPlayground',
-    version='0.1.0',
+    version='0.1.1',
     packages=find_packages(),
     author='Ilia Azizi',
     author_email='ilia.azizi@unil.ch',
@@ -15,6 +15,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/Unco3892/UncertaintyPlayground', 
     install_requires=requirements,
+    include_package_data=True,
     tests_require=[
         'unittest'
     ],

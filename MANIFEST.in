@@ -1,2 +1,2 @@
-include uncertaintyplayground/requirements.txt
-
+graft uncertaintyplayground
+global-exclude *.py[cod] __pycache__ *.so *.dylib .DS_Store *.git .github
