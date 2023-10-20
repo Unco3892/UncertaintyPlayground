@@ -1,5 +1,5 @@
 ---
-name: Other
+name: \u1F914 Other
 about: Any other issues
 title: ''
 labels: ''

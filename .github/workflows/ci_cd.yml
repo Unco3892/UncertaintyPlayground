@@ -41,6 +41,15 @@ jobs:
     - name: Run tests
       run: |
         python -m unittest discover -s uncertaintyplayground/tests
+    - name: Check if version exists
+      id: check_version
+      run: |
+        VERSION_EXISTS=$(pip search UncertaintyPlayground | grep "UncertaintyPlayground (YOUR_VERSION)")
+        if [ -n "$VERSION_EXISTS" ]; then
+          echo "::set-output name=exists::true"
+        else
+          echo "::set-output name=exists::false"
+        fi
 
   deploy-to-pypi:
     needs: build-and-test
@@ -56,6 +65,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
     - name: Build and publish
+      if: steps.check_version.outputs.exists == 'false'
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
