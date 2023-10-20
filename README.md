@@ -13,7 +13,12 @@
 - Numpy == 1.24.0
 - Seaborn == 0.12.2
 
-From the root directory of the repo, run the following in your terminal:
+Use `PyPI` to install the package:
+```bash
+pip install uncertaintyplayground
+```
+
+or alterntively, clone the repo and from the root directory of the repo, run the following in your terminal:
 
 ```bash
 pip install .

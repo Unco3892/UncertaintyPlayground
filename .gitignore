@@ -24,3 +24,5 @@ examples/svgpr_solo_plot.png
 
 # Virtual Environment files
 venv/
+site/
+personal_links.md
