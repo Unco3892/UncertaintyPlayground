@@ -43,6 +43,7 @@ jobs:
         python -m unittest discover -s uncertaintyplayground/tests
     - name: Check if version exists
       id: check_version
+      shell: bash
       run: |
         VERSION=$(python setup.py --version)
         VERSION_EXISTS=$(curl -s https://pypi.org/pypi/UncertaintyPlayground/json | jq -r '.releases["'$VERSION'"]')
