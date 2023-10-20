@@ -44,8 +44,9 @@ jobs:
     - name: Check if version exists
       id: check_version
       run: |
-        VERSION_EXISTS=$(pip search UncertaintyPlayground | grep "UncertaintyPlayground (YOUR_VERSION)")
-        if [ -n "$VERSION_EXISTS" ]; then
+        VERSION=$(python setup.py --version)
+        VERSION_EXISTS=$(curl -s https://pypi.org/pypi/UncertaintyPlayground/json | jq -r '.releases["'$VERSION'"]')
+        if [ "$VERSION_EXISTS" != "null" ]; then
           echo "::set-output name=exists::true"
         else
           echo "::set-output name=exists::false"

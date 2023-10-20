@@ -1,5 +1,5 @@
 ---
-name: "\u1F4DD Documentation/Examples"
+name: "\u1F4DD  📝 Documentation/Examples"
 about: Describe this issue template's purpose here.
 title: "[Docs]"
 labels: documentation

@@ -1,5 +1,5 @@
 ---
-name: \u1F914 Other
+name: "\U0001F914 Other"
 about: Any other issues
 title: ''
 labels: ''
