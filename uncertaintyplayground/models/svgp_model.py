@@ -19,11 +19,11 @@ class SVGP(gpytorch.models.ApproximateGP):
     """
 
     def __init__(self, inducing_points, dtype=torch.float32, device = None):
+        self.device = device
+        self.inducing_points = inducing_points.to(device = self.device)
         variational_distribution = gpytorch.variational.CholeskyVariationalDistribution(
             inducing_points.size(0), dtype=dtype
         )
-        self.device = device
-        self.inducing_points = inducing_points.to(device = self.device)
         variational_strategy = gpytorch.variational.VariationalStrategy(
             self,
             inducing_points,
