@@ -497,6 +497,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../tests/test_base_trainer/" class="md-nav__link">
+        test_base_trainer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../tests/test_early_stopping/" class="md-nav__link">
         test_early_stopping
       </a>
@@ -938,6 +952,16 @@ Inherits from the gpytorch.models.ApproximateGP class.</p>
                 <code>torch.float32</code>
           </td>
         </tr>
+        <tr>
+          <td><code>device</code></td>
+          <td>
+                <code>torch.<span title="torch.device">device</span></code>
+          </td>
+          <td><p>Device can be specified to the desired <code>cpu</code> or <code>cuda</code> for GPU</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
     </tbody>
   </table>
 
@@ -981,22 +1005,25 @@ Inherits from the gpytorch.models.ApproximateGP class.</p>
     Args:
         inducing_points (torch.Tensor): Inducing points tensor.
         dtype (torch.dtype, optional): Data type of the model. Defaults to torch.float32.
+        device (torch.device): Device can be specified to the desired `cpu` or `cuda` for GPU
 
     Attributes:
         mean_module (gpytorch.means.ConstantMean): Constant mean module.
         covar_module (gpytorch.kernels.ScaleKernel): Scaled RBF kernel.
     """
 
-    def __init__(self, inducing_points, dtype=torch.float32):
+    def __init__(self, inducing_points, dtype=torch.float32, device = None):
+        self.device = device
+        self.inducing_points = inducing_points.to(device = self.device)
         variational_distribution = gpytorch.variational.CholeskyVariationalDistribution(
-            inducing_points.size(0), dtype=dtype
+            self.inducing_points.size(0), dtype=dtype
         )
         variational_strategy = gpytorch.variational.VariationalStrategy(
             self,
-            inducing_points,
+            self.inducing_points,
             variational_distribution,
-            learn_inducing_locations=True,
-        ).to(dtype)
+            learn_inducing_locations=True
+        ).to(dtype = dtype)
 
         super().__init__(variational_strategy)
         self.mean_module = gpytorch.means.ConstantMean(dtype=dtype)
@@ -1013,6 +1040,7 @@ Inherits from the gpytorch.models.ApproximateGP class.</p>
         Returns:
             gpytorch.distributions.MultivariateNormal: Multivariate normal distribution with the given mean and covariance.
         """
+        x = x.to(device = self.device)
         mean_x = self.mean_module(x)
         covar_x = self.covar_module(x)
         return gpytorch.distributions.MultivariateNormal(mean_x, covar_x)</code></pre>
@@ -1097,6 +1125,7 @@ Inherits from the gpytorch.models.ApproximateGP class.</p>
     Returns:
         gpytorch.distributions.MultivariateNormal: Multivariate normal distribution with the given mean and covariance.
     """
+    x = x.to(device = self.device)
     mean_x = self.mean_module(x)
     covar_x = self.covar_module(x)
     return gpytorch.distributions.MultivariateNormal(mean_x, covar_x)</code></pre>

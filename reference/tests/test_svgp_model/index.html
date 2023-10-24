@@ -440,6 +440,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../test_base_trainer/" class="md-nav__link">
+        test_base_trainer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../test_early_stopping/" class="md-nav__link">
         test_early_stopping
       </a>
@@ -947,7 +961,8 @@
         """
         self.inducing_points = torch.rand((10, 2))
         self.dtype = torch.float32
-        self.svgp = SVGP(self.inducing_points, self.dtype)
+        self.device = None
+        self.svgp = SVGP(self.inducing_points, dtype = self.dtype,  device = self.device)
 
     def test_init(self):
         """
@@ -1004,7 +1019,8 @@
     """
     self.inducing_points = torch.rand((10, 2))
     self.dtype = torch.float32
-    self.svgp = SVGP(self.inducing_points, self.dtype)</code></pre>
+    self.device = None
+    self.svgp = SVGP(self.inducing_points, dtype = self.dtype,  device = self.device)</code></pre>
       </details>
   </div>
 
