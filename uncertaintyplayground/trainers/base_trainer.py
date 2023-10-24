@@ -154,10 +154,12 @@ class BaseTrainer:
         """
         Prepare the DataLoader for training data.
         """
-        # Use all available CPU cores or default to 1 if not detected
-        num_workers = 0  # Changed from os.cpu_count() - 1 or 1
-        train_dataset = TensorDataset(
-            self.X_train, self.y_train, self.sample_weights_train)
+        num_workers = os.cpu_count() - 1  # or you can use `os.cpu_count() - 1` or just `os.cpu_count()`
+        train_dataset = TensorDataset(self.X_train, self.y_train, self.sample_weights_train)
         self.train_loader = DataLoader(
-            train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers
+            train_dataset, 
+            batch_size=self.batch_size, 
+            shuffle=True, 
+            num_workers=num_workers,  # for parallel data loading
+            pin_memory=True  # allows faster data transfer to CUDA devices
         )

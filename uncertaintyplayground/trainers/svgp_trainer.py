@@ -43,7 +43,7 @@ class SparseGPTrainer(BaseTrainer):
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
             dtype=self.dtype).to(device=self.device, dtype=self.dtype)  # Ensure the likelihood is on the right device
 
-        print(f"Model device: {self.model.device}")
+        print(f"Model device 3: {self.model.device}")
         print(f"Data device: {next(iter(self.train_loader))[0].device}")  # This should now print the correct device
 
     def train(self):
@@ -76,8 +76,7 @@ class SparseGPTrainer(BaseTrainer):
 
         for i in range(self.num_epochs):
             for X_batch, y_batch, weights_batch in self.train_loader:
-                X_batch, y_batch, weights_batch = X_batch.to(self.device, dtype=self.dtype), y_batch.to(
-                    self.device, dtype=self.dtype), weights_batch.to(device = self.device, dtype=self.dtype)  # Move tensors to the chosen device
+                X_batch, y_batch, weights_batch = X_batch.to(device = self.device, dtype=self.dtype), y_batch.to(device = self.device, dtype=self.dtype), weights_batch.to(device = self.device, dtype=self.dtype)  # Move tensors to the chosen device
                 optimizer.zero_grad()
 
                 output = self.model(X_batch)
