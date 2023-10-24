@@ -91,41 +91,17 @@ class BaseTrainer:
         """
         # Convert X to a tensor if it's a numpy array
         if isinstance(self.X, np.ndarray):
-            self.X = torch.from_numpy(self.X).to(device = self.device, dtype = self.dtype)  # Ensure it's moved to the correct device
+            self.X = torch.from_numpy(self.X).to(self.dtype)
 
         # Convert y to a tensor if it's a list or numpy array
         if isinstance(self.y, (list, np.ndarray)):
-            self.y = torch.tensor(self.y, device = self.device, dtype=self.dtype)
+            self.y = torch.tensor(self.y, dtype=self.dtype)
 
         # Check if sample_weights is a tensor, numpy array, or list
         if self.sample_weights is not None:
             if isinstance(self.sample_weights, (np.ndarray, list)):
                 self.sample_weights = torch.tensor(
-                    self.sample_weights, device = self.device, dtype=self.dtype)
-
-        # Ensure data is on CPU
-        self.X = self.X.cpu()
-        self.y = self.y.cpu()
-        if self.sample_weights is not None:
-            self.sample_weights = self.sample_weights.cpu()
-
-    # def prepare_inputs(self):
-    #     """
-    #     Convert input data to the correct type and format.
-    #     """
-    #     # Convert X to a tensor if it's a numpy array
-    #     if isinstance(self.X, np.ndarray):
-    #         self.X = torch.from_numpy(self.X).to(self.dtype)
-
-    #     # Convert y to a tensor if it's a list or numpy array
-    #     if isinstance(self.y, (list, np.ndarray)):
-    #         self.y = torch.tensor(self.y, dtype=self.dtype)
-
-    #     # Check if sample_weights is a tensor, numpy array, or list
-    #     if self.sample_weights is not None:
-    #         if isinstance(self.sample_weights, (np.ndarray, list)):
-    #             self.sample_weights = torch.tensor(
-    #                 self.sample_weights, dtype=self.dtype)
+                    self.sample_weights, dtype=self.dtype)
 
     def split_data(self, test_size=0.2):
         """
@@ -160,12 +136,10 @@ class BaseTrainer:
         """
         Prepare the DataLoader for training data.
         """
-        num_workers = os.cpu_count() - 1  # or you can use `os.cpu_count() - 1` or just `os.cpu_count()`
-        train_dataset = TensorDataset(self.X_train, self.y_train, self.sample_weights_train)
+        # Use all available CPU cores or default to 1 if not detected
+        num_workers = os.cpu_count() - 1 or 1
+        train_dataset = TensorDataset(
+            self.X_train, self.y_train, self.sample_weights_train)
         self.train_loader = DataLoader(
-            train_dataset, 
-            batch_size=self.batch_size, 
-            shuffle=True, 
-            num_workers=num_workers,  # for parallel data loading
-            pin_memory=True  # allows faster data transfer to CUDA devices
+            train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers, pin_memory=True
         )

@@ -103,13 +103,22 @@ class SparseGPTrainer(BaseTrainer):
             self.likelihood.eval()
             print("boom")
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                y_pred_val = self.likelihood(self.model(self.X_val.cpu())).mean
-            print("yo")
+                print("Shape of X_val:", self.X_val.shape)
+                raw_output = self.model(self.X_val.to(self.device))
+                print("Shape of raw output:", raw_output.shape)
+                y_pred_val = self.likelihood(raw_output).mean
+                print("Shape of y_pred_val after likelihood:", y_pred_val.shape)
+
+            y_true_val = self.y_val.detach().cpu().numpy()
+            # y_pred_val = y_pred_val.squeeze().detach().cpu().numpy()
+            y_pred_val = y_pred_val.detach().cpu().numpy()
+            # y_true_val = y_true_val[:, np.newaxis] # This adds a singleton dimension at the end
             
-            mse_val = mean_squared_error(
-                self.y_val.detach().cpu().numpy(), y_pred_val.detach().cpu().numpy())
-            r2_val = r2_score(self.y_val.detach().cpu().numpy(),
-                              y_pred_val.detach().cpu().numpy())
+            print("Shape of y_true_val before:", self.y_val.shape)
+            print("Shape of y_pred_val before:", y_pred_val.shape)
+            
+            mse_val = mean_squared_error(y_true_val,y_pred_val)
+            r2_val = r2_score(y_true_val,y_pred_val)
 
             print("bam")
             self.model.train()
