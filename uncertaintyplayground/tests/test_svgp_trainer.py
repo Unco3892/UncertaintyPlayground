@@ -31,8 +31,6 @@ class TestSparseGPTrainer(unittest.TestCase):
         This test trains the model and checks that it has non-zero parameters afterward, verifying that training has indeed happened.
         """
         self.trainer.train()
-        print("Shape of y_true_val before:", self.trainer.y_val.shape)
-        print("Shape of y_pred_val before:", self.trainer.y_pred_val.shape)
         self.assertTrue(any(p.detach().numpy().any() for p in self.trainer.model.parameters()))
 
     def test_predict_with_uncertainty(self):

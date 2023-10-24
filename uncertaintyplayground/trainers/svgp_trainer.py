@@ -96,24 +96,20 @@ class SparseGPTrainer(BaseTrainer):
             #     scheduler.step()
             # if self.use_scheduler:
             #     scheduler.step()
-            print("man")
-
+ 
             # Compute validation metrics (MSE and R2)
             self.model.eval()
             self.likelihood.eval()
-            print("boom")
+ 
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                print("Shape of X_val:", self.X_val.shape)
+                # print("Shape of X_val:", self.X_val.shape)
                 raw_output = self.model(self.X_val.to(self.device))
                 y_pred_val = self.likelihood(raw_output).mean
-                print("Shape of y_pred_val after likelihood:", y_pred_val.detach().cpu().numpy().shape)
+                # print("Shape of y_pred_val after likelihood:", y_pred_val.detach().cpu().numpy().shape)
             print("yo")
 
-
             y_true_val = self.y_val.detach().cpu().numpy()
-            # y_pred_val = y_pred_val.squeeze().detach().cpu().numpy()
             y_pred_val = y_pred_val.detach().cpu().numpy()
-            # y_true_val = y_true_val[:, np.newaxis] # This adds a singleton dimension at the end
             
             print("Shape of y_true_val before:", self.y_val.shape)
             print("Shape of y_pred_val before:", y_pred_val.shape)
@@ -154,7 +150,7 @@ class SparseGPTrainer(BaseTrainer):
 
         # Convert numpy array to PyTorch tensor if necessary
         if isinstance(X, np.ndarray):
-            X = torch.from_numpy(X).to(dtype = self.dtype)
+            X = torch.from_numpy(X).to(device= self.device, dtype = self.dtype)
 
         # Check if X is a single instance and add an extra dimension if necessary
         if X.ndim == 1:
@@ -163,7 +159,7 @@ class SparseGPTrainer(BaseTrainer):
         with torch.no_grad(), gpytorch.settings.fast_pred_var():
             # Get the predictive mean and variance
             preds = self.likelihood(self.model(X))
-            mean = preds.mean.cpu().numpy()
-            variance = preds.variance.cpu().numpy()
+            mean = preds.mean.detach().cpu().numpy()
+            variance = preds.variance.detach().cpu().numpy()
 
         return mean, variance
