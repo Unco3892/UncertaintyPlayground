@@ -34,16 +34,17 @@ class SparseGPTrainer(BaseTrainer):
         super().__init__(*args, **kwargs)
         self.num_inducing_points = num_inducing_points
         
-        # Initialize the model with inducing points
-        inducing_points = self.X_train[:num_inducing_points, :]
-        self.model = SVGP(inducing_points, dtype=self.dtype, device = self.device)
-        self.model = self.model.to(device = self.device, dtype=self.dtype)
-        #.to( )
+        # Ensure inducing points are on the correct device
+        inducing_points = self.X_train[:num_inducing_points, :].to(self.device)  # Move inducing points to the specified device
+        
+        self.model = SVGP(inducing_points, dtype=self.dtype, device=self.device)
+        self.model = self.model.to(device=self.device, dtype=self.dtype)  # Ensure the model is on the right device
+
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
-            dtype=self.dtype).to(device = self.device, dtype=self.dtype)
+            dtype=self.dtype).to(device=self.device, dtype=self.dtype)  # Ensure the likelihood is on the right device
+
         print(f"Model device: {self.model.device}")
-        print(f"Data device: {next(iter(self.train_loader))[0].device}")
-        # and so on for other components
+        print(f"Data device: {next(iter(self.train_loader))[0].device}")  # This should now print the correct device
 
     def train(self):
         # set the seed

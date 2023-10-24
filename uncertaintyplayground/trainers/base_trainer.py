@@ -91,17 +91,17 @@ class BaseTrainer:
         """
         # Convert X to a tensor if it's a numpy array
         if isinstance(self.X, np.ndarray):
-            self.X = torch.from_numpy(self.X).to(self.dtype)
+            self.X = torch.from_numpy(self.X).to(device = self.device, dtype = self.dtype)  # Ensure it's moved to the correct device
 
         # Convert y to a tensor if it's a list or numpy array
         if isinstance(self.y, (list, np.ndarray)):
-            self.y = torch.tensor(self.y, dtype=self.dtype)
+            self.y = torch.tensor(self.y, device = self.device, dtype=self.dtype)
 
         # Check if sample_weights is a tensor, numpy array, or list
         if self.sample_weights is not None:
             if isinstance(self.sample_weights, (np.ndarray, list)):
                 self.sample_weights = torch.tensor(
-                    self.sample_weights, dtype=self.dtype)
+                    self.sample_weights, device = self.device, dtype=self.dtype)
 
     def split_data(self, test_size=0.2):
         """
