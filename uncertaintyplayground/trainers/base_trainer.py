@@ -159,5 +159,5 @@ class BaseTrainer:
         train_dataset = TensorDataset(
             self.X_train, self.y_train, self.sample_weights_train)
         self.train_loader = DataLoader(
-            train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers, pin_memory=True
+            train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers
         )
