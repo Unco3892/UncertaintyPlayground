@@ -22,6 +22,7 @@ class BaseTrainer:
         patience (int): Number of consecutive epochs with no improvement after which training will be stopped.
         dtype (torch.dtype): Data type to use for the tensors.
         device (torch.device): Device can be specified to the desired `cpu` or `cuda` for GPU (else if set to `None`, then GPU if available, otherwise CPU).
+        multi_cpu_dataloader (bool): Use multiple CPUs for data loading or pass everything onto the GPU.
 
     Attributes:
         X (torch.Tensor): Input data tensor.
@@ -52,7 +53,8 @@ class BaseTrainer:
             use_scheduler=False,
             patience=10,
             dtype=torch.float32,
-            device = None
+            device = None,
+            multi_cpu_dataloader = True
     ):
         self.X = X
         self.y = y
@@ -76,6 +78,9 @@ class BaseTrainer:
             device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
         )
 
+        # Choose whether to use multiple CPUs for data loading
+        self.multi_cpu_dataloader = multi_cpu_dataloader
+
         # Convert input tensors to the correct type
         self.prepare_inputs()
 
@@ -91,7 +96,7 @@ class BaseTrainer:
         """
         # Convert X to a tensor if it's a numpy array
         if isinstance(self.X, np.ndarray):
-            self.X = torch.from_numpy(self.X).to(self.dtype)
+            self.X = torch.from_numpy(self.X).to(dtype=self.dtype)
 
         # Convert y to a tensor if it's a list or numpy array
         if isinstance(self.y, (list, np.ndarray)):
@@ -103,7 +108,7 @@ class BaseTrainer:
                 self.sample_weights = torch.tensor(
                     self.sample_weights, dtype=self.dtype)
 
-    def split_data(self, test_size=0.2):
+    def split_data(self):
         """
         Split the data into training and validation sets.
 
@@ -115,7 +120,7 @@ class BaseTrainer:
 
         self.X_train, self.X_val, self.y_train, self.y_val, self.sample_weights_train, self.sample_weights_val = \
             train_test_split(self.X, self.y, self.sample_weights,
-                             test_size=test_size, random_state=self.random_state)
+                             test_size=self.test_size, random_state=self.random_state)
 
     def custom_lr_scheduler(self, epoch):
         """
@@ -133,13 +138,16 @@ class BaseTrainer:
             return 0.2 / self.lr
 
     def prepare_dataloader(self):
-        """
-        Prepare the DataLoader for training data.
-        """
-        # Use all available CPU cores or default to 1 if not detected
-        num_workers = os.cpu_count() - 1 or 1
-        train_dataset = TensorDataset(
-            self.X_train, self.y_train, self.sample_weights_train)
-        self.train_loader = DataLoader(
-            train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers, pin_memory=True
-        )
+            """
+            Prepare the DataLoader for training data.
+            """
+            # Use all available CPU cores or default to 1 if not detected
+            if self.multi_cpu_dataloader:
+                num_workers = os.cpu_count() - 1 or 1
+            else:
+                num_workers = 0
+            train_dataset = TensorDataset(
+                self.X_train, self.y_train, self.sample_weights_train)
+            self.train_loader = DataLoader(
+                train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)
+

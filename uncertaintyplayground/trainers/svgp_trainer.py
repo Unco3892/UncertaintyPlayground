@@ -43,8 +43,8 @@ class SparseGPTrainer(BaseTrainer):
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
             dtype=self.dtype).to(device=self.device, dtype=self.dtype)  # Ensure the likelihood is on the right device
 
-        print(f"Model device 3: {self.model.device}")
-        print(f"Data device: {next(iter(self.train_loader))[0].device}")  # This should now print the correct device
+        print(f"Model device: {self.model.device}")
+        print(f"Data device: {next(iter(self.train_loader))[0].device}")
 
     def train(self):
         # set the seed
@@ -106,7 +106,6 @@ class SparseGPTrainer(BaseTrainer):
                 raw_output = self.model(self.X_val.to(self.device))
                 y_pred_val = self.likelihood(raw_output).mean
                 # print("Shape of y_pred_val after likelihood:", y_pred_val.detach().cpu().numpy().shape)
-            print("yo")
 
             y_true_val = self.y_val.detach().cpu().numpy()
             y_pred_val = y_pred_val.detach().cpu().numpy()
@@ -117,7 +116,6 @@ class SparseGPTrainer(BaseTrainer):
             mse_val = mean_squared_error(y_true_val,y_pred_val)
             r2_val = r2_score(y_true_val,y_pred_val)
 
-            print("bam")
             self.model.train()
             self.likelihood.train()
 
