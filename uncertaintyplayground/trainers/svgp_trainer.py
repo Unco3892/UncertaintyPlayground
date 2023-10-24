@@ -41,7 +41,10 @@ class SparseGPTrainer(BaseTrainer):
         #.to( dtype=self.dtype)
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
             dtype=self.dtype).to(self.device, dtype=self.dtype)
-        
+        print(f"Model device: {self.model.device}")
+        print(f"Data device: {next(iter(self.train_loader))[0].device}")
+        # and so on for other components
+
     def train(self):
         # set the seed
         torch.manual_seed(self.random_state)

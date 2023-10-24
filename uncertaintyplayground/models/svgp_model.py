@@ -23,6 +23,7 @@ class SVGP(gpytorch.models.ApproximateGP):
             inducing_points.size(0), dtype=dtype
         )
         self.device = device
+        self.inducing_points = inducing_points.to(self.device)
         variational_strategy = gpytorch.variational.VariationalStrategy(
             self,
             inducing_points,
