@@ -71,17 +71,16 @@ class SparseGPTrainer(BaseTrainer):
             patience=self.patience, compare_fn=lambda x, y: x < y)
 
         # Initiate the model training mode
-        print("Yo")
         self.model.train()
         self.likelihood.train()
 
-        print("Ho")
         for i in range(self.num_epochs):
             for X_batch, y_batch, weights_batch in self.train_loader:
                 X_batch, y_batch, weights_batch = X_batch.to(device = self.device, dtype=self.dtype, non_blocking = True), y_batch.to(device = self.device, dtype=self.dtype, non_blocking = True), weights_batch.to(device = self.device, dtype=self.dtype, non_blocking = True)  # Move tensors to the chosen device
                 optimizer.zero_grad()
-
+                print("Yo")
                 output = self.model(X_batch)
+                print("Ho")
                 unweighted_loss = -mll(output, y_batch)
 
                 # Apply sample weights
