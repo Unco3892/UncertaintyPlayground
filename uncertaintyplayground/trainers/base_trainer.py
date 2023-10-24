@@ -21,6 +21,7 @@ class BaseTrainer:
         use_scheduler (bool): Whether to use a learning rate scheduler (`not yet fully supported`).
         patience (int): Number of consecutive epochs with no improvement after which training will be stopped.
         dtype (torch.dtype): Data type to use for the tensors.
+        device (torch.device): Device can be specified to the desired `cpu` or `gpu` (else if set to `None`, then GPU if available, otherwise CPU).
 
     Attributes:
         X (torch.Tensor): Input data tensor.
@@ -34,7 +35,6 @@ class BaseTrainer:
         lr (float): Learning rate for the optimizer.
         patience (int): Number of consecutive epochs with no improvement after which training will be stopped.
         dtype (torch.dtype): Data type of the tensors.
-        device (torch.device): Device (GPU if available, otherwise CPU).
         train_loader (torch.utils.data.DataLoader): DataLoader for training data.
     """
 
@@ -51,7 +51,8 @@ class BaseTrainer:
             lr=0.01,
             use_scheduler=False,
             patience=10,
-            dtype=torch.float32
+            dtype=torch.float32,
+            device = None
     ):
         self.X = X
         self.y = y
@@ -72,7 +73,8 @@ class BaseTrainer:
 
         # Choose device (GPU if available, otherwise CPU)
         self.device = torch.device(
-            "cuda" if torch.cuda.is_available() else "cpu")
+            device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
+        )
 
         # Convert input tensors to the correct type
         self.prepare_inputs()

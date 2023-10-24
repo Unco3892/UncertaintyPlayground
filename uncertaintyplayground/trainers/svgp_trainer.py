@@ -101,9 +101,9 @@ class SparseGPTrainer(BaseTrainer):
                 y_pred_val = self.likelihood(self.model(self.X_val)).mean
 
             mse_val = mean_squared_error(
-                self.y_val.detach().numpy(), y_pred_val.detach().numpy())
-            r2_val = r2_score(self.y_val.detach().numpy(),
-                              y_pred_val.detach().numpy())
+                self.y_val.detach().cpu().numpy(), y_pred_val.detach().cpu().numpy())
+            r2_val = r2_score(self.y_val.detach().cpu().numpy(),
+                              y_pred_val.detach().cpu().numpy())
 
             self.model.train()
             self.likelihood.train()
