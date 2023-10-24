@@ -103,6 +103,12 @@ class BaseTrainer:
                 self.sample_weights = torch.tensor(
                     self.sample_weights, device = self.device, dtype=self.dtype)
 
+        # Ensure data is on CPU
+        self.X = self.X.cpu()
+        self.y = self.y.cpu()
+        if self.sample_weights is not None:
+            self.sample_weights = self.sample_weights.cpu()
+
     # def prepare_inputs(self):
     #     """
     #     Convert input data to the correct type and format.
