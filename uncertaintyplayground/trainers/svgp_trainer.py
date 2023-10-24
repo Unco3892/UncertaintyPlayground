@@ -37,10 +37,10 @@ class SparseGPTrainer(BaseTrainer):
         # Initialize the model with inducing points
         inducing_points = self.X_train[:num_inducing_points, :]
         self.model = SVGP(inducing_points, dtype=self.dtype, device = self.device)
-        self.model = self.model.to(self.device)
-        #.to( dtype=self.dtype)
+        self.model = self.model.to(device = self.device, dtype=self.dtype)
+        #.to( )
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
-            dtype=self.dtype).to(self.device, dtype=self.dtype)
+            dtype=self.dtype).to(device = self.device, dtype=self.dtype)
         print(f"Model device: {self.model.device}")
         print(f"Data device: {next(iter(self.train_loader))[0].device}")
         # and so on for other components
@@ -76,7 +76,7 @@ class SparseGPTrainer(BaseTrainer):
         for i in range(self.num_epochs):
             for X_batch, y_batch, weights_batch in self.train_loader:
                 X_batch, y_batch, weights_batch = X_batch.to(self.device, dtype=self.dtype), y_batch.to(
-                    self.device, dtype=self.dtype), weights_batch.to(self.device, dtype=self.dtype)  # Move tensors to the chosen device
+                    self.device, dtype=self.dtype), weights_batch.to(device = self.device, dtype=self.dtype)  # Move tensors to the chosen device
                 optimizer.zero_grad()
 
                 output = self.model(X_batch)
@@ -141,7 +141,7 @@ class SparseGPTrainer(BaseTrainer):
 
         # Convert numpy array to PyTorch tensor if necessary
         if isinstance(X, np.ndarray):
-            X = torch.from_numpy(X).to(self.dtype)
+            X = torch.from_numpy(X).to(dtype = self.dtype)
 
         # Check if X is a single instance and add an extra dimension if necessary
         if X.ndim == 1:

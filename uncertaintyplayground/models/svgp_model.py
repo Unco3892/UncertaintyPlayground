@@ -23,13 +23,13 @@ class SVGP(gpytorch.models.ApproximateGP):
             inducing_points.size(0), dtype=dtype
         )
         self.device = device
-        self.inducing_points = inducing_points.to(self.device)
+        self.inducing_points = inducing_points.to(device = self.device)
         variational_strategy = gpytorch.variational.VariationalStrategy(
             self,
             inducing_points,
             variational_distribution,
             learn_inducing_locations=True
-        ).to(dtype)
+        ).to(dtype = dtype)
 
         super().__init__(variational_strategy)
         self.mean_module = gpytorch.means.ConstantMean(dtype=dtype)
@@ -46,7 +46,7 @@ class SVGP(gpytorch.models.ApproximateGP):
         Returns:
             gpytorch.distributions.MultivariateNormal: Multivariate normal distribution with the given mean and covariance.
         """
-        x = x.to(self.device)
+        x = x.to(device = self.device)
         mean_x = self.mean_module(x)
         covar_x = self.covar_module(x)
         return gpytorch.distributions.MultivariateNormal(mean_x, covar_x)
