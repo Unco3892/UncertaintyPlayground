@@ -78,9 +78,7 @@ class SparseGPTrainer(BaseTrainer):
             for X_batch, y_batch, weights_batch in self.train_loader:
                 X_batch, y_batch, weights_batch = X_batch.to(device = self.device, dtype=self.dtype, non_blocking = True), y_batch.to(device = self.device, dtype=self.dtype, non_blocking = True), weights_batch.to(device = self.device, dtype=self.dtype, non_blocking = True)  # Move tensors to the chosen device
                 optimizer.zero_grad()
-                print("Yo")
                 output = self.model(X_batch)
-                print("Ho")
                 unweighted_loss = -mll(output, y_batch)
 
                 # Apply sample weights
@@ -98,24 +96,26 @@ class SparseGPTrainer(BaseTrainer):
             #     scheduler.step()
             # if self.use_scheduler:
             #     scheduler.step()
+            print("man")
 
             # Compute validation metrics (MSE and R2)
             self.model.eval()
             self.likelihood.eval()
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                y_pred_val = self.likelihood(self.model(self.X_val)).mean
+                y_pred_val = self.likelihood(self.model(self.X_val.cpu())).mean
 
             mse_val = mean_squared_error(
                 self.y_val.detach().cpu().numpy(), y_pred_val.detach().cpu().numpy())
             r2_val = r2_score(self.y_val.detach().cpu().numpy(),
                               y_pred_val.detach().cpu().numpy())
 
+            print("bam")
             self.model.train()
             self.likelihood.train()
 
             print(
                 f"Epoch {i + 1}/{self.num_epochs}, Weighted Loss: {weighted_loss.item():.3f}, Val MSE: {mse_val:.6f}, Val R2: {r2_val:.3f}")
-
+            
             should_stop = early_stopping(mse_val, self.model)
 
             if should_stop:
