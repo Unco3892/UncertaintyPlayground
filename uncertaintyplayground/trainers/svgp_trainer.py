@@ -101,9 +101,11 @@ class SparseGPTrainer(BaseTrainer):
             # Compute validation metrics (MSE and R2)
             self.model.eval()
             self.likelihood.eval()
+            print("boom")
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
                 y_pred_val = self.likelihood(self.model(self.X_val.cpu())).mean
-
+            print("yo")
+            
             mse_val = mean_squared_error(
                 self.y_val.detach().cpu().numpy(), y_pred_val.detach().cpu().numpy())
             r2_val = r2_score(self.y_val.detach().cpu().numpy(),
