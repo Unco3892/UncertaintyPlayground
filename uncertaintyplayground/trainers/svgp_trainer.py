@@ -45,6 +45,7 @@ class SparseGPTrainer(BaseTrainer):
 
         print(f"Model device: {self.model.device}")
         print(f"Data device: {next(iter(self.train_loader))[0].device}")  # This should now print the correct device
+        print(f"Data device: {next(iter(self.train_loader))[0].device}")  # This should now print the correct device
 
     def train(self):
         # set the seed
