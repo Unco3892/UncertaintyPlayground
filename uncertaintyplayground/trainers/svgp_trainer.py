@@ -105,9 +105,10 @@ class SparseGPTrainer(BaseTrainer):
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
                 print("Shape of X_val:", self.X_val.shape)
                 raw_output = self.model(self.X_val.to(self.device))
-                print("Shape of raw output:", raw_output.shape)
                 y_pred_val = self.likelihood(raw_output).mean
-                print("Shape of y_pred_val after likelihood:", y_pred_val.shape)
+                print("Shape of y_pred_val after likelihood:", y_pred_val.detach().cpu().numpy().shape)
+            print("yo")
+
 
             y_true_val = self.y_val.detach().cpu().numpy()
             # y_pred_val = y_pred_val.squeeze().detach().cpu().numpy()
