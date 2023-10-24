@@ -23,4 +23,9 @@ Then at the root of the project, feel free to run the following commands to read
 * `mkdocs build` - Build the documentation site.
 * `mkdocs -h` - Print help message and exit.
 
+Additionally, you can update it on GitHub with the following command to the `gh-deploy` branch:
+```bash
+$ mkdocs gh-deploy
+```
+
 More info can be found here https://mkdocstrings.github.io/recipes/
