@@ -11,21 +11,23 @@ class SVGP(gpytorch.models.ApproximateGP):
     Args:
         inducing_points (torch.Tensor): Inducing points tensor.
         dtype (torch.dtype, optional): Data type of the model. Defaults to torch.float32.
-
+        device (torch.device): Device can be specified to the desired `cpu` or `cuda` for GPU
+    
     Attributes:
         mean_module (gpytorch.means.ConstantMean): Constant mean module.
         covar_module (gpytorch.kernels.ScaleKernel): Scaled RBF kernel.
     """
 
-    def __init__(self, inducing_points, dtype=torch.float32):
+    def __init__(self, inducing_points, dtype=torch.float32, device = None):
         variational_distribution = gpytorch.variational.CholeskyVariationalDistribution(
             inducing_points.size(0), dtype=dtype
         )
+        self.device = device
         variational_strategy = gpytorch.variational.VariationalStrategy(
             self,
             inducing_points,
             variational_distribution,
-            learn_inducing_locations=True,
+            learn_inducing_locations=True
         ).to(dtype)
 
         super().__init__(variational_strategy)
@@ -43,6 +45,7 @@ class SVGP(gpytorch.models.ApproximateGP):
         Returns:
             gpytorch.distributions.MultivariateNormal: Multivariate normal distribution with the given mean and covariance.
         """
+        x = x.to(self.device)
         mean_x = self.mean_module(x)
         covar_x = self.covar_module(x)
         return gpytorch.distributions.MultivariateNormal(mean_x, covar_x)

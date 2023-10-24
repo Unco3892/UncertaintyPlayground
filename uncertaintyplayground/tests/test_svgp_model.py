@@ -14,7 +14,8 @@ class TestSVGP(unittest.TestCase):
         """
         self.inducing_points = torch.rand((10, 2))
         self.dtype = torch.float32
-        self.svgp = SVGP(self.inducing_points, self.dtype)
+        self.device = None
+        self.svgp = SVGP(self.inducing_points, dtype = self.dtype,  device = self.device)
 
     def test_init(self):
         """

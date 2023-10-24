@@ -36,8 +36,9 @@ class SparseGPTrainer(BaseTrainer):
         
         # Initialize the model with inducing points
         inducing_points = self.X_train[:num_inducing_points, :]
-        self.model = SVGP(inducing_points, dtype=self.dtype).to(
-            self.device, dtype=self.dtype)
+        self.model = SVGP(inducing_points, dtype=self.dtype, device = self.device)
+        self.model = self.model.to(self.device)
+        #.to( dtype=self.dtype)
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
             dtype=self.dtype).to(self.device, dtype=self.dtype)
         

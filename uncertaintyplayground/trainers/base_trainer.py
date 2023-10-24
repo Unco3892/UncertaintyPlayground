@@ -21,7 +21,7 @@ class BaseTrainer:
         use_scheduler (bool): Whether to use a learning rate scheduler (`not yet fully supported`).
         patience (int): Number of consecutive epochs with no improvement after which training will be stopped.
         dtype (torch.dtype): Data type to use for the tensors.
-        device (torch.device): Device can be specified to the desired `cpu` or `gpu` (else if set to `None`, then GPU if available, otherwise CPU).
+        device (torch.device): Device can be specified to the desired `cpu` or `cuda` for GPU (else if set to `None`, then GPU if available, otherwise CPU).
 
     Attributes:
         X (torch.Tensor): Input data tensor.
