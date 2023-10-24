@@ -85,41 +85,41 @@ class BaseTrainer:
         # Create DataLoader for training data
         self.prepare_dataloader()
 
-    # def prepare_inputs(self):
-    #     """
-    #     Convert input data to the correct type and format.
-    #     """
-    #     # Convert X to a tensor if it's a numpy array
-    #     if isinstance(self.X, np.ndarray):
-    #         self.X = torch.from_numpy(self.X).to(device = self.device, dtype = self.dtype)  # Ensure it's moved to the correct device
-
-    #     # Convert y to a tensor if it's a list or numpy array
-    #     if isinstance(self.y, (list, np.ndarray)):
-    #         self.y = torch.tensor(self.y, device = self.device, dtype=self.dtype)
-
-    #     # Check if sample_weights is a tensor, numpy array, or list
-    #     if self.sample_weights is not None:
-    #         if isinstance(self.sample_weights, (np.ndarray, list)):
-    #             self.sample_weights = torch.tensor(
-    #                 self.sample_weights, device = self.device, dtype=self.dtype)
-
     def prepare_inputs(self):
         """
         Convert input data to the correct type and format.
         """
         # Convert X to a tensor if it's a numpy array
         if isinstance(self.X, np.ndarray):
-            self.X = torch.from_numpy(self.X).to(self.dtype)
+            self.X = torch.from_numpy(self.X).to(device = self.device, dtype = self.dtype)  # Ensure it's moved to the correct device
 
         # Convert y to a tensor if it's a list or numpy array
         if isinstance(self.y, (list, np.ndarray)):
-            self.y = torch.tensor(self.y, dtype=self.dtype)
+            self.y = torch.tensor(self.y, device = self.device, dtype=self.dtype)
 
         # Check if sample_weights is a tensor, numpy array, or list
         if self.sample_weights is not None:
             if isinstance(self.sample_weights, (np.ndarray, list)):
                 self.sample_weights = torch.tensor(
-                    self.sample_weights, dtype=self.dtype)
+                    self.sample_weights, device = self.device, dtype=self.dtype)
+
+    # def prepare_inputs(self):
+    #     """
+    #     Convert input data to the correct type and format.
+    #     """
+    #     # Convert X to a tensor if it's a numpy array
+    #     if isinstance(self.X, np.ndarray):
+    #         self.X = torch.from_numpy(self.X).to(self.dtype)
+
+    #     # Convert y to a tensor if it's a list or numpy array
+    #     if isinstance(self.y, (list, np.ndarray)):
+    #         self.y = torch.tensor(self.y, dtype=self.dtype)
+
+    #     # Check if sample_weights is a tensor, numpy array, or list
+    #     if self.sample_weights is not None:
+    #         if isinstance(self.sample_weights, (np.ndarray, list)):
+    #             self.sample_weights = torch.tensor(
+    #                 self.sample_weights, dtype=self.dtype)
 
     def split_data(self, test_size=0.2):
         """
@@ -155,7 +155,7 @@ class BaseTrainer:
         Prepare the DataLoader for training data.
         """
         # Use all available CPU cores or default to 1 if not detected
-        num_workers = os.cpu_count() - 1 or 1
+        num_workers = 0  # Changed from os.cpu_count() - 1 or 1
         train_dataset = TensorDataset(
             self.X_train, self.y_train, self.sample_weights_train)
         self.train_loader = DataLoader(

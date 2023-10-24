@@ -43,7 +43,7 @@ class SparseGPTrainer(BaseTrainer):
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
             dtype=self.dtype).to(device=self.device, dtype=self.dtype)  # Ensure the likelihood is on the right device
 
-        print(f"Model device 2: {self.model.device}")
+        print(f"Model device: {self.model.device}")
         print(f"Data device: {next(iter(self.train_loader))[0].device}")  # This should now print the correct device
 
     def train(self):
