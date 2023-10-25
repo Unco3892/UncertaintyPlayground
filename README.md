@@ -19,10 +19,9 @@ Use `PyPI` to install the package:
 pip install uncertaintyplayground
 ```
 
-or alterntively, clone the repo and from the root directory of the repo, run the following in your terminal:
-
+or alterntively, to use the development version, install directly from GitHub:
 ```bash
-pip install .
+pip install git+https://github.com/unco3892/UncertaintyPlayground.git
 ```
 
 ## Usage
@@ -75,16 +74,14 @@ You can find another example for MDN in the `examples` folder.
 
 ## Contributors
 
-`UncertinatyPlayground` is maintained by [Ilia Azizi](https://iliaazizi.com/) (University of Lausanne). Any other contributors are welcome to join! Feel free to get in touch with (contact links on my website).
+This library is maintained by [Ilia Azizi](https://iliaazizi.com/) (University of Lausanne). Any other contributors are welcome to join! Feel free to get in touch with (contact links on my website).
 <!-- Please see the [contributing guide](CONTRIBUTING.md) for more details. -->
 
 ## Citation
 
 If you use this package in your research, please cite our work:
 
-**UncertaintyPlayground: A Fast and Simplified Python Library for Uncertainty Estimation**  
-Ilia Azizi
-[arXiv:2310.15281](https://arxiv.org/abs/2310.15281)
+**UncertaintyPlayground: A Fast and Simplified Python Library for Uncertainty Estimation** , Ilia Azizi, [arXiv:2310.15281](https://arxiv.org/abs/2310.15281)
 
 ```bibtex
 @misc{azizi2023uncertaintyplayground,
