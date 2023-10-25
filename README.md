@@ -2,6 +2,7 @@
 
 ![CI Test Suite](https://github.com/unco3892/UncertaintyPlayground/actions/workflows/ci_cd.yml/badge.svg?branch=main)
 [![Python Version](https://img.shields.io/badge/python-3.8+-green.svg)](https://www.python.org/downloads/)
+[![PyPI](https://img.shields.io/pypi/v/UncertaintyPlayground.svg)](https://pypi.org/project/UncertaintyPlayground/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ## Installation
@@ -72,57 +73,29 @@ You can find another example for MDN in the `examples` folder.
 
 <!-- ## Examples, Tutorials, and Documentation -->
 
-## Package structure
-
-```bash
-UncertaintyPlayground/
-├── README.md
-├── setup.py
-├── LICENSE
-├── MANIFEST.in
-├── tox.ini # Local continuous integration
-├── mkdocs.yml
-├── docs # Documentation
-│   ├── bib.md
-│   ├── example.md
-│   ├── gen_ref_pages.py
-│   ├── index.md
-│   └── README.md
-├── examples # Examples of the package
-│   ├── compare_models_example.py
-│   ├── mdn_example.py
-│   └── svgp_example.py
-└── uncertaintyplayground # Main package
-    ├── requirements.txt
-    ├── models # Models
-    │   ├── mdn_model.py
-    │   └── svgp_model.py
-    ├── trainers # Training the models
-    │   ├── base_trainer.py
-    │   ├── mdn_trainer.py
-    │   └── svgp_trainer.py
-    ├── predplot # Single instance prediction (inference) plot
-    │   ├── grid_predplot.py
-    │   ├── mdn_predplot.py
-    │   └── svgp_predplot.py
-    ├── utils # Utility functions
-    │   ├── early_stopping.py
-    │   └── generate_data.py
-    └── tests # Unit tests
-        ├── test_early_stopping.py
-        ├── test_generate_data.py
-        ├── test_mdn_model.py
-        ├── test_mdn_predplot.py
-        ├── test_mdn_trainer.py
-        ├── test_svgp_model.py
-        ├── test_svgp_predplot.py
-        └── test_svgp_trainer.py
-```
-
 ## Contributors
 
 `UncertinatyPlayground` is maintained by [Ilia Azizi](https://iliaazizi.com/) (University of Lausanne). Any other contributors are welcome to join! Feel free to get in touch with (contact links on my website).
 <!-- Please see the [contributing guide](CONTRIBUTING.md) for more details. -->
+
+## Citation
+
+If you use this package in your research, please cite our work:
+
+**UncertaintyPlayground: A Fast and Simplified Python Library for Uncertainty Estimation**  
+Ilia Azizi
+[arXiv:2310.15281](https://arxiv.org/abs/2310.15281)
+
+```bibtex
+@misc{azizi2023uncertaintyplayground,
+      title={UncertaintyPlayground: A Fast and Simplified Python Library for Uncertainty Estimation}, 
+      author={Ilia Azizi},
+      year={2023},
+      eprint={2310.15281},
+      archivePrefix={arXiv},
+      primaryClass={stat.ML}
+}
+```
 
 ## License
 

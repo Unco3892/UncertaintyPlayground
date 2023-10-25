@@ -6,7 +6,7 @@ with open('uncertaintyplayground/requirements.txt') as f:
 
 setup(
     name='UncertaintyPlayground',
-    version='0.1.1',
+    version='0.1.2',
     packages=find_packages(),
     author='Ilia Azizi',
     author_email='ilia.azizi@unil.ch',
