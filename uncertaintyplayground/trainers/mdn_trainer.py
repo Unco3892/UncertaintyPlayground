@@ -25,11 +25,13 @@ class MDNTrainer(BaseTrainer):
         super().__init__(*args, **kwargs)
         self.n_gaussians = n_gaussians
 
-        self.model = MDN(input_dim=self.X.shape[1], n_gaussians=self.n_gaussians, dense1_units = dense1_units).to(self.device)
+        self.model = MDN(input_dim=self.X.shape[1], n_gaussians=self.n_gaussians, dense1_units = dense1_units).to(device = self.device)
         if self.dtype == torch.float64:
             self.model = self.model.double()  # Convert model parameters to float64
         optimizer_fn = getattr(torch.optim, self.optimizer_fn_name)
         self.optimizer = optimizer_fn(self.model.parameters(), lr=self.lr)
+        print(f"Model device: {next(self.model.parameters()).device}")
+        print(f"Data device: {next(iter(self.train_loader))[0].device}")
 
     def train(self):
         """

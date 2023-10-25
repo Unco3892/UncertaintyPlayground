@@ -34,13 +34,18 @@ class SparseGPTrainer(BaseTrainer):
         super().__init__(*args, **kwargs)
         self.num_inducing_points = num_inducing_points
         
-        # Initialize the model with inducing points
-        inducing_points = self.X_train[:num_inducing_points, :]
-        self.model = SVGP(inducing_points, dtype=self.dtype).to(
-            self.device, dtype=self.dtype)
-        self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
-            dtype=self.dtype).to(self.device, dtype=self.dtype)
+        # Ensure inducing points are on the correct device
+        inducing_points = self.X_train[:num_inducing_points, :].to(self.device)  # Move inducing points to the specified device
         
+        self.model = SVGP(inducing_points, dtype=self.dtype, device=self.device)
+        self.model = self.model.to(device=self.device, dtype=self.dtype)  # Ensure the model is on the right device
+
+        self.likelihood = gpytorch.likelihoods.GaussianLikelihood(
+            dtype=self.dtype).to(device=self.device, dtype=self.dtype)  # Ensure the likelihood is on the right device
+
+        print(f"Model device: {self.model.device}")
+        print(f"Data device: {next(iter(self.train_loader))[0].device}")
+
     def train(self):
         # set the seed
         torch.manual_seed(self.random_state)
@@ -71,10 +76,8 @@ class SparseGPTrainer(BaseTrainer):
 
         for i in range(self.num_epochs):
             for X_batch, y_batch, weights_batch in self.train_loader:
-                X_batch, y_batch, weights_batch = X_batch.to(self.device, dtype=self.dtype), y_batch.to(
-                    self.device, dtype=self.dtype), weights_batch.to(self.device, dtype=self.dtype)  # Move tensors to the chosen device
+                X_batch, y_batch, weights_batch = X_batch.to(device = self.device, dtype=self.dtype, non_blocking = True), y_batch.to(device = self.device, dtype=self.dtype, non_blocking = True), weights_batch.to(device = self.device, dtype=self.dtype, non_blocking = True)  # Move tensors to the chosen device
                 optimizer.zero_grad()
-
                 output = self.model(X_batch)
                 unweighted_loss = -mll(output, y_batch)
 
@@ -93,24 +96,34 @@ class SparseGPTrainer(BaseTrainer):
             #     scheduler.step()
             # if self.use_scheduler:
             #     scheduler.step()
-
+ 
             # Compute validation metrics (MSE and R2)
             self.model.eval()
             self.likelihood.eval()
+ 
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                y_pred_val = self.likelihood(self.model(self.X_val)).mean
+                raw_output = self.model(self.X_val.to(self.device))
+                y_pred_val = self.likelihood(raw_output).mean
+                # for debugging
+                # print("Shape of y_pred_val after likelihood:", y_pred_val.detach().cpu().numpy().shape)
+                # print("Shape of X_val:", self.X_val.shape)
 
-            mse_val = mean_squared_error(
-                self.y_val.detach().numpy(), y_pred_val.detach().numpy())
-            r2_val = r2_score(self.y_val.detach().numpy(),
-                              y_pred_val.detach().numpy())
+            y_true_val = self.y_val.detach().cpu().numpy()
+            y_pred_val = y_pred_val.detach().cpu().numpy()
+
+            # for debugging
+            # print("Shape of y_true_val before:", self.y_val.shape)
+            # print("Shape of y_pred_val before:", y_pred_val.shape)
+            
+            mse_val = mean_squared_error(y_true_val,y_pred_val)
+            r2_val = r2_score(y_true_val,y_pred_val)
 
             self.model.train()
             self.likelihood.train()
 
             print(
                 f"Epoch {i + 1}/{self.num_epochs}, Weighted Loss: {weighted_loss.item():.3f}, Val MSE: {mse_val:.6f}, Val R2: {r2_val:.3f}")
-
+            
             should_stop = early_stopping(mse_val, self.model)
 
             if should_stop:
@@ -137,7 +150,7 @@ class SparseGPTrainer(BaseTrainer):
 
         # Convert numpy array to PyTorch tensor if necessary
         if isinstance(X, np.ndarray):
-            X = torch.from_numpy(X).to(self.dtype)
+            X = torch.from_numpy(X).to(device= self.device, dtype = self.dtype)
 
         # Check if X is a single instance and add an extra dimension if necessary
         if X.ndim == 1:
@@ -146,7 +159,7 @@ class SparseGPTrainer(BaseTrainer):
         with torch.no_grad(), gpytorch.settings.fast_pred_var():
             # Get the predictive mean and variance
             preds = self.likelihood(self.model(X))
-            mean = preds.mean.cpu().numpy()
-            variance = preds.variance.cpu().numpy()
+            mean = preds.mean.detach().cpu().numpy()
+            variance = preds.variance.detach().cpu().numpy()
 
         return mean, variance
