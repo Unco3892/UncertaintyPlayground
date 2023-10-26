@@ -2,7 +2,7 @@
 name: "🎨 Refactor"
 about: Propose a refactor/speedup/improvement to UncertaintyPlayground's internals
 title: ''
-labels: ''
+labels: refactor
 assignees: ''
 
 ---

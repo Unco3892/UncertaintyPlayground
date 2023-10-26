@@ -15,8 +15,6 @@ __pycache__/
 
 # Pyenv setting useful (same versions as the `tox.ini` file)
 .python-version
-join.py
-outcome.txt
 examples/mdn_grid_plot.png
 examples/mdn_solo_plot.png
 examples/svgpr_grid_plot.png
@@ -25,4 +23,3 @@ examples/svgpr_solo_plot.png
 # Virtual Environment files
 venv/
 site/
-personal_links.md
