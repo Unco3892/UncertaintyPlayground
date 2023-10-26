@@ -5,7 +5,7 @@ import numpy as np
 import warnings
 from typing import Optional, Union, List
 import torch
-from trainers.mdn_trainer import MDNTrainer
+from uncertaintyplayground.trainers.mdn_trainer import MDNTrainer
 
 def compare_distributions_mdn(
     trainer: MDNTrainer,

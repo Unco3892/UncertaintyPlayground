@@ -3,7 +3,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from typing import Optional, Union
-from trainers.svgp_trainer import SparseGPTrainer
+from uncertaintyplayground.trainers.svgp_trainer import SparseGPTrainer
 
 def compare_distributions_svgpr(
     trainer: SparseGPTrainer,
