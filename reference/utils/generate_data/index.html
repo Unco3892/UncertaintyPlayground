@@ -881,7 +881,7 @@
 
 
 <h2 id="utils.generate_data.generate_multi_modal_data" class="doc doc-heading">
-<code class="highlight language-python">generate_multi_modal_data(num_samples, modes)</code>
+<code class="highlight language-python"><span class="n">generate_multi_modal_data</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">modes</span><span class="p">)</span></code>
 
 </h2>
 
@@ -970,53 +970,90 @@ contains the keys 'mean' (float), 'std_dev' (float), and 'weight' (float).</p></
   </table>
 
 <p><strong>Examples:</strong></p>
-    <pre class="highlight"><code class="language-pycon">&gt;&gt;&gt; modes = [
-...     {'mean': -3.0, 'std_dev': 0.5, 'weight': 0.3},
-...     {'mean': 0.0, 'std_dev': 1.0, 'weight': 0.4},
-...     {'mean': 3.0, 'std_dev': 0.7, 'weight': 0.3}
-... ]
-&gt;&gt;&gt; data = generate_multi_modal_data(1000, modes)
-&gt;&gt;&gt; print(data.shape)
-(1000,)</code></pre>
+    <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">modes</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">generate_multi_modal_data</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">modes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="go">(1000,)</span>
+</code></pre></div>
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/utils/generate_data.py</code></summary>
-        <pre class="highlight"><code class="language-python">def generate_multi_modal_data(num_samples, modes):
-    """
-    Generate multimodal data for the mixture density network.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">generate_multi_modal_data</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">modes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate multimodal data for the mixture density network.</span>
 
-    This function generates a specified number of samples for each mode. Each mode is defined by
-    a mean, standard deviation, and weight. The weight determines the proportion of total samples
-    that will come from this mode.
+<span class="sd">    This function generates a specified number of samples for each mode. Each mode is defined by</span>
+<span class="sd">    a mean, standard deviation, and weight. The weight determines the proportion of total samples</span>
+<span class="sd">    that will come from this mode.</span>
 
-    Args:
-        num_samples (int): The total number of data samples to generate.
-        modes (list of dict): A list of dictionaries, where each dictionary represents a mode and
-            contains the keys 'mean' (float), 'std_dev' (float), and 'weight' (float).
+<span class="sd">    Args:</span>
+<span class="sd">        num_samples (int): The total number of data samples to generate.</span>
+<span class="sd">        modes (list of dict): A list of dictionaries, where each dictionary represents a mode and</span>
+<span class="sd">            contains the keys &#39;mean&#39; (float), &#39;std_dev&#39; (float), and &#39;weight&#39; (float).</span>
 
-    Returns:
-        np.array: An array of generated data samples.
+<span class="sd">    Returns:</span>
+<span class="sd">        np.array: An array of generated data samples.</span>
 
-    Raises:
-        ValueError: If num_samples is not a positive integer.
-        ValueError: If modes is not a list of dictionaries each containing 'mean', 'std_dev', and 'weight'.
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If num_samples is not a positive integer.</span>
+<span class="sd">        ValueError: If modes is not a list of dictionaries each containing &#39;mean&#39;, &#39;std_dev&#39;, and &#39;weight&#39;.</span>
 
-    Examples:
-        &gt;&gt;&gt; modes = [
-        ...     {'mean': -3.0, 'std_dev': 0.5, 'weight': 0.3},
-        ...     {'mean': 0.0, 'std_dev': 1.0, 'weight': 0.4},
-        ...     {'mean': 3.0, 'std_dev': 0.7, 'weight': 0.3}
-        ... ]
-        &gt;&gt;&gt; data = generate_multi_modal_data(1000, modes)
-        &gt;&gt;&gt; print(data.shape)
-        (1000,)
-    """
-    samples = []
-    for mode in modes:
-        mean, std_dev = mode['mean'], mode['std_dev']
-        num = int(num_samples * mode['weight'])
-        samples.extend(np.random.normal(mean, std_dev, num))
-    return np.array(samples)</code></pre>
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; modes = [</span>
+<span class="sd">        ...     {&#39;mean&#39;: -3.0, &#39;std_dev&#39;: 0.5, &#39;weight&#39;: 0.3},</span>
+<span class="sd">        ...     {&#39;mean&#39;: 0.0, &#39;std_dev&#39;: 1.0, &#39;weight&#39;: 0.4},</span>
+<span class="sd">        ...     {&#39;mean&#39;: 3.0, &#39;std_dev&#39;: 0.7, &#39;weight&#39;: 0.3}</span>
+<span class="sd">        ... ]</span>
+<span class="sd">        &gt;&gt;&gt; data = generate_multi_modal_data(1000, modes)</span>
+<span class="sd">        &gt;&gt;&gt; print(data.shape)</span>
+<span class="sd">        (1000,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">:</span>
+        <span class="n">mean</span><span class="p">,</span> <span class="n">std_dev</span> <span class="o">=</span> <span class="n">mode</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">],</span> <span class="n">mode</span><span class="p">[</span><span class="s1">&#39;std_dev&#39;</span><span class="p">]</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_samples</span> <span class="o">*</span> <span class="n">mode</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
+        <span class="n">samples</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std_dev</span><span class="p">,</span> <span class="n">num</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

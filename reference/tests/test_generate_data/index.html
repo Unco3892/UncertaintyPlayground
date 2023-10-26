@@ -881,7 +881,7 @@
 
 
 <h2 id="tests.test_generate_data.test_generate_multi_modal_data" class="doc doc-heading">
-<code class="highlight language-python">test_generate_multi_modal_data()</code>
+<code class="highlight language-python"><span class="n">test_generate_multi_modal_data</span><span class="p">()</span></code>
 
 </h2>
 
@@ -919,34 +919,62 @@ close to the expected values.</p>
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_generate_data.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_generate_multi_modal_data():
-    """
-    Unit test for `generate_multi_modal_data` function.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_generate_multi_modal_data</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unit test for `generate_multi_modal_data` function.</span>
 
-    This test checks whether the function returns an array of correct size and also if the data
-    follows the expected distribution by checking whether the mean and standard deviation are
-    close to the expected values.
+<span class="sd">    This test checks whether the function returns an array of correct size and also if the data</span>
+<span class="sd">    follows the expected distribution by checking whether the mean and standard deviation are</span>
+<span class="sd">    close to the expected values.</span>
 
-    Raises:
-        AssertionError: If the returned array is not of the correct size.
-        AssertionError: If the mean or standard deviation of the generated data is too far from the expected value.
-    """
-    num_samples = 10000
-    modes = [
-        {'mean': -3.0, 'std_dev': 0.5, 'weight': 0.3},
-        {'mean': 0.0, 'std_dev': 1.0, 'weight': 0.4},
-        {'mean': 3.0, 'std_dev': 0.7, 'weight': 0.3}
-    ]
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: If the returned array is not of the correct size.</span>
+<span class="sd">        AssertionError: If the mean or standard deviation of the generated data is too far from the expected value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">10000</span>
+    <span class="n">modes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">}</span>
+    <span class="p">]</span>
 
-    y = generate_multi_modal_data(num_samples, modes)
+    <span class="n">y</span> <span class="o">=</span> <span class="n">generate_multi_modal_data</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">modes</span><span class="p">)</span>
 
-    assert len(y) == num_samples, "The generated data does not have the correct number of samples."
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_samples</span><span class="p">,</span> <span class="s2">&quot;The generated data does not have the correct number of samples.&quot;</span>
 
-    # Check if the mean and std deviation are close to expected values
-    for mode in modes:
-        mode_samples = [sample for sample in y if abs(sample-mode['mean']) &lt; 3*mode['std_dev']]
-        assert abs(np.mean(mode_samples)-mode['mean']) &lt; 0.1, f"For mode with mean {mode['mean']}, generated data does not have correct mean."
-        assert abs(np.std(mode_samples)-mode['std_dev']) &lt; 0.1, f"For mode with mean {mode['mean']}, generated data does not have correct std deviation."</code></pre>
+    <span class="c1"># Check if the mean and std deviation are close to expected values</span>
+    <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">:</span>
+        <span class="n">mode_samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span> <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">y</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sample</span><span class="o">-</span><span class="n">mode</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">*</span><span class="n">mode</span><span class="p">[</span><span class="s1">&#39;std_dev&#39;</span><span class="p">]]</span>
+        <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mode_samples</span><span class="p">)</span><span class="o">-</span><span class="n">mode</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;For mode with mean </span><span class="si">{</span><span class="n">mode</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, generated data does not have correct mean.&quot;</span>
+        <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">mode_samples</span><span class="p">)</span><span class="o">-</span><span class="n">mode</span><span class="p">[</span><span class="s1">&#39;std_dev&#39;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;For mode with mean </span><span class="si">{</span><span class="n">mode</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, generated data does not have correct std deviation.&quot;</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

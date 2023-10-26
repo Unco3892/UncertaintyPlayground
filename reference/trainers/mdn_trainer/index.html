@@ -1014,101 +1014,196 @@
 
         <details class="quote">
           <summary>Source code in <code>uncertaintyplayground/trainers/mdn_trainer.py</code></summary>
-          <pre class="highlight"><code class="language-python">class MDNTrainer(BaseTrainer):
-    """
-    Trainer for the Mixed Density Network (MDN) model.
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  7</span>
+<span class="normal">  8</span>
+<span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">MDNTrainer</span><span class="p">(</span><span class="n">BaseTrainer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Trainer for the Mixed Density Network (MDN) model.</span>
 
-    This class handles the training process for the MDN model.
+<span class="sd">    This class handles the training process for the MDN model.</span>
 
-    Args:
-        dense1_units (int): Number of hidden units in first layer of the neural network.
-        n_gaussians (int): Number of Gaussian components in the mixture.
-        **kwargs: Additional arguments passed to the BaseTrainer.
+<span class="sd">    Args:</span>
+<span class="sd">        dense1_units (int): Number of hidden units in first layer of the neural network.</span>
+<span class="sd">        n_gaussians (int): Number of Gaussian components in the mixture.</span>
+<span class="sd">        **kwargs: Additional arguments passed to the BaseTrainer.</span>
 
-    Attributes:
-        n_gaussians (int): Number of Gaussian components in the mixture.
-        model (MDN): The MDN model.
-        optimizer (torch.optim.Optimizer): The optimizer for model training.
-    """
+<span class="sd">    Attributes:</span>
+<span class="sd">        n_gaussians (int): Number of Gaussian components in the mixture.</span>
+<span class="sd">        model (MDN): The MDN model.</span>
+<span class="sd">        optimizer (torch.optim.Optimizer): The optimizer for model training.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    def __init__(self, *args, dense1_units=20, n_gaussians=5, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.n_gaussians = n_gaussians
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">dense1_units</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span> <span class="o">=</span> <span class="n">n_gaussians</span>
 
-        self.model = MDN(input_dim=self.X.shape[1], n_gaussians=self.n_gaussians, dense1_units = dense1_units).to(device = self.device)
-        if self.dtype == torch.float64:
-            self.model = self.model.double()  # Convert model parameters to float64
-        optimizer_fn = getattr(torch.optim, self.optimizer_fn_name)
-        self.optimizer = optimizer_fn(self.model.parameters(), lr=self.lr)
-        print(f"Model device: {next(self.model.parameters()).device}")
-        print(f"Data device: {next(iter(self.train_loader))[0].device}")
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">MDN</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">,</span> <span class="n">dense1_units</span> <span class="o">=</span> <span class="n">dense1_units</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">double</span><span class="p">()</span>  <span class="c1"># Convert model parameters to float64</span>
+        <span class="n">optimizer_fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_fn_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model device: </span><span class="si">{</span><span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data device: </span><span class="si">{</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    def train(self):
-        """
-        Train the MDN model.
-        """
-        self.model.train()
-        early_stopping = EarlyStopping(patience=self.patience, compare_fn=lambda x, y: x &lt; y)
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train the MDN model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="n">early_stopping</span> <span class="o">=</span> <span class="n">EarlyStopping</span><span class="p">(</span><span class="n">patience</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">patience</span><span class="p">,</span> <span class="n">compare_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">)</span>
 
-        for epoch in range(self.num_epochs):
-            for X_batch, y_batch, weights_batch in self.train_loader:
-                X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_epochs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">X_batch</span><span class="p">,</span> <span class="n">y_batch</span><span class="p">,</span> <span class="n">weights_batch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">:</span>
+                <span class="n">X_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="n">X_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">y_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
-                self.optimizer.zero_grad()
+                <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 
-                pi, mu, sigma = self.model(X_batch)
-                loss = mdn_loss(y_batch, mu, sigma, pi)
+                <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">X_batch</span><span class="p">)</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="n">mdn_loss</span><span class="p">(</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
 
-                loss.backward()
-                self.optimizer.step()
+                <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
-            self.model.eval()
-            with torch.no_grad():
-                pi, mu, sigma = self.model(self.X_val.to(self.device))
-                val_loss = mdn_loss(self.y_val.to(self.device), mu, sigma, pi)
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_val</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">))</span>
+                <span class="n">val_loss</span> <span class="o">=</span> <span class="n">mdn_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_val</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
 
-            self.model.train()
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 
-            print(
-                f"Epoch {epoch + 1}/{self.num_epochs}, Training Loss: {loss.item():.3f}, "
-                f"Validation Loss: {val_loss.item():.3f}"
-            )
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_epochs</span><span class="si">}</span><span class="s2">, Training Loss: </span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Validation Loss: </span><span class="si">{</span><span class="n">val_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
-            should_stop = early_stopping(val_loss.item(), self.model)
+            <span class="n">should_stop</span> <span class="o">=</span> <span class="n">early_stopping</span><span class="p">(</span><span class="n">val_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 
-            if should_stop:
-                print(f"Early stopping after {epoch + 1} epochs")
-                break
+            <span class="k">if</span> <span class="n">should_stop</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Early stopping after </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> epochs&quot;</span><span class="p">)</span>
+                <span class="k">break</span>
 
-        if early_stopping.best_model_state is not None:
-            self.model.load_state_dict(early_stopping.best_model_state)
-            self.model.eval()
+        <span class="k">if</span> <span class="n">early_stopping</span><span class="o">.</span><span class="n">best_model_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">best_model_state</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
-    def predict_with_uncertainty(self, X):
-        """
-        Predict the output distribution given input data.
+    <span class="k">def</span> <span class="nf">predict_with_uncertainty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Predict the output distribution given input data.</span>
 
-        Args:
-            X (np.ndarray or torch.Tensor): Input data of shape (num_samples, num_features).
+<span class="sd">        Args:</span>
+<span class="sd">            X (np.ndarray or torch.Tensor): Input data of shape (num_samples, num_features).</span>
 
-        Returns:
-            tuple: A tuple containing the predicted mixture weights, means, standard deviations, and samples.
-        """
-        self.model.eval()
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple containing the predicted mixture weights, means, standard deviations, and samples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
-        # Convert numpy array to PyTorch tensor if necessary
-        if isinstance(X, np.ndarray):
-            X = torch.from_numpy(X).to(self.device)
+        <span class="c1"># Convert numpy array to PyTorch tensor if necessary</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
-        # Check if X is a single instance and add an extra dimension if necessary
-        if X.ndim == 1:
-            X = torch.unsqueeze(X, 0)
+        <span class="c1"># Check if X is a single instance and add an extra dimension if necessary</span>
+        <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-        with torch.no_grad():
-            pi, mu, sigma = self.model(X)
-            sample = self.model.sample(X, num_samples=1000)
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
-        return pi.cpu().numpy(), mu.cpu().numpy(), sigma.cpu().numpy(), sample.cpu().numpy()</code></pre>
+        <span class="k">return</span> <span class="n">pi</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">mu</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sigma</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sample</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
         </details>
 
   
@@ -1128,7 +1223,7 @@
 
 
 <h3 id="trainers.mdn_trainer.MDNTrainer.predict_with_uncertainty" class="doc doc-heading">
-<code class="highlight language-python">predict_with_uncertainty(X)</code>
+<code class="highlight language-python"><span class="n">predict_with_uncertainty</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></code>
 
 </h3>
 
@@ -1180,31 +1275,56 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/trainers/mdn_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def predict_with_uncertainty(self, X):
-    """
-    Predict the output distribution given input data.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">predict_with_uncertainty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Predict the output distribution given input data.</span>
 
-    Args:
-        X (np.ndarray or torch.Tensor): Input data of shape (num_samples, num_features).
+<span class="sd">    Args:</span>
+<span class="sd">        X (np.ndarray or torch.Tensor): Input data of shape (num_samples, num_features).</span>
 
-    Returns:
-        tuple: A tuple containing the predicted mixture weights, means, standard deviations, and samples.
-    """
-    self.model.eval()
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: A tuple containing the predicted mixture weights, means, standard deviations, and samples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
-    # Convert numpy array to PyTorch tensor if necessary
-    if isinstance(X, np.ndarray):
-        X = torch.from_numpy(X).to(self.device)
+    <span class="c1"># Convert numpy array to PyTorch tensor if necessary</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
-    # Check if X is a single instance and add an extra dimension if necessary
-    if X.ndim == 1:
-        X = torch.unsqueeze(X, 0)
+    <span class="c1"># Check if X is a single instance and add an extra dimension if necessary</span>
+    <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-    with torch.no_grad():
-        pi, mu, sigma = self.model(X)
-        sample = self.model.sample(X, num_samples=1000)
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
-    return pi.cpu().numpy(), mu.cpu().numpy(), sigma.cpu().numpy(), sample.cpu().numpy()</code></pre>
+    <span class="k">return</span> <span class="n">pi</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">mu</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sigma</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">sample</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1215,7 +1335,7 @@
 
 
 <h3 id="trainers.mdn_trainer.MDNTrainer.train" class="doc doc-heading">
-<code class="highlight language-python">train()</code>
+<code class="highlight language-python"><span class="n">train</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1226,46 +1346,86 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/trainers/mdn_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def train(self):
-    """
-    Train the MDN model.
-    """
-    self.model.train()
-    early_stopping = EarlyStopping(patience=self.patience, compare_fn=lambda x, y: x &lt; y)
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Train the MDN model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">early_stopping</span> <span class="o">=</span> <span class="n">EarlyStopping</span><span class="p">(</span><span class="n">patience</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">patience</span><span class="p">,</span> <span class="n">compare_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">)</span>
 
-    for epoch in range(self.num_epochs):
-        for X_batch, y_batch, weights_batch in self.train_loader:
-            X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_epochs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">X_batch</span><span class="p">,</span> <span class="n">y_batch</span><span class="p">,</span> <span class="n">weights_batch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">:</span>
+            <span class="n">X_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="n">X_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">y_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
-            self.optimizer.zero_grad()
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 
-            pi, mu, sigma = self.model(X_batch)
-            loss = mdn_loss(y_batch, mu, sigma, pi)
+            <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">X_batch</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">mdn_loss</span><span class="p">(</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
 
-            loss.backward()
-            self.optimizer.step()
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
-        self.model.eval()
-        with torch.no_grad():
-            pi, mu, sigma = self.model(self.X_val.to(self.device))
-            val_loss = mdn_loss(self.y_val.to(self.device), mu, sigma, pi)
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_val</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">))</span>
+            <span class="n">val_loss</span> <span class="o">=</span> <span class="n">mdn_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_val</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
 
-        self.model.train()
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 
-        print(
-            f"Epoch {epoch + 1}/{self.num_epochs}, Training Loss: {loss.item():.3f}, "
-            f"Validation Loss: {val_loss.item():.3f}"
-        )
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_epochs</span><span class="si">}</span><span class="s2">, Training Loss: </span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Validation Loss: </span><span class="si">{</span><span class="n">val_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
-        should_stop = early_stopping(val_loss.item(), self.model)
+        <span class="n">should_stop</span> <span class="o">=</span> <span class="n">early_stopping</span><span class="p">(</span><span class="n">val_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 
-        if should_stop:
-            print(f"Early stopping after {epoch + 1} epochs")
-            break
+        <span class="k">if</span> <span class="n">should_stop</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Early stopping after </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> epochs&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
 
-    if early_stopping.best_model_state is not None:
-        self.model.load_state_dict(early_stopping.best_model_state)
-        self.model.eval()</code></pre>
+    <span class="k">if</span> <span class="n">early_stopping</span><span class="o">.</span><span class="n">best_model_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">best_model_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

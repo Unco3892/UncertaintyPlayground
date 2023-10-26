@@ -995,55 +995,104 @@ Inherits from the gpytorch.models.ApproximateGP class.</p>
 
         <details class="quote">
           <summary>Source code in <code>uncertaintyplayground/models/svgp_model.py</code></summary>
-          <pre class="highlight"><code class="language-python">class SVGP(gpytorch.models.ApproximateGP):
-    """
-    Stochastic Variational Gaussian Process (SVGP) Regression Model.
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SVGP</span><span class="p">(</span><span class="n">gpytorch</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">ApproximateGP</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stochastic Variational Gaussian Process (SVGP) Regression Model.</span>
 
-    A scalable Gaussian Process (GP) model based on stochastic variational inference.
-    Inherits from the gpytorch.models.ApproximateGP class.
+<span class="sd">    A scalable Gaussian Process (GP) model based on stochastic variational inference.</span>
+<span class="sd">    Inherits from the gpytorch.models.ApproximateGP class.</span>
 
-    Args:
-        inducing_points (torch.Tensor): Inducing points tensor.
-        dtype (torch.dtype, optional): Data type of the model. Defaults to torch.float32.
-        device (torch.device): Device can be specified to the desired `cpu` or `cuda` for GPU
+<span class="sd">    Args:</span>
+<span class="sd">        inducing_points (torch.Tensor): Inducing points tensor.</span>
+<span class="sd">        dtype (torch.dtype, optional): Data type of the model. Defaults to torch.float32.</span>
+<span class="sd">        device (torch.device): Device can be specified to the desired `cpu` or `cuda` for GPU</span>
 
-    Attributes:
-        mean_module (gpytorch.means.ConstantMean): Constant mean module.
-        covar_module (gpytorch.kernels.ScaleKernel): Scaled RBF kernel.
-    """
+<span class="sd">    Attributes:</span>
+<span class="sd">        mean_module (gpytorch.means.ConstantMean): Constant mean module.</span>
+<span class="sd">        covar_module (gpytorch.kernels.ScaleKernel): Scaled RBF kernel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    def __init__(self, inducing_points, dtype=torch.float32, device = None):
-        self.device = device
-        self.inducing_points = inducing_points.to(device = self.device)
-        variational_distribution = gpytorch.variational.CholeskyVariationalDistribution(
-            self.inducing_points.size(0), dtype=dtype
-        )
-        variational_strategy = gpytorch.variational.VariationalStrategy(
-            self,
-            self.inducing_points,
-            variational_distribution,
-            learn_inducing_locations=True
-        ).to(dtype = dtype)
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inducing_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inducing_points</span> <span class="o">=</span> <span class="n">inducing_points</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">variational_distribution</span> <span class="o">=</span> <span class="n">gpytorch</span><span class="o">.</span><span class="n">variational</span><span class="o">.</span><span class="n">CholeskyVariationalDistribution</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inducing_points</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span>
+        <span class="p">)</span>
+        <span class="n">variational_strategy</span> <span class="o">=</span> <span class="n">gpytorch</span><span class="o">.</span><span class="n">variational</span><span class="o">.</span><span class="n">VariationalStrategy</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inducing_points</span><span class="p">,</span>
+            <span class="n">variational_distribution</span><span class="p">,</span>
+            <span class="n">learn_inducing_locations</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span><span class="p">)</span>
 
-        super().__init__(variational_strategy)
-        self.mean_module = gpytorch.means.ConstantMean(dtype=dtype)
-        self.covar_module = gpytorch.kernels.ScaleKernel(
-            gpytorch.kernels.RBFKernel())
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">variational_strategy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_module</span> <span class="o">=</span> <span class="n">gpytorch</span><span class="o">.</span><span class="n">means</span><span class="o">.</span><span class="n">ConstantMean</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">covar_module</span> <span class="o">=</span> <span class="n">gpytorch</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">ScaleKernel</span><span class="p">(</span>
+            <span class="n">gpytorch</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">RBFKernel</span><span class="p">())</span>
 
-    def forward(self, x):
-        """
-        Forward pass for the SVGPRegressionModel.
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forward pass for the SVGPRegressionModel.</span>
 
-        Args:
-            x (torch.Tensor): Input tensor.
+<span class="sd">        Args:</span>
+<span class="sd">            x (torch.Tensor): Input tensor.</span>
 
-        Returns:
-            gpytorch.distributions.MultivariateNormal: Multivariate normal distribution with the given mean and covariance.
-        """
-        x = x.to(device = self.device)
-        mean_x = self.mean_module(x)
-        covar_x = self.covar_module(x)
-        return gpytorch.distributions.MultivariateNormal(mean_x, covar_x)</code></pre>
+<span class="sd">        Returns:</span>
+<span class="sd">            gpytorch.distributions.MultivariateNormal: Multivariate normal distribution with the given mean and covariance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">mean_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_module</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">covar_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">covar_module</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gpytorch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">mean_x</span><span class="p">,</span> <span class="n">covar_x</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
         </details>
 
   
@@ -1063,7 +1112,7 @@ Inherits from the gpytorch.models.ApproximateGP class.</p>
 
 
 <h3 id="models.svgp_model.SVGP.forward" class="doc doc-heading">
-<code class="highlight language-python">forward(x)</code>
+<code class="highlight language-python"><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></code>
 
 </h3>
 
@@ -1115,20 +1164,34 @@ Inherits from the gpytorch.models.ApproximateGP class.</p>
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/models/svgp_model.py</code></summary>
-        <pre class="highlight"><code class="language-python">def forward(self, x):
-    """
-    Forward pass for the SVGPRegressionModel.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Forward pass for the SVGPRegressionModel.</span>
 
-    Args:
-        x (torch.Tensor): Input tensor.
+<span class="sd">    Args:</span>
+<span class="sd">        x (torch.Tensor): Input tensor.</span>
 
-    Returns:
-        gpytorch.distributions.MultivariateNormal: Multivariate normal distribution with the given mean and covariance.
-    """
-    x = x.to(device = self.device)
-    mean_x = self.mean_module(x)
-    covar_x = self.covar_module(x)
-    return gpytorch.distributions.MultivariateNormal(mean_x, covar_x)</code></pre>
+<span class="sd">    Returns:</span>
+<span class="sd">        gpytorch.distributions.MultivariateNormal: Multivariate normal distribution with the given mean and covariance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">mean_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_module</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">covar_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">covar_module</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gpytorch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">mean_x</span><span class="p">,</span> <span class="n">covar_x</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

@@ -950,52 +950,98 @@
 
         <details class="quote">
           <summary>Source code in <code>uncertaintyplayground/tests/test_mdn_trainer.py</code></summary>
-          <pre class="highlight"><code class="language-python">class TestMDNTrainer(unittest.TestCase):
-    """
-    This test class provides unit tests for the MDNTrainer class.
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TestMDNTrainer</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This test class provides unit tests for the MDNTrainer class.</span>
 
-    """
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    def setUp(self):
-        """
-        Sets up the testing environment for each test method.
-        """
-        self.modes = [
-            {'mean': -3.0, 'std_dev': 0.5, 'weight': 0.3},
-            {'mean': 0.0, 'std_dev': 1.0, 'weight': 0.4},
-            {'mean': 3.0, 'std_dev': 0.7, 'weight': 0.3}
-        ]
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets up the testing environment for each test method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">}</span>
+        <span class="p">]</span>
 
-        torch.manual_seed(1)
-        np.random.seed(42)
-        self.num_samples = 100
-        self.X = np.random.rand(self.num_samples, 20)
-        self.y = generate_multi_modal_data(self.num_samples, self.modes)
+        <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">generate_multi_modal_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
 
-    def test_train(self):
-        """
-        Tests the train method of the MDNTrainer class.
-        """
-        trainer = MDNTrainer(self.X, self.y, num_epochs=3, lr=0.01, dense1_units=5, n_gaussians=3, dtype = torch.float32)
-        trainer.train()
+    <span class="k">def</span> <span class="nf">test_train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tests the train method of the MDNTrainer class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">trainer</span> <span class="o">=</span> <span class="n">MDNTrainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">dense1_units</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 
-    def test_predict_with_uncertainty(self):
-        """
-        Tests the predict_with_uncertainty method of the MDNTrainer class.
-        """
-        trainer = MDNTrainer(self.X, self.y, num_epochs=2, lr=0.01, dense1_units=5, n_gaussians=3)
-        trainer.train()
+    <span class="k">def</span> <span class="nf">test_predict_with_uncertainty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tests the predict_with_uncertainty method of the MDNTrainer class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">trainer</span> <span class="o">=</span> <span class="n">MDNTrainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">dense1_units</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 
-        # Generate a test instance
-        test_instance = np.random.rand(1, 20)
-        test_instance = test_instance.astype(np.float32)
+        <span class="c1"># Generate a test instance</span>
+        <span class="n">test_instance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">test_instance</span> <span class="o">=</span> <span class="n">test_instance</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
-        pi, mu, sigma, sample = trainer.predict_with_uncertainty(test_instance)
-        # Add assertions based on the expected behavior of the predict_with_uncertainty function
-        self.assertEqual(pi.shape, (1, 3))
-        self.assertEqual(mu.shape, (1, 3))
-        self.assertEqual(sigma.shape, (1, 3))
-        self.assertIsInstance(sample, np.ndarray)</code></pre>
+        <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sample</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">predict_with_uncertainty</span><span class="p">(</span><span class="n">test_instance</span><span class="p">)</span>
+        <span class="c1"># Add assertions based on the expected behavior of the predict_with_uncertainty function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sigma</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
         </details>
 
   
@@ -1015,7 +1061,7 @@
 
 
 <h3 id="tests.test_mdn_trainer.TestMDNTrainer.setUp" class="doc doc-heading">
-<code class="highlight language-python">setUp()</code>
+<code class="highlight language-python"><span class="n">setUp</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1026,21 +1072,36 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_mdn_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def setUp(self):
-    """
-    Sets up the testing environment for each test method.
-    """
-    self.modes = [
-        {'mean': -3.0, 'std_dev': 0.5, 'weight': 0.3},
-        {'mean': 0.0, 'std_dev': 1.0, 'weight': 0.4},
-        {'mean': 3.0, 'std_dev': 0.7, 'weight': 0.3}
-    ]
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets up the testing environment for each test method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">modes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">}</span>
+    <span class="p">]</span>
 
-    torch.manual_seed(1)
-    np.random.seed(42)
-    self.num_samples = 100
-    self.X = np.random.rand(self.num_samples, 20)
-    self.y = generate_multi_modal_data(self.num_samples, self.modes)</code></pre>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">generate_multi_modal_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1051,7 +1112,7 @@
 
 
 <h3 id="tests.test_mdn_trainer.TestMDNTrainer.test_predict_with_uncertainty" class="doc doc-heading">
-<code class="highlight language-python">test_predict_with_uncertainty()</code>
+<code class="highlight language-python"><span class="n">test_predict_with_uncertainty</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1062,23 +1123,40 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_mdn_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_predict_with_uncertainty(self):
-    """
-    Tests the predict_with_uncertainty method of the MDNTrainer class.
-    """
-    trainer = MDNTrainer(self.X, self.y, num_epochs=2, lr=0.01, dense1_units=5, n_gaussians=3)
-    trainer.train()
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_predict_with_uncertainty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests the predict_with_uncertainty method of the MDNTrainer class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">MDNTrainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">dense1_units</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 
-    # Generate a test instance
-    test_instance = np.random.rand(1, 20)
-    test_instance = test_instance.astype(np.float32)
+    <span class="c1"># Generate a test instance</span>
+    <span class="n">test_instance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">test_instance</span> <span class="o">=</span> <span class="n">test_instance</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
-    pi, mu, sigma, sample = trainer.predict_with_uncertainty(test_instance)
-    # Add assertions based on the expected behavior of the predict_with_uncertainty function
-    self.assertEqual(pi.shape, (1, 3))
-    self.assertEqual(mu.shape, (1, 3))
-    self.assertEqual(sigma.shape, (1, 3))
-    self.assertIsInstance(sample, np.ndarray)</code></pre>
+    <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sample</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">predict_with_uncertainty</span><span class="p">(</span><span class="n">test_instance</span><span class="p">)</span>
+    <span class="c1"># Add assertions based on the expected behavior of the predict_with_uncertainty function</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sigma</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1089,7 +1167,7 @@
 
 
 <h3 id="tests.test_mdn_trainer.TestMDNTrainer.test_train" class="doc doc-heading">
-<code class="highlight language-python">test_train()</code>
+<code class="highlight language-python"><span class="n">test_train</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1100,12 +1178,18 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_mdn_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_train(self):
-    """
-    Tests the train method of the MDNTrainer class.
-    """
-    trainer = MDNTrainer(self.X, self.y, num_epochs=3, lr=0.01, dense1_units=5, n_gaussians=3, dtype = torch.float32)
-    trainer.train()</code></pre>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests the train method of the MDNTrainer class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">MDNTrainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">dense1_units</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

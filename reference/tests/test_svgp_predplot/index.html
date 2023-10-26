@@ -950,53 +950,100 @@
 
         <details class="quote">
           <summary>Source code in <code>uncertaintyplayground/tests/test_svgp_predplot.py</code></summary>
-          <pre class="highlight"><code class="language-python">class TestSVGPRPlots(unittest.TestCase):
-    """
-    This test class provides unit tests for the compare_distributions_svgpr and plot_results_grid functions for SVGPR model.
-    """
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TestSVGPRPlots</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This test class provides unit tests for the compare_distributions_svgpr and plot_results_grid functions for SVGPR model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    def setUp(self):
-        """
-        Sets up the testing environment for each test method.
-        """
-        # Assuming data is generated in a similar way as in the MDN case
-        self.modes = [
-            {'mean': -3.0, 'std_dev': 0.5, 'weight': 0.3},
-            {'mean': 0.0, 'std_dev': 1.0, 'weight': 0.4},
-            {'mean': 3.0, 'std_dev': 0.7, 'weight': 0.3}
-        ]
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets up the testing environment for each test method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Assuming data is generated in a similar way as in the MDN case</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">}</span>
+        <span class="p">]</span>
 
-        torch.manual_seed(1)
-        np.random.seed(42)
-        self.num_samples = 1000
-        self.X_test = np.random.rand(self.num_samples, 20)
-        self.Y_test = generate_multi_modal_data(self.num_samples, self.modes)
+        <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Y_test</span> <span class="o">=</span> <span class="n">generate_multi_modal_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
 
-        self.svgpr_trainer = SparseGPTrainer(self.X_test, self.Y_test, num_epochs=5, lr=0.01)
-        self.svgpr_trainer.train()
+        <span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span> <span class="o">=</span> <span class="n">SparseGPTrainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 
-    def test_compare_distributions_svgpr(self):
-        """
-        Tests the compare_distributions function for the SVGPR model.
-        """
-        index_instance = 900
+    <span class="k">def</span> <span class="nf">test_compare_distributions_svgpr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tests the compare_distributions function for the SVGPR model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">index_instance</span> <span class="o">=</span> <span class="mi">900</span>
 
-        with DisablePlotDisplay():
-            compare_distributions_svgpr(self.svgpr_trainer, x_instance = self.X_test[index_instance, :], y_actual=self.Y_test[index_instance])
+        <span class="k">with</span> <span class="n">DisablePlotDisplay</span><span class="p">():</span>
+            <span class="n">compare_distributions_svgpr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span><span class="p">,</span> <span class="n">x_instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">[</span><span class="n">index_instance</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y_actual</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Y_test</span><span class="p">[</span><span class="n">index_instance</span><span class="p">])</span>
 
-    def test_plot_results_grid_svgpr(self):
-        """
-        Tests the plot_results_grid function with SVGPR model.
-        """
-        indices = [900, 100]  # Example indices
+    <span class="k">def</span> <span class="nf">test_plot_results_grid_svgpr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tests the plot_results_grid function with SVGPR model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>  <span class="c1"># Example indices</span>
 
-        # Testing with actual y values
-        with DisablePlotDisplay():
-            plot_results_grid(self.svgpr_trainer, compare_distributions_svgpr, self.X_test, indices, self.Y_test)
+        <span class="c1"># Testing with actual y values</span>
+        <span class="k">with</span> <span class="n">DisablePlotDisplay</span><span class="p">():</span>
+            <span class="n">plot_results_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span><span class="p">,</span> <span class="n">compare_distributions_svgpr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y_test</span><span class="p">)</span>
 
-        # Testing without actual y values
-        with DisablePlotDisplay():
-            plot_results_grid(self.svgpr_trainer, compare_distributions_svgpr, self.X_test, indices, None)</code></pre>
+        <span class="c1"># Testing without actual y values</span>
+        <span class="k">with</span> <span class="n">DisablePlotDisplay</span><span class="p">():</span>
+            <span class="n">plot_results_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span><span class="p">,</span> <span class="n">compare_distributions_svgpr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
         </details>
 
   
@@ -1016,7 +1063,7 @@
 
 
 <h3 id="tests.test_svgp_predplot.TestSVGPRPlots.setUp" class="doc doc-heading">
-<code class="highlight language-python">setUp()</code>
+<code class="highlight language-python"><span class="n">setUp</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1027,25 +1074,44 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_svgp_predplot.py</code></summary>
-        <pre class="highlight"><code class="language-python">def setUp(self):
-    """
-    Sets up the testing environment for each test method.
-    """
-    # Assuming data is generated in a similar way as in the MDN case
-    self.modes = [
-        {'mean': -3.0, 'std_dev': 0.5, 'weight': 0.3},
-        {'mean': 0.0, 'std_dev': 1.0, 'weight': 0.4},
-        {'mean': 3.0, 'std_dev': 0.7, 'weight': 0.3}
-    ]
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets up the testing environment for each test method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Assuming data is generated in a similar way as in the MDN case</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">modes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">}</span>
+    <span class="p">]</span>
 
-    torch.manual_seed(1)
-    np.random.seed(42)
-    self.num_samples = 1000
-    self.X_test = np.random.rand(self.num_samples, 20)
-    self.Y_test = generate_multi_modal_data(self.num_samples, self.modes)
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">Y_test</span> <span class="o">=</span> <span class="n">generate_multi_modal_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
 
-    self.svgpr_trainer = SparseGPTrainer(self.X_test, self.Y_test, num_epochs=5, lr=0.01)
-    self.svgpr_trainer.train()</code></pre>
+    <span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span> <span class="o">=</span> <span class="n">SparseGPTrainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1056,7 +1122,7 @@
 
 
 <h3 id="tests.test_svgp_predplot.TestSVGPRPlots.test_compare_distributions_svgpr" class="doc doc-heading">
-<code class="highlight language-python">test_compare_distributions_svgpr()</code>
+<code class="highlight language-python"><span class="n">test_compare_distributions_svgpr</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1067,14 +1133,22 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_svgp_predplot.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_compare_distributions_svgpr(self):
-    """
-    Tests the compare_distributions function for the SVGPR model.
-    """
-    index_instance = 900
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_compare_distributions_svgpr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests the compare_distributions function for the SVGPR model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">index_instance</span> <span class="o">=</span> <span class="mi">900</span>
 
-    with DisablePlotDisplay():
-        compare_distributions_svgpr(self.svgpr_trainer, x_instance = self.X_test[index_instance, :], y_actual=self.Y_test[index_instance])</code></pre>
+    <span class="k">with</span> <span class="n">DisablePlotDisplay</span><span class="p">():</span>
+        <span class="n">compare_distributions_svgpr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span><span class="p">,</span> <span class="n">x_instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">[</span><span class="n">index_instance</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y_actual</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Y_test</span><span class="p">[</span><span class="n">index_instance</span><span class="p">])</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1085,7 +1159,7 @@
 
 
 <h3 id="tests.test_svgp_predplot.TestSVGPRPlots.test_plot_results_grid_svgpr" class="doc doc-heading">
-<code class="highlight language-python">test_plot_results_grid_svgpr()</code>
+<code class="highlight language-python"><span class="n">test_plot_results_grid_svgpr</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1096,19 +1170,32 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_svgp_predplot.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_plot_results_grid_svgpr(self):
-    """
-    Tests the plot_results_grid function with SVGPR model.
-    """
-    indices = [900, 100]  # Example indices
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_plot_results_grid_svgpr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests the plot_results_grid function with SVGPR model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>  <span class="c1"># Example indices</span>
 
-    # Testing with actual y values
-    with DisablePlotDisplay():
-        plot_results_grid(self.svgpr_trainer, compare_distributions_svgpr, self.X_test, indices, self.Y_test)
+    <span class="c1"># Testing with actual y values</span>
+    <span class="k">with</span> <span class="n">DisablePlotDisplay</span><span class="p">():</span>
+        <span class="n">plot_results_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span><span class="p">,</span> <span class="n">compare_distributions_svgpr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y_test</span><span class="p">)</span>
 
-    # Testing without actual y values
-    with DisablePlotDisplay():
-        plot_results_grid(self.svgpr_trainer, compare_distributions_svgpr, self.X_test, indices, None)</code></pre>
+    <span class="c1"># Testing without actual y values</span>
+    <span class="k">with</span> <span class="n">DisablePlotDisplay</span><span class="p">():</span>
+        <span class="n">plot_results_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">svgpr_trainer</span><span class="p">,</span> <span class="n">compare_distributions_svgpr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_test</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

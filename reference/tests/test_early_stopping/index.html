@@ -950,39 +950,72 @@
 
         <details class="quote">
           <summary>Source code in <code>uncertaintyplayground/tests/test_early_stopping.py</code></summary>
-          <pre class="highlight"><code class="language-python">class TestEarlyStopping(unittest.TestCase):
-    """
-    Unit tests for EarlyStopping class.
-    """
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TestEarlyStopping</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unit tests for EarlyStopping class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    def setUp(self):
-        """
-        Test fixture setup method.
-        """
-        self.early_stopping = EarlyStopping()
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test fixture setup method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span> <span class="o">=</span> <span class="n">EarlyStopping</span><span class="p">()</span>
 
-    def test_init(self):
-        """
-        Test case for EarlyStopping initialization.
-        """
-        self.assertIsInstance(self.early_stopping, EarlyStopping)
-        self.assertEqual(self.early_stopping.counter, 0)
-        self.assertEqual(self.early_stopping.best_val_metric, np.inf)
+    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test case for EarlyStopping initialization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="p">,</span> <span class="n">EarlyStopping</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">best_val_metric</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
 
-    def test_call(self):
-        """
-        Test case for call method in EarlyStopping.
-        """
-        model = torch.nn.Linear(1, 1)  # simple model for testing
-        val_metric = 10
-        self.early_stopping(val_metric, model)
-        self.assertEqual(self.early_stopping.best_val_metric, 10)
-        self.assertEqual(self.early_stopping.counter, 0)
+    <span class="k">def</span> <span class="nf">test_call</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test case for call method in EarlyStopping.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># simple model for testing</span>
+        <span class="n">val_metric</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="p">(</span><span class="n">val_metric</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">best_val_metric</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-        val_metric = 20
-        self.early_stopping(val_metric, model)
-        self.assertEqual(self.early_stopping.best_val_metric, 10)
-        self.assertEqual(self.early_stopping.counter, 1)</code></pre>
+        <span class="n">val_metric</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="p">(</span><span class="n">val_metric</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">best_val_metric</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
         </details>
 
   
@@ -1002,7 +1035,7 @@
 
 
 <h3 id="tests.test_early_stopping.TestEarlyStopping.setUp" class="doc doc-heading">
-<code class="highlight language-python">setUp()</code>
+<code class="highlight language-python"><span class="n">setUp</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1013,11 +1046,16 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_early_stopping.py</code></summary>
-        <pre class="highlight"><code class="language-python">def setUp(self):
-    """
-    Test fixture setup method.
-    """
-    self.early_stopping = EarlyStopping()</code></pre>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test fixture setup method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span> <span class="o">=</span> <span class="n">EarlyStopping</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1028,7 +1066,7 @@
 
 
 <h3 id="tests.test_early_stopping.TestEarlyStopping.test_call" class="doc doc-heading">
-<code class="highlight language-python">test_call()</code>
+<code class="highlight language-python"><span class="n">test_call</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1039,20 +1077,34 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_early_stopping.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_call(self):
-    """
-    Test case for call method in EarlyStopping.
-    """
-    model = torch.nn.Linear(1, 1)  # simple model for testing
-    val_metric = 10
-    self.early_stopping(val_metric, model)
-    self.assertEqual(self.early_stopping.best_val_metric, 10)
-    self.assertEqual(self.early_stopping.counter, 0)
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_call</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test case for call method in EarlyStopping.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># simple model for testing</span>
+    <span class="n">val_metric</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="p">(</span><span class="n">val_metric</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">best_val_metric</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-    val_metric = 20
-    self.early_stopping(val_metric, model)
-    self.assertEqual(self.early_stopping.best_val_metric, 10)
-    self.assertEqual(self.early_stopping.counter, 1)</code></pre>
+    <span class="n">val_metric</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="p">(</span><span class="n">val_metric</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">best_val_metric</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1063,7 +1115,7 @@
 
 
 <h3 id="tests.test_early_stopping.TestEarlyStopping.test_init" class="doc doc-heading">
-<code class="highlight language-python">test_init()</code>
+<code class="highlight language-python"><span class="n">test_init</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1074,13 +1126,20 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_early_stopping.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_init(self):
-    """
-    Test case for EarlyStopping initialization.
-    """
-    self.assertIsInstance(self.early_stopping, EarlyStopping)
-    self.assertEqual(self.early_stopping.counter, 0)
-    self.assertEqual(self.early_stopping.best_val_metric, np.inf)</code></pre>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test case for EarlyStopping initialization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="p">,</span> <span class="n">EarlyStopping</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="o">.</span><span class="n">best_val_metric</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

@@ -881,7 +881,7 @@
 
 
 <h2 id="predplot.mdn_predplot.compare_distributions_mdn" class="doc doc-heading">
-<code class="highlight language-python">compare_distributions_mdn(trainer, x_instance, y_actual=None, num_samples=10000, ax=None, dtype=np.float32)</code>
+<code class="highlight language-python"><span class="n">compare_distributions_mdn</span><span class="p">(</span><span class="n">trainer</span><span class="p">,</span> <span class="n">x_instance</span><span class="p">,</span> <span class="n">y_actual</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></code>
 
 </h2>
 
@@ -985,81 +985,156 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/predplot/mdn_predplot.py</code></summary>
-        <pre class="highlight"><code class="language-python">def compare_distributions_mdn(trainer, x_instance, y_actual=None, num_samples=10000, ax=None, dtype=np.float32):
-    """
-    Compare the actual and predicted outcome value/distributions for the MDN model.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">compare_distributions_mdn</span><span class="p">(</span><span class="n">trainer</span><span class="p">,</span> <span class="n">x_instance</span><span class="p">,</span> <span class="n">y_actual</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compare the actual and predicted outcome value/distributions for the MDN model.</span>
 
-    Args:
-        trainer (MDNTrainer): The trained MDNTrainer instance.
-        x_instance (np.ndarray or torch.Tensor): The instance for which to predict the outcome distribution.
-        y_actual (float or np.ndarray, optional): The actual outcome(s). If a single value, plot as a vertical line.
-                                                  If an array or list, plot as a KDE. If None, don't plot actual outcome.
-        num_samples (int, optional): The number of samples to generate from the predicted and actual distributions.
-                                     Default is 10000.
-        ax (matplotlib.axes.Axes, optional): The axes on which to plot. If None, create a new figure.
-        dtype (np.dtype, optional): Data type to use for plotting. Default is np.float32.
+<span class="sd">    Args:</span>
+<span class="sd">        trainer (MDNTrainer): The trained MDNTrainer instance.</span>
+<span class="sd">        x_instance (np.ndarray or torch.Tensor): The instance for which to predict the outcome distribution.</span>
+<span class="sd">        y_actual (float or np.ndarray, optional): The actual outcome(s). If a single value, plot as a vertical line.</span>
+<span class="sd">                                                  If an array or list, plot as a KDE. If None, don&#39;t plot actual outcome.</span>
+<span class="sd">        num_samples (int, optional): The number of samples to generate from the predicted and actual distributions.</span>
+<span class="sd">                                     Default is 10000.</span>
+<span class="sd">        ax (matplotlib.axes.Axes, optional): The axes on which to plot. If None, create a new figure.</span>
+<span class="sd">        dtype (np.dtype, optional): Data type to use for plotting. Default is np.float32.</span>
 
-    Returns:
-        None
-    """
-    # Ensure it passes the unit testing
-    warnings.warn("This is a UserWarning")
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Ensure it passes the unit testing</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;This is a UserWarning&quot;</span><span class="p">)</span>
 
-    # Ensure x_instance is a 2D array
-    if x_instance.ndim == 1:
-        x_instance = np.expand_dims(x_instance, axis=0)
+    <span class="c1"># Ensure x_instance is a 2D array</span>
+    <span class="k">if</span> <span class="n">x_instance</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">x_instance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x_instance</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    # Change the prediction instance to the desired data type
-    x_instance = x_instance.astype(dtype)
+    <span class="c1"># Change the prediction instance to the desired data type</span>
+    <span class="n">x_instance</span> <span class="o">=</span> <span class="n">x_instance</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
 
-    # Get the predicted parameters of the mixture distribution
-    pi, mu, sigma, pred = trainer.predict_with_uncertainty(x_instance)
+    <span class="c1"># Get the predicted parameters of the mixture distribution</span>
+    <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">pred</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">predict_with_uncertainty</span><span class="p">(</span><span class="n">x_instance</span><span class="p">)</span>
 
-    # Generate samples from the predicted distribution
-    predicted_samples = []
+    <span class="c1"># Generate samples from the predicted distribution</span>
+    <span class="n">predicted_samples</span> <span class="o">=</span> <span class="p">[]</span>
 
-    print ("The actual input was: ",x_instance, "\n",
-           "The ground truth was: ",y_actual, "\n",
-           "The predicted weights are: ",pi, "\n", 
-           "The predicted means are: ",mu, "\n",
-           "The predicted sigmas are: ",sigma, "\n",
-           "The final prediction is: ",pred, "\n")
+    <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;The actual input was: &quot;</span><span class="p">,</span><span class="n">x_instance</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;The ground truth was: &quot;</span><span class="p">,</span><span class="n">y_actual</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;The predicted weights are: &quot;</span><span class="p">,</span><span class="n">pi</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> 
+           <span class="s2">&quot;The predicted means are: &quot;</span><span class="p">,</span><span class="n">mu</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;The predicted sigmas are: &quot;</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;The final prediction is: &quot;</span><span class="p">,</span><span class="n">pred</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    for _ in range(num_samples):
-        # Choose Gaussian
-        idx = np.random.choice(np.arange(len(pi[0])), p=pi[0])
-        # Sample from Gaussian
-        sample = np.random.normal(mu[0, idx], sigma[0, idx])
-        predicted_samples.append(sample)
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+        <span class="c1"># Choose Gaussian</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pi</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="n">p</span><span class="o">=</span><span class="n">pi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># Sample from Gaussian</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">idx</span><span class="p">],</span> <span class="n">sigma</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">idx</span><span class="p">])</span>
+        <span class="n">predicted_samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
 
-    # Plot KDE of predicted samples
-    if ax is None:
-        sns.kdeplot(predicted_samples, fill=True, color="r", label="Predicted distribution")
-        plt.axvline(pred[0], color="r", linestyle="--", label="Predicted value")
-    else:
-        sns.kdeplot(predicted_samples, fill=True, color="r", label="Predicted distribution", ax=ax)
-        ax.axvline(pred[0], color="r", linestyle="--", label="Predicted value")
+    <span class="c1"># Plot KDE of predicted samples</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">predicted_samples</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted distribution&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">pred</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted value&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">predicted_samples</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted distribution&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">pred</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted value&quot;</span><span class="p">)</span>
 
-    # Plot the actual value(s)
-    if y_actual is not None:
-        if np.isscalar(y_actual):
-            if ax is None:
-                plt.axvline(y_actual, color="b", linestyle="--", label="Ground truth")
-            else:
-                ax.axvline(y_actual, color="b", linestyle="--", label="Ground truth")
-        else:
-            if ax is None:
-                sns.kdeplot(y_actual, fill=True, color="b", label="Actual")
-            else:
-                sns.kdeplot(y_actual, fill=True, color="b", label="Actual", ax=ax)
+    <span class="c1"># Plot the actual value(s)</span>
+    <span class="k">if</span> <span class="n">y_actual</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">y_actual</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">y_actual</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ground truth&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">y_actual</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ground truth&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">y_actual</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Actual&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">y_actual</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Actual&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
-    # Set an option when doing multiple plots
-    if ax is None:
-        plt.xlabel('Value')
-        plt.ylabel('Density')
-        plt.legend()
-        plt.grid(axis='y', alpha=0.75)
-        plt.show()</code></pre>
+    <span class="c1"># Set an option when doing multiple plots</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Value&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Density&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

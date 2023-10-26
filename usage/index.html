@@ -856,84 +856,86 @@
 
 <h2 id="real-data">Real data</h2>
 <p>This example uses the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html">California Housing dataset from Sklearn</a>. You can train and visualize the results of the models in the following way:</p>
-<pre class="highlight"><code class="language-python">from uncertaintyplayground.trainers.svgp_trainer import SparseGPTrainer
-from uncertaintyplayground.trainers.mdn_trainer import MDNTrainer
-from uncertaintyplayground.predplot.svgp_predplot import compare_distributions_svgpr
-from uncertaintyplayground.predplot.mdn_predplot import compare_distributions_mdn
-from uncertaintyplayground.predplot.grid_predplot import plot_results_grid
-import torch
-import numpy as np
-from sklearn.datasets import fetch_california_housing
-from sklearn.model_selection import train_test_split
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">uncertaintyplayground.trainers.svgp_trainer</span> <span class="kn">import</span> <span class="n">SparseGPTrainer</span>
+<span class="kn">from</span> <span class="nn">uncertaintyplayground.trainers.mdn_trainer</span> <span class="kn">import</span> <span class="n">MDNTrainer</span>
+<span class="kn">from</span> <span class="nn">uncertaintyplayground.predplot.svgp_predplot</span> <span class="kn">import</span> <span class="n">compare_distributions_svgpr</span>
+<span class="kn">from</span> <span class="nn">uncertaintyplayground.predplot.mdn_predplot</span> <span class="kn">import</span> <span class="n">compare_distributions_mdn</span>
+<span class="kn">from</span> <span class="nn">uncertaintyplayground.predplot.grid_predplot</span> <span class="kn">import</span> <span class="n">plot_results_grid</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_california_housing</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 
-# Load the California Housing dataset
-california = fetch_california_housing()
+<span class="c1"># Load the California Housing dataset</span>
+<span class="n">california</span> <span class="o">=</span> <span class="n">fetch_california_housing</span><span class="p">()</span>
 
-# Convert X and y to numpy arrays of float32
-X = np.array(california.data, dtype=np.float32)
-y = np.array(california.target, dtype=np.float32)
+<span class="c1"># Convert X and y to numpy arrays of float32</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">california</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">california</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
-# Set random seed for reproducibility
-np.random.seed(42)
-torch.manual_seed(1)
+<span class="c1"># Set random seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-# Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+<span class="c1"># Split the dataset into training and testing sets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
-# SVGPR: Initialize and train a SVGPR model with 100 inducing points
-california_trainer_svgp = SparseGPTrainer(X_train, y_train, num_inducing_points=100, num_epochs=30, batch_size=512, lr=0.1, patience=3)
-california_trainer_svgp.train()
+<span class="c1"># SVGPR: Initialize and train a SVGPR model with 100 inducing points</span>
+<span class="n">california_trainer_svgp</span> <span class="o">=</span> <span class="n">SparseGPTrainer</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">num_inducing_points</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">california_trainer_svgp</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 
-# MDN: Initialize and train an MDN model
-california_trainer_mdn = MDNTrainer(X_train, y_train, num_epochs=100, lr=0.001, dense1_units=50, n_gaussians=10)
-california_trainer_mdn.train()
+<span class="c1"># MDN: Initialize and train an MDN model</span>
+<span class="n">california_trainer_mdn</span> <span class="o">=</span> <span class="n">MDNTrainer</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">dense1_units</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">california_trainer_mdn</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 
-# SVPGR: Visualize the SVGPR's predictions for multiple instances
-plot_results_grid(trainer=california_trainer_svgp, compare_func=compare_distributions_svgpr, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)
+<span class="c1"># SVPGR: Visualize the SVGPR&#39;s predictions for multiple instances</span>
+<span class="n">plot_results_grid</span><span class="p">(</span><span class="n">trainer</span><span class="o">=</span><span class="n">california_trainer_svgp</span><span class="p">,</span> <span class="n">compare_func</span><span class="o">=</span><span class="n">compare_distributions_svgpr</span><span class="p">,</span> <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="p">[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-# MDN: Visualize the MDN's predictions for multiple instances
-plot_results_grid(trainer=california_trainer_mdn, compare_func=compare_distributions_mdn, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)</code></pre>
+<span class="c1"># MDN: Visualize the MDN&#39;s predictions for multiple instances</span>
+<span class="n">plot_results_grid</span><span class="p">(</span><span class="n">trainer</span><span class="o">=</span><span class="n">california_trainer_mdn</span><span class="p">,</span> <span class="n">compare_func</span><span class="o">=</span><span class="n">compare_distributions_mdn</span><span class="p">,</span> <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="p">[</span><span class="mi">900</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
 <p>Please note that these models have not been tuned for this dataset, and are only used as an example.</p>
 <h2 id="synthetic-data">Synthetic data</h2>
 <p>It can be difficult to find truely multi-modal datsets, therefore, to check that MDN works as epected, we can capture the relationships with some simulated data:</p>
-<pre class="highlight"><code class="language-python">import torch
-import numpy as np
-from uncertaintyplayground.trainers.mdn_trainer import MDNTrainer
-from uncertaintyplayground.utils.generate_data import generate_multi_modal_data
-from uncertaintyplayground.predplot.grid_predplot import plot_results_grid
-from uncertaintyplayground.predplot.mdn_predplot import compare_distributions_mdn
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">uncertaintyplayground.trainers.mdn_trainer</span> <span class="kn">import</span> <span class="n">MDNTrainer</span>
+<span class="kn">from</span> <span class="nn">uncertaintyplayground.utils.generate_data</span> <span class="kn">import</span> <span class="n">generate_multi_modal_data</span>
+<span class="kn">from</span> <span class="nn">uncertaintyplayground.predplot.grid_predplot</span> <span class="kn">import</span> <span class="n">plot_results_grid</span>
+<span class="kn">from</span> <span class="nn">uncertaintyplayground.predplot.mdn_predplot</span> <span class="kn">import</span> <span class="n">compare_distributions_mdn</span>
 
-#-------------------------------------------------------------
-# Example 1: Using MDN model with simulated data
-# Generate simulated data with three modes
-modes = [
-    {'mean': -3.0, 'std_dev': 0.5, 'weight': 0.3},
-    {'mean': 0.0, 'std_dev': 1.0, 'weight': 0.4},
-    {'mean': 3.0, 'std_dev': 0.7, 'weight': 0.3}
-]
+<span class="c1">#-------------------------------------------------------------</span>
+<span class="c1"># Example 1: Using MDN model with simulated data</span>
+<span class="c1"># Generate simulated data with three modes</span>
+<span class="n">modes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;std_dev&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">}</span>
+<span class="p">]</span>
 
-# Set random seed for reproducibility
-np.random.seed(42)
-torch.manual_seed(1)
+<span class="c1"># Set random seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-num_samples = 1000
-X = np.random.rand(num_samples, 10)
-y = generate_multi_modal_data(num_samples, modes)
+<span class="n">num_samples</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">generate_multi_modal_data</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">modes</span><span class="p">)</span>
 
-# Train an MDN model with 50 hidden units and 5 Gaussian components
-mdn_trainer = MDNTrainer(X, y, num_epochs=100, lr=0.01, n_gaussians=5, dense1_units=50)
-mdn_trainer.train()
+<span class="c1"># Train an MDN model with 50 hidden units and 5 Gaussian components</span>
+<span class="n">mdn_trainer</span> <span class="o">=</span> <span class="n">MDNTrainer</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dense1_units</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">mdn_trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 
-# Visualize the model's predictions and uncertainties for a single instance
-# Note: Make sure that the predictions for the inference are in the same type of float as the training data
-index_instance = 900
+<span class="c1"># Visualize the model&#39;s predictions and uncertainties for a single instance</span>
+<span class="c1"># Note: Make sure that the predictions for the inference are in the same type of float as the training data</span>
+<span class="n">index_instance</span> <span class="o">=</span> <span class="mi">900</span>
 
-# With an actual y value (diagnostic)
-compare_distributions_mdn(trainer=mdn_trainer, x_instance=X[index_instance, :],y_actual=y[index_instance], num_samples=1000)
+<span class="c1"># With an actual y value (diagnostic)</span>
+<span class="n">compare_distributions_mdn</span><span class="p">(</span><span class="n">trainer</span><span class="o">=</span><span class="n">mdn_trainer</span><span class="p">,</span> <span class="n">x_instance</span><span class="o">=</span><span class="n">X</span><span class="p">[</span><span class="n">index_instance</span><span class="p">,</span> <span class="p">:],</span><span class="n">y_actual</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="n">index_instance</span><span class="p">],</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
-# You can also make any of the plots without a `y` (default set to None)
-# Without an actual y value (pure inference)
-compare_distributions_mdn(trainer = mdn_trainer, x_instance = X[index_instance, :])</code></pre>
+<span class="c1"># You can also make any of the plots without a `y` (default set to None)</span>
+<span class="c1"># Without an actual y value (pure inference)</span>
+<span class="n">compare_distributions_mdn</span><span class="p">(</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">mdn_trainer</span><span class="p">,</span> <span class="n">x_instance</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">index_instance</span><span class="p">,</span> <span class="p">:])</span>
+</code></pre></div>
 
 
 

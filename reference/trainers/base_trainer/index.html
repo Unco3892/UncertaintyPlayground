@@ -1213,152 +1213,298 @@
 
         <details class="quote">
           <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
-          <pre class="highlight"><code class="language-python">class BaseTrainer:
-    """
-    Base trainer class for model training.
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  7</span>
+<span class="normal">  8</span>
+<span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">BaseTrainer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base trainer class for model training.</span>
 
-    Args:
-        X (np.ndarray or torch.Tensor): Input data of shape (num_samples, num_features).
-        y (np.ndarray or torch.Tensor): Target data of shape (num_samples,).
-        sample_weights (np.ndarray or torch.Tensor): Optional sample weights of shape (num_samples,).
-        test_size (float): The proportion of the data to include in the validation set.
-        random_state (int): The seed used by the random number generator.
-        num_epochs (int): Number of training epochs.
-        batch_size (int): Batch size for training.
-        optimizer_fn_name (str): Name of the optimizer function from the `torch.optim` module.
-        lr (float): Learning rate for the optimizer.
-        use_scheduler (bool): Whether to use a learning rate scheduler (`not yet fully supported`).
-        patience (int): Number of consecutive epochs with no improvement after which training will be stopped.
-        dtype (torch.dtype): Data type to use for the tensors.
-        device (torch.device): Device can be specified to the desired `cpu` or `cuda` for GPU (else if set to `None`, then GPU if available, otherwise CPU).
-        multi_cpu_dataloader (bool): Use multiple CPUs for data loading or pass everything onto the GPU.
+<span class="sd">    Args:</span>
+<span class="sd">        X (np.ndarray or torch.Tensor): Input data of shape (num_samples, num_features).</span>
+<span class="sd">        y (np.ndarray or torch.Tensor): Target data of shape (num_samples,).</span>
+<span class="sd">        sample_weights (np.ndarray or torch.Tensor): Optional sample weights of shape (num_samples,).</span>
+<span class="sd">        test_size (float): The proportion of the data to include in the validation set.</span>
+<span class="sd">        random_state (int): The seed used by the random number generator.</span>
+<span class="sd">        num_epochs (int): Number of training epochs.</span>
+<span class="sd">        batch_size (int): Batch size for training.</span>
+<span class="sd">        optimizer_fn_name (str): Name of the optimizer function from the `torch.optim` module.</span>
+<span class="sd">        lr (float): Learning rate for the optimizer.</span>
+<span class="sd">        use_scheduler (bool): Whether to use a learning rate scheduler (`not yet fully supported`).</span>
+<span class="sd">        patience (int): Number of consecutive epochs with no improvement after which training will be stopped.</span>
+<span class="sd">        dtype (torch.dtype): Data type to use for the tensors.</span>
+<span class="sd">        device (torch.device): Device can be specified to the desired `cpu` or `cuda` for GPU (else if set to `None`, then GPU if available, otherwise CPU).</span>
+<span class="sd">        multi_cpu_dataloader (bool): Use multiple CPUs for data loading or pass everything onto the GPU.</span>
 
-    Attributes:
-        X (torch.Tensor): Input data tensor.
-        y (torch.Tensor): Target data tensor.
-        sample_weights (torch.Tensor): Sample weights tensor.
-        test_size (float): Proportion of data to include in the validation set.
-        random_state (int): Seed used by the random number generator.
-        num_epochs (int): Number of training epochs.
-        batch_size (int): Batch size for training.
-        optimizer_fn_name (str): Name of the optimizer function.
-        lr (float): Learning rate for the optimizer.
-        patience (int): Number of consecutive epochs with no improvement after which training will be stopped.
-        dtype (torch.dtype): Data type of the tensors.
-        train_loader (torch.utils.data.DataLoader): DataLoader for training data.
-    """
+<span class="sd">    Attributes:</span>
+<span class="sd">        X (torch.Tensor): Input data tensor.</span>
+<span class="sd">        y (torch.Tensor): Target data tensor.</span>
+<span class="sd">        sample_weights (torch.Tensor): Sample weights tensor.</span>
+<span class="sd">        test_size (float): Proportion of data to include in the validation set.</span>
+<span class="sd">        random_state (int): Seed used by the random number generator.</span>
+<span class="sd">        num_epochs (int): Number of training epochs.</span>
+<span class="sd">        batch_size (int): Batch size for training.</span>
+<span class="sd">        optimizer_fn_name (str): Name of the optimizer function.</span>
+<span class="sd">        lr (float): Learning rate for the optimizer.</span>
+<span class="sd">        patience (int): Number of consecutive epochs with no improvement after which training will be stopped.</span>
+<span class="sd">        dtype (torch.dtype): Data type of the tensors.</span>
+<span class="sd">        train_loader (torch.utils.data.DataLoader): DataLoader for training data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    def __init__(
-            self,
-            X,
-            y,
-            sample_weights=None,
-            test_size=0.2,
-            random_state=42,
-            num_epochs=50,
-            batch_size=256,
-            optimizer_fn_name="Adam",
-            lr=0.01,
-            use_scheduler=False,
-            patience=10,
-            dtype=torch.float32,
-            device = None,
-            multi_cpu_dataloader = True
-    ):
-        self.X = X
-        self.y = y
-        self.sample_weights = sample_weights
-        self.test_size = test_size
-        self.random_state = random_state
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
-        self.optimizer_fn_name = optimizer_fn_name
-        self.lr = lr
-        self.patience = patience
-        self.dtype = dtype
-        self.use_scheduler = use_scheduler
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">X</span><span class="p">,</span>
+            <span class="n">y</span><span class="p">,</span>
+            <span class="n">sample_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+            <span class="n">num_epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+            <span class="n">optimizer_fn_name</span><span class="o">=</span><span class="s2">&quot;Adam&quot;</span><span class="p">,</span>
+            <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+            <span class="n">use_scheduler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">patience</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">multi_cpu_dataloader</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span> <span class="o">=</span> <span class="n">sample_weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">test_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_epochs</span> <span class="o">=</span> <span class="n">num_epochs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_fn_name</span> <span class="o">=</span> <span class="n">optimizer_fn_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patience</span> <span class="o">=</span> <span class="n">patience</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_scheduler</span> <span class="o">=</span> <span class="n">use_scheduler</span>
 
-        # Setting for early stopping
-        self.best_epoch = -1
-        self.best_val_mse = np.inf
+        <span class="c1"># Setting for early stopping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_epoch</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_val_mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
 
-        # Choose device (GPU if available, otherwise CPU)
-        self.device = torch.device(
-            device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
-        )
+        <span class="c1"># Choose device (GPU if available, otherwise CPU)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+            <span class="n">device</span> <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
 
-        # Choose whether to use multiple CPUs for data loading
-        self.multi_cpu_dataloader = multi_cpu_dataloader
+        <span class="c1"># Choose whether to use multiple CPUs for data loading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multi_cpu_dataloader</span> <span class="o">=</span> <span class="n">multi_cpu_dataloader</span>
 
-        # Convert input tensors to the correct type
-        self.prepare_inputs()
+        <span class="c1"># Convert input tensors to the correct type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_inputs</span><span class="p">()</span>
 
-        # Split data into training and validation sets
-        self.split_data()
+        <span class="c1"># Split data into training and validation sets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_data</span><span class="p">()</span>
 
-        # Create DataLoader for training data
-        self.prepare_dataloader()
+        <span class="c1"># Create DataLoader for training data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_dataloader</span><span class="p">()</span>
 
-    def prepare_inputs(self):
-        """
-        Convert input data to the correct type and format.
-        """
-        # Convert X to a tensor if it's a numpy array
-        if isinstance(self.X, np.ndarray):
-            self.X = torch.from_numpy(self.X).to(dtype=self.dtype)
+    <span class="k">def</span> <span class="nf">prepare_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert input data to the correct type and format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert X to a tensor if it&#39;s a numpy array</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-        # Convert y to a tensor if it's a list or numpy array
-        if isinstance(self.y, (list, np.ndarray)):
-            self.y = torch.tensor(self.y, dtype=self.dtype)
+        <span class="c1"># Convert y to a tensor if it&#39;s a list or numpy array</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-        # Check if sample_weights is a tensor, numpy array, or list
-        if self.sample_weights is not None:
-            if isinstance(self.sample_weights, (np.ndarray, list)):
-                self.sample_weights = torch.tensor(
-                    self.sample_weights, dtype=self.dtype)
+        <span class="c1"># Check if sample_weights is a tensor, numpy array, or list</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-    def split_data(self):
-        """
-        Split the data into training and validation sets.
+    <span class="k">def</span> <span class="nf">split_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Split the data into training and validation sets.</span>
 
-        Args:
-            test_size (float): Proportion of data to include in the validation set.
-        """
-        if self.sample_weights is None:
-            self.sample_weights = torch.ones(self.X.shape[0], dtype=self.dtype)
+<span class="sd">        Args:</span>
+<span class="sd">            test_size (float): Proportion of data to include in the validation set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-        self.X_train, self.X_val, self.y_train, self.y_val, self.sample_weights_train, self.sample_weights_val = \
-            train_test_split(self.X, self.y, self.sample_weights,
-                             test_size=self.test_size, random_state=self.random_state)
+        <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_val</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_val</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights_val</span> <span class="o">=</span> \
+            <span class="n">train_test_split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span><span class="p">,</span>
+                             <span class="n">test_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
 
-    def custom_lr_scheduler(self, epoch):
-        """
-        Custom learning rate scheduler function.
+    <span class="k">def</span> <span class="nf">custom_lr_scheduler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Custom learning rate scheduler function.</span>
 
-        Args:
-            epoch (int): Current epoch.
+<span class="sd">        Args:</span>
+<span class="sd">            epoch (int): Current epoch.</span>
 
-        Returns:
-            float: Learning rate for the epoch.
-        """
-        if epoch &lt; 3:
-            return 1 - 0.1 * epoch / self.lr
-        else:
-            return 0.2 / self.lr
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Learning rate for the epoch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">epoch</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">epoch</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span>
 
-    def prepare_dataloader(self):
-            """
-            Prepare the DataLoader for training data.
-            """
-            # Use all available CPU cores or default to 1 if not detected
-            if self.multi_cpu_dataloader:
-                num_workers = os.cpu_count() - 1 or 1
-            else:
-                num_workers = 0
-            train_dataset = TensorDataset(
-                self.X_train, self.y_train, self.sample_weights_train)
-            self.train_loader = DataLoader(
-                train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)</code></pre>
+    <span class="k">def</span> <span class="nf">prepare_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Prepare the DataLoader for training data.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># Use all available CPU cores or default to 1 if not detected</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_cpu_dataloader</span><span class="p">:</span>
+                <span class="n">num_workers</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num_workers</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights_train</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+                <span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
         </details>
 
   
@@ -1378,7 +1524,7 @@
 
 
 <h3 id="trainers.base_trainer.BaseTrainer.custom_lr_scheduler" class="doc doc-heading">
-<code class="highlight language-python">custom_lr_scheduler(epoch)</code>
+<code class="highlight language-python"><span class="n">custom_lr_scheduler</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span></code>
 
 </h3>
 
@@ -1430,20 +1576,34 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def custom_lr_scheduler(self, epoch):
-    """
-    Custom learning rate scheduler function.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">custom_lr_scheduler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Custom learning rate scheduler function.</span>
 
-    Args:
-        epoch (int): Current epoch.
+<span class="sd">    Args:</span>
+<span class="sd">        epoch (int): Current epoch.</span>
 
-    Returns:
-        float: Learning rate for the epoch.
-    """
-    if epoch &lt; 3:
-        return 1 - 0.1 * epoch / self.lr
-    else:
-        return 0.2 / self.lr</code></pre>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Learning rate for the epoch.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">epoch</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">epoch</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1454,7 +1614,7 @@
 
 
 <h3 id="trainers.base_trainer.BaseTrainer.prepare_dataloader" class="doc doc-heading">
-<code class="highlight language-python">prepare_dataloader()</code>
+<code class="highlight language-python"><span class="n">prepare_dataloader</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1465,19 +1625,32 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def prepare_dataloader(self):
-        """
-        Prepare the DataLoader for training data.
-        """
-        # Use all available CPU cores or default to 1 if not detected
-        if self.multi_cpu_dataloader:
-            num_workers = os.cpu_count() - 1 or 1
-        else:
-            num_workers = 0
-        train_dataset = TensorDataset(
-            self.X_train, self.y_train, self.sample_weights_train)
-        self.train_loader = DataLoader(
-            train_dataset, batch_size=self.batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)</code></pre>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepare the DataLoader for training data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Use all available CPU cores or default to 1 if not detected</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_cpu_dataloader</span><span class="p">:</span>
+            <span class="n">num_workers</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">num_workers</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights_train</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1488,7 +1661,7 @@
 
 
 <h3 id="trainers.base_trainer.BaseTrainer.prepare_inputs" class="doc doc-heading">
-<code class="highlight language-python">prepare_inputs()</code>
+<code class="highlight language-python"><span class="n">prepare_inputs</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1499,23 +1672,40 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def prepare_inputs(self):
-    """
-    Convert input data to the correct type and format.
-    """
-    # Convert X to a tensor if it's a numpy array
-    if isinstance(self.X, np.ndarray):
-        self.X = torch.from_numpy(self.X).to(dtype=self.dtype)
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert input data to the correct type and format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert X to a tensor if it&#39;s a numpy array</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-    # Convert y to a tensor if it's a list or numpy array
-    if isinstance(self.y, (list, np.ndarray)):
-        self.y = torch.tensor(self.y, dtype=self.dtype)
+    <span class="c1"># Convert y to a tensor if it&#39;s a list or numpy array</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-    # Check if sample_weights is a tensor, numpy array, or list
-    if self.sample_weights is not None:
-        if isinstance(self.sample_weights, (np.ndarray, list)):
-            self.sample_weights = torch.tensor(
-                self.sample_weights, dtype=self.dtype)</code></pre>
+    <span class="c1"># Check if sample_weights is a tensor, numpy array, or list</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1526,7 +1716,7 @@
 
 
 <h3 id="trainers.base_trainer.BaseTrainer.split_data" class="doc doc-heading">
-<code class="highlight language-python">split_data()</code>
+<code class="highlight language-python"><span class="n">split_data</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1561,19 +1751,32 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/trainers/base_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def split_data(self):
-    """
-    Split the data into training and validation sets.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">split_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Split the data into training and validation sets.</span>
 
-    Args:
-        test_size (float): Proportion of data to include in the validation set.
-    """
-    if self.sample_weights is None:
-        self.sample_weights = torch.ones(self.X.shape[0], dtype=self.dtype)
+<span class="sd">    Args:</span>
+<span class="sd">        test_size (float): Proportion of data to include in the validation set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-    self.X_train, self.X_val, self.y_train, self.y_val, self.sample_weights_train, self.sample_weights_val = \
-        train_test_split(self.X, self.y, self.sample_weights,
-                         test_size=self.test_size, random_state=self.random_state)</code></pre>
+    <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_val</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_val</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights_val</span> <span class="o">=</span> \
+        <span class="n">train_test_split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_weights</span><span class="p">,</span>
+                         <span class="n">test_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

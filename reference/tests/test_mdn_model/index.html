@@ -964,36 +964,66 @@
 
         <details class="quote">
           <summary>Source code in <code>uncertaintyplayground/tests/test_mdn_model.py</code></summary>
-          <pre class="highlight"><code class="language-python">class TestMDN(unittest.TestCase):
-    """Tests for the class MDN"""
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TestMDN</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests for the class MDN&quot;&quot;&quot;</span>
 
-    def setUp(self):
-        """Set up a test fixture with input_dim = 20, dense1_units  = 10, n_gaussians = 3"""
-        self.input_dim = 20
-        self.dense1_units = 10
-        self.n_gaussians = 3
-        self.mdn = MDN(input_dim=self.input_dim, n_gaussians=self.n_gaussians, dense1_units=self.dense1_units)
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a test fixture with input_dim = 20, dense1_units  = 10, n_gaussians = 3&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dense1_units</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdn</span> <span class="o">=</span> <span class="n">MDN</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">,</span> <span class="n">dense1_units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dense1_units</span><span class="p">)</span>
 
-    def test_init(self):
-        """Test that the MDN is initialized properly"""
-        self.assertEqual(self.mdn.z_h[0].in_features, self.input_dim)
-        self.assertEqual(self.mdn.z_h[0].out_features, self.dense1_units)
-        self.assertEqual(self.mdn.z_pi.in_features, self.dense1_units)
-        self.assertEqual(self.mdn.z_pi.out_features, self.n_gaussians)
+    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test that the MDN is initialized properly&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">z_h</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">z_h</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense1_units</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">z_pi</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense1_units</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">z_pi</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">)</span>
 
-    def test_forward(self):
-        """Test the forward function with a tensor of shape (1, 20)"""
-        x = torch.rand((1, self.input_dim))
-        pi, mu, sigma = self.mdn.forward(x)
-        self.assertEqual(pi.shape, (1, self.n_gaussians))
-        self.assertEqual(mu.shape, (1, self.n_gaussians))
-        self.assertEqual(sigma.shape, (1, self.n_gaussians))
+    <span class="k">def</span> <span class="nf">test_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test the forward function with a tensor of shape (1, 20)&quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span><span class="p">))</span>
+        <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sigma</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">))</span>
 
-    def test_sample(self):
-        """Test the sample function with a tensor of shape (1, 20)"""
-        x = torch.rand((1, self.input_dim))
-        sample = self.mdn.sample(x)
-        self.assertEqual(sample.shape, (1,))</code></pre>
+    <span class="k">def</span> <span class="nf">test_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test the sample function with a tensor of shape (1, 20)&quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span><span class="p">))</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,))</span>
+</code></pre></div></td></tr></table></div>
         </details>
 
   
@@ -1013,7 +1043,7 @@
 
 
 <h3 id="tests.test_mdn_model.TestMDN.setUp" class="doc doc-heading">
-<code class="highlight language-python">setUp()</code>
+<code class="highlight language-python"><span class="n">setUp</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1024,12 +1054,18 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_mdn_model.py</code></summary>
-        <pre class="highlight"><code class="language-python">def setUp(self):
-    """Set up a test fixture with input_dim = 20, dense1_units  = 10, n_gaussians = 3"""
-    self.input_dim = 20
-    self.dense1_units = 10
-    self.n_gaussians = 3
-    self.mdn = MDN(input_dim=self.input_dim, n_gaussians=self.n_gaussians, dense1_units=self.dense1_units)</code></pre>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a test fixture with input_dim = 20, dense1_units  = 10, n_gaussians = 3&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense1_units</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">mdn</span> <span class="o">=</span> <span class="n">MDN</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">n_gaussians</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">,</span> <span class="n">dense1_units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dense1_units</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1040,7 +1076,7 @@
 
 
 <h3 id="tests.test_mdn_model.TestMDN.test_forward" class="doc doc-heading">
-<code class="highlight language-python">test_forward()</code>
+<code class="highlight language-python"><span class="n">test_forward</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1051,13 +1087,20 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_mdn_model.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_forward(self):
-    """Test the forward function with a tensor of shape (1, 20)"""
-    x = torch.rand((1, self.input_dim))
-    pi, mu, sigma = self.mdn.forward(x)
-    self.assertEqual(pi.shape, (1, self.n_gaussians))
-    self.assertEqual(mu.shape, (1, self.n_gaussians))
-    self.assertEqual(sigma.shape, (1, self.n_gaussians))</code></pre>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the forward function with a tensor of shape (1, 20)&quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span><span class="p">))</span>
+    <span class="n">pi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mu</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sigma</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1068,7 +1111,7 @@
 
 
 <h3 id="tests.test_mdn_model.TestMDN.test_init" class="doc doc-heading">
-<code class="highlight language-python">test_init()</code>
+<code class="highlight language-python"><span class="n">test_init</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1079,12 +1122,18 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_mdn_model.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_init(self):
-    """Test that the MDN is initialized properly"""
-    self.assertEqual(self.mdn.z_h[0].in_features, self.input_dim)
-    self.assertEqual(self.mdn.z_h[0].out_features, self.dense1_units)
-    self.assertEqual(self.mdn.z_pi.in_features, self.dense1_units)
-    self.assertEqual(self.mdn.z_pi.out_features, self.n_gaussians)</code></pre>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test that the MDN is initialized properly&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">z_h</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">z_h</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense1_units</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">z_pi</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense1_units</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">z_pi</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gaussians</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1095,7 +1144,7 @@
 
 
 <h3 id="tests.test_mdn_model.TestMDN.test_sample" class="doc doc-heading">
-<code class="highlight language-python">test_sample()</code>
+<code class="highlight language-python"><span class="n">test_sample</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1106,11 +1155,16 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_mdn_model.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_sample(self):
-    """Test the sample function with a tensor of shape (1, 20)"""
-    x = torch.rand((1, self.input_dim))
-    sample = self.mdn.sample(x)
-    self.assertEqual(sample.shape, (1,))</code></pre>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the sample function with a tensor of shape (1, 20)&quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span><span class="p">))</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdn</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,))</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 

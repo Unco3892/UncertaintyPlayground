@@ -985,47 +985,88 @@
 
         <details class="quote">
           <summary>Source code in <code>uncertaintyplayground/tests/test_svgp_trainer.py</code></summary>
-          <pre class="highlight"><code class="language-python">class TestSparseGPTrainer(unittest.TestCase):
-    """
-    Unit test suite for the SparseGPTrainer class.
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TestSparseGPTrainer</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unit test suite for the SparseGPTrainer class.</span>
 
-    This class contains a series of methods to test the functionalities of SparseGPTrainer, including training and making predictions with uncertainty.
+<span class="sd">    This class contains a series of methods to test the functionalities of SparseGPTrainer, including training and making predictions with uncertainty.</span>
 
-    Attributes:
-        X (np.array): An array of feature vectors for the training data.
-        y (np.array): An array of target values for the training data.
-        trainer (SparseGPTrainer): The SparseGPTrainer instance to test.
-    """
+<span class="sd">    Attributes:</span>
+<span class="sd">        X (np.array): An array of feature vectors for the training data.</span>
+<span class="sd">        y (np.array): An array of target values for the training data.</span>
+<span class="sd">        trainer (SparseGPTrainer): The SparseGPTrainer instance to test.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    def setUp(self):
-        """
-        Setup function that runs before each test method.
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Setup function that runs before each test method.</span>
 
-        This method generates random data for the tests and initializes an instance of SparseGPTrainer.
-        """
-        self.X = np.random.rand(100, 20)
-        self.y = np.random.rand(100)
-        self.trainer = SparseGPTrainer(self.X, self.y, num_inducing_points=20, num_epochs=10, batch_size=20, lr=0.2, patience=3)
+<span class="sd">        This method generates random data for the tests and initializes an instance of SparseGPTrainer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">SparseGPTrainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">num_inducing_points</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
-    def test_train(self):
-        """
-        Tests the train method of the SparseGPTrainer class.
+    <span class="k">def</span> <span class="nf">test_train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tests the train method of the SparseGPTrainer class.</span>
 
-        This test trains the model and checks that it has non-zero parameters afterward, verifying that training has indeed happened.
-        """
-        self.trainer.train()
-        self.assertTrue(any(p.detach().numpy().any() for p in self.trainer.model.parameters()))
+<span class="sd">        This test trains the model and checks that it has non-zero parameters afterward, verifying that training has indeed happened.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()))</span>
 
-    def test_predict_with_uncertainty(self):
-        """
-        Tests the predict_with_uncertainty method of the SparseGPTrainer class.
+    <span class="k">def</span> <span class="nf">test_predict_with_uncertainty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tests the predict_with_uncertainty method of the SparseGPTrainer class.</span>
 
-        This test trains the model and then makes a prediction with uncertainty. It checks that the predictions and uncertainties have the correct shape.
-        """
-        self.trainer.train()
-        y_pred, y_var = self.trainer.predict_with_uncertainty(self.X)
-        self.assertEqual(y_pred.shape, (self.X.shape[0],))
-        self.assertEqual(y_var.shape, (self.X.shape[0],))</code></pre>
+<span class="sd">        This test trains the model and then makes a prediction with uncertainty. It checks that the predictions and uncertainties have the correct shape.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">predict_with_uncertainty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">y_var</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+</code></pre></div></td></tr></table></div>
         </details>
 
   
@@ -1045,7 +1086,7 @@
 
 
 <h3 id="tests.test_svgp_trainer.TestSparseGPTrainer.setUp" class="doc doc-heading">
-<code class="highlight language-python">setUp()</code>
+<code class="highlight language-python"><span class="n">setUp</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1057,15 +1098,24 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_svgp_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def setUp(self):
-    """
-    Setup function that runs before each test method.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Setup function that runs before each test method.</span>
 
-    This method generates random data for the tests and initializes an instance of SparseGPTrainer.
-    """
-    self.X = np.random.rand(100, 20)
-    self.y = np.random.rand(100)
-    self.trainer = SparseGPTrainer(self.X, self.y, num_inducing_points=20, num_epochs=10, batch_size=20, lr=0.2, patience=3)</code></pre>
+<span class="sd">    This method generates random data for the tests and initializes an instance of SparseGPTrainer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">SparseGPTrainer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">num_inducing_points</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1076,7 +1126,7 @@
 
 
 <h3 id="tests.test_svgp_trainer.TestSparseGPTrainer.test_predict_with_uncertainty" class="doc doc-heading">
-<code class="highlight language-python">test_predict_with_uncertainty()</code>
+<code class="highlight language-python"><span class="n">test_predict_with_uncertainty</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1088,16 +1138,26 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_svgp_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_predict_with_uncertainty(self):
-    """
-    Tests the predict_with_uncertainty method of the SparseGPTrainer class.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_predict_with_uncertainty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests the predict_with_uncertainty method of the SparseGPTrainer class.</span>
 
-    This test trains the model and then makes a prediction with uncertainty. It checks that the predictions and uncertainties have the correct shape.
-    """
-    self.trainer.train()
-    y_pred, y_var = self.trainer.predict_with_uncertainty(self.X)
-    self.assertEqual(y_pred.shape, (self.X.shape[0],))
-    self.assertEqual(y_var.shape, (self.X.shape[0],))</code></pre>
+<span class="sd">    This test trains the model and then makes a prediction with uncertainty. It checks that the predictions and uncertainties have the correct shape.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">predict_with_uncertainty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">y_var</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
@@ -1108,7 +1168,7 @@
 
 
 <h3 id="tests.test_svgp_trainer.TestSparseGPTrainer.test_train" class="doc doc-heading">
-<code class="highlight language-python">test_train()</code>
+<code class="highlight language-python"><span class="n">test_train</span><span class="p">()</span></code>
 
 </h3>
 
@@ -1120,14 +1180,22 @@
 
       <details class="quote">
         <summary>Source code in <code>uncertaintyplayground/tests/test_svgp_trainer.py</code></summary>
-        <pre class="highlight"><code class="language-python">def test_train(self):
-    """
-    Tests the train method of the SparseGPTrainer class.
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests the train method of the SparseGPTrainer class.</span>
 
-    This test trains the model and checks that it has non-zero parameters afterward, verifying that training has indeed happened.
-    """
-    self.trainer.train()
-    self.assertTrue(any(p.detach().numpy().any() for p in self.trainer.model.parameters()))</code></pre>
+<span class="sd">    This test trains the model and checks that it has non-zero parameters afterward, verifying that training has indeed happened.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()))</span>
+</code></pre></div></td></tr></table></div>
       </details>
   </div>
 
