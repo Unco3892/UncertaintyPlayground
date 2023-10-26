@@ -1,6 +1,6 @@
 ---
 name: "📝 Documentation/Examples"
-about: Describe this issue template's purpose here.
+about: Provide us with feedback on our documentation or examples
 title: "[Docs]"
 labels: documentation
 assignees: ''

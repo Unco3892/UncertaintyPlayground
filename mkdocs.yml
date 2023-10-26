@@ -45,6 +45,13 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji
+  # - pymdownx.highlight:
+  #     # linenums: true
+  #     line_spans: __span
+  #     pygments_lang_class: true
 
 nav:
   - Code Reference: reference/
