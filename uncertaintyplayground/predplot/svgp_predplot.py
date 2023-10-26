@@ -1,8 +1,18 @@
 import seaborn as sns
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+from typing import Optional, Union
+from trainers.svgp_trainer import SparseGPTrainer
 
-def compare_distributions_svgpr(trainer, x_instance, y_actual=None, num_samples=10000, ax=None, dtype=np.float32):
+def compare_distributions_svgpr(
+    trainer: SparseGPTrainer,
+    x_instance: np.ndarray,
+    y_actual: Optional[Union[float, np.ndarray]] = None,
+    num_samples: int = 10000,
+    ax: Optional['matplotlib.axes.Axes'] = None,
+    dtype: np.dtype = np.float32
+) -> None:
     """
     Compare the actual and predicted outcome value/distributions for the SVGPR model.
 
