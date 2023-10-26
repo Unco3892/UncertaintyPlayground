@@ -756,13 +756,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#documentation-layout" class="md-nav__link">
     Documentation layout
   </a>
@@ -862,13 +855,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#documentation-layout" class="md-nav__link">
     Documentation layout
   </a>
@@ -921,58 +907,20 @@
 <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green.svg" /></a></p>
 <p>This Python library provides fast (and <em>easy</em>) prediction intervals for regression tasks built on top of <code>PyTorch</code> &amp; <code>GPyTorch</code>. Specifically, the library uses <code>Sparse &amp; Variational Gaussian Process Regression</code> for Gaussian cases (normally distributed outcomes) and <code>Mixed Density Networks</code> for multi-modal distributions. Users can estimate the prediction interval for a given instance with either model. The library was developed and maintained by <a href="https://iliaazizi.com/">Ilia Azizi</a>. Please note that this version is still in early development and not ready for production use. </p>
 <h2 id="installation">Installation</h2>
-<p><em>Requirements</em>:
-- Python &gt;= 3.8
-- PyTorch == 2.0.1
-- GPyTorch == 1.10
-- Numpy == 1.24.0
-- Seaborn == 0.12.2</p>
-<p>Use <code>PyPI</code> to install the package:
-<pre class="highlight"><code class="language-bash">pip install uncertaintyplayground</code></pre></p>
-<p>or alterntively, to use the development version, install directly from GitHub:
-<pre class="highlight"><code class="language-bash">pip install git+https://github.com/unco3892/UncertaintyPlayground.git</code></pre></p>
-<h2 id="usage">Usage</h2>
-<p>You can train and visualize the results of the models in the following way (this example uses the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html">California Housing dataset from Sklearn</a>):</p>
-<pre class="highlight"><code class="language-python">from uncertaintyplayground.trainers.svgp_trainer import SparseGPTrainer
-from uncertaintyplayground.trainers.mdn_trainer import MDNTrainer
-from uncertaintyplayground.predplot.svgp_predplot import compare_distributions_svgpr
-from uncertaintyplayground.predplot.mdn_predplot import compare_distributions_mdn
-from uncertaintyplayground.predplot.grid_predplot import plot_results_grid
-import torch
-import numpy as np
-from sklearn.datasets import fetch_california_housing
-from sklearn.model_selection import train_test_split
-
-# Load the California Housing dataset
-california = fetch_california_housing()
-
-# Convert X and y to numpy arrays of float32
-X = np.array(california.data, dtype=np.float32)
-y = np.array(california.target, dtype=np.float32)
-
-# Set random seed for reproducibility
-np.random.seed(42)
-torch.manual_seed(1)
-
-# Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# SVGPR: Initialize and train a SVGPR model with 100 inducing points
-california_trainer_svgp = SparseGPTrainer(X_train, y_train, num_inducing_points=100, num_epochs=30, batch_size=512, lr=0.1, patience=3)
-california_trainer_svgp.train()
-
-# MDN: Initialize and train an MDN model
-california_trainer_mdn = MDNTrainer(X_train, y_train, num_epochs=100, lr=0.001, dense1_units=50, n_gaussians=10)
-california_trainer_mdn.train()
-
-# SVPGR: Visualize the SVGPR's predictions for multiple instances
-plot_results_grid(trainer=california_trainer_svgp, compare_func=compare_distributions_svgpr, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)
-
-# MDN: Visualize the MDN's predictions for multiple instances
-plot_results_grid(trainer=california_trainer_mdn, compare_func=compare_distributions_mdn, X_test=X_test, Y_test=y_test, indices=[900, 500], ncols=2)</code></pre>
-<p>You can find another example for MDN in the <code>examples</code> folder.</p>
-<!-- ## Examples, Tutorials, and Documentation -->
-
+<p><em>Requirements</em>:</p>
+<ul>
+<li>Python &gt;= 3.8</li>
+<li>PyTorch == 2.0.1</li>
+<li>GPyTorch == 1.10</li>
+<li>Numpy == 1.24.0</li>
+<li>Seaborn == 0.12.2</li>
+</ul>
+<p>Use <code>PyPI</code> to install the package:</p>
+<pre class="highlight"><code class="language-bash">pip install uncertaintyplayground</code></pre>
+<p>or alterntively, to use the development version, install directly from GitHub:</p>
+<pre class="highlight"><code class="language-bash">pip install git+https://github.com/unco3892/UncertaintyPlayground.git</code></pre>
+<p>Then, you can import the module:</p>
+<pre class="highlight"><code class="language-python">import uncertaintyplayground as up</code></pre>
 <h2 id="documentation-layout">Documentation layout</h2>
 <p>Aside from this page, there are three other sections in this documentation. The most important is the <code>Code Reference</code> which relates the source code and all the arguments for the functions.  The <code>Usage</code> section contains a couple of examples of using this package with real and simulated data. Finally, the <code>Bibliography</code> section contains the list of papers that are used in this package.</p>
 <h2 id="contributors">Contributors</h2>
